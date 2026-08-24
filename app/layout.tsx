@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VPG | Vietnam Products Go Global",
+  title: "VPG | Sản phẩm Việt vươn ra thế giới",
   description:
     "VPG là dự án cộng đồng do JCI Grace tổ chức nhằm giúp doanh nghiệp Việt Nam nâng cao năng lực và đưa sản phẩm ra thị trường quốc tế.",
   icons: {
@@ -10,9 +10,9 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "VPG | Vietnam Products Go Global",
+    title: "VPG | Sản phẩm Việt vươn ra thế giới",
     description:
-      "Vietnam Products. Global Markets. Cộng đồng giúp doanh nghiệp Việt học, chuẩn hóa, kết nối và xuất khẩu.",
+      "Sản phẩm Việt. Thị trường toàn cầu. Cộng đồng giúp doanh nghiệp Việt học, chuẩn hóa, kết nối và xuất khẩu.",
     type: "website",
     images: ["/hero-pattern.png"],
   },
