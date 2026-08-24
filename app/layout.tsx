@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description:
       "Vietnam Products. Global Markets. Cộng đồng giúp doanh nghiệp Việt học, chuẩn hóa, kết nối và xuất khẩu.",
     type: "website",
-    images: ["/visual.jpg"],
+    images: ["/hero-pattern.png"],
   },
 };
 
