@@ -34,6 +34,11 @@ test("server-renders the VPG landing page", async () => {
   assert.match(html, /Sản phẩm Việt\. Thị trường toàn cầu\./);
   assert.match(html, /Học viện VPG/);
   assert.match(html, /Hệ sinh thái đối tác VPG/);
+  assert.match(html, /Sản phẩm Việt có câu chuyện/);
+  assert.match(html, /Hoạt động thực tế/);
+  assert.match(html, /\/asset\/products\/1\.jpg/);
+  assert.match(html, /\/asset\/events\/hoabinh\.jpg/);
+  assert.match(html, /\/asset\/products\/product-motion\.mp4/);
   assert.doesNotMatch(html, /Your site is taking shape|react-loading-skeleton|codex-preview/i);
   assert.doesNotMatch(html, /Partner Pool|Export Readiness Score|Enterprise Journey|Global Markets/i);
 });

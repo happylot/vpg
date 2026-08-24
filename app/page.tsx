@@ -83,6 +83,67 @@ const kpis = [
   ["20-30", "câu chuyện thành công"],
 ];
 
+const productImages = [
+  {
+    src: "/asset/products/1.jpg",
+    alt: "Bộ sản phẩm quà tặng văn hóa Việt được trưng bày trên nền nâu đỏ",
+    label: "Quà tặng văn hóa",
+  },
+  {
+    src: "/asset/products/2.jpg",
+    alt: "Tài liệu giới thiệu bộ sản phẩm vị di sản",
+    label: "Bộ hồ sơ sản phẩm",
+  },
+  {
+    src: "/asset/products/3.jpg",
+    alt: "Mô hình kiến trúc truyền thống Việt Nam",
+    label: "Thủ công mỹ nghệ",
+  },
+  {
+    src: "/asset/products/4.jpg",
+    alt: "Khách hàng xem mô hình sản phẩm bằng điện thoại",
+    label: "Trải nghiệm số",
+  },
+  {
+    src: "/asset/products/5.jpg",
+    alt: "Sản phẩm văn hóa lấy cảm hứng từ chùa Một Cột",
+    label: "Di sản Việt",
+  },
+  {
+    src: "/asset/products/6.jpg",
+    alt: "Mô hình tháp rùa và sản phẩm lưu niệm Việt Nam",
+    label: "Thiết kế bản địa",
+  },
+  {
+    src: "/asset/products/7.jpg",
+    alt: "Bộ sản phẩm quà tặng văn hóa Việt được bày theo concept cao cấp",
+    label: "Sẵn sàng kể chuyện",
+  },
+  {
+    src: "/asset/products/banaco-dried-banana.webp",
+    alt: "Sản phẩm chuối sấy đóng gói mang thương hiệu Việt",
+    label: "Nông sản chế biến",
+  },
+];
+
+const eventImages = [
+  {
+    src: "/asset/events/9.jpg",
+    alt: "Nhóm doanh nhân Việt và đối tác quốc tế tại một hoạt động kết nối",
+    label: "Kết nối địa phương",
+  },
+  {
+    src: "/asset/events/ai-ceo.jpg",
+    alt: "Nhóm chuyên gia và doanh nhân tham gia chương trình chia sẻ",
+    label: "Mạng lưới chuyên gia",
+  },
+  {
+    src: "/asset/events/hoabinh.jpg",
+    alt: "Sân khấu chương trình đào tạo dành cho doanh nghiệp",
+    label: "Đào tạo thực chiến",
+  },
+];
+
 export default function Home() {
   return (
     <main>
@@ -102,21 +163,41 @@ export default function Home() {
         </nav>
 
         <div className="hero__content" id="top">
-          <p className="kicker">Sản phẩm Việt. Thị trường toàn cầu.</p>
-          <h1 id="hero-title">VPG</h1>
-          <h2>Sản phẩm Việt vươn ra thế giới</h2>
-          <p className="hero__lead">
-            Dự án cộng đồng do JCI Grace tổ chức, kết nối tri thức, chuyên gia,
-            đối tác và cơ hội thị trường để giúp doanh nghiệp Việt Nam đưa sản
-            phẩm ra thị trường quốc tế.
-          </p>
-          <div className="hero__actions">
-            <a className="button button--primary" href="#journey">
-              Khám phá hành trình
-            </a>
-            <a className="button button--ghost" href="#partners">
-              Trở thành đối tác
-            </a>
+          <div className="hero__copy">
+            <p className="kicker">Sản phẩm Việt. Thị trường toàn cầu.</p>
+            <h1 id="hero-title">VPG</h1>
+            <h2>Sản phẩm Việt vươn ra thế giới</h2>
+            <p className="hero__lead">
+              Dự án cộng đồng do JCI Grace tổ chức, kết nối tri thức, chuyên
+              gia, đối tác và cơ hội thị trường để giúp doanh nghiệp Việt Nam
+              đưa sản phẩm ra thị trường quốc tế.
+            </p>
+            <div className="hero__actions">
+              <a className="button button--primary" href="#journey">
+                Khám phá hành trình
+              </a>
+              <a className="button button--ghost" href="#partners">
+                Trở thành đối tác
+              </a>
+            </div>
+          </div>
+
+          <div className="hero-showcase" aria-label="Ảnh sản phẩm và hoạt động VPG">
+            <figure className="hero-showcase__main">
+              <img
+                src="/asset/products/1.jpg"
+                alt="Bộ sản phẩm văn hóa Việt sẵn sàng được giới thiệu ra thị trường quốc tế"
+              />
+              <figcaption>Sản phẩm có câu chuyện</figcaption>
+            </figure>
+            <figure className="hero-showcase__small hero-showcase__small--top">
+              <img src="/asset/events/hoabinh.jpg" alt="Chương trình đào tạo thực chiến dành cho doanh nghiệp" />
+              <figcaption>Đào tạo thực chiến</figcaption>
+            </figure>
+            <figure className="hero-showcase__small hero-showcase__small--bottom">
+              <img src="/asset/products/banaco-dried-banana.webp" alt="Sản phẩm chuối sấy Việt Nam đóng gói xuất khẩu" />
+              <figcaption>Nông sản chế biến</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -160,6 +241,38 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="product-story section">
+        <div className="section__inner">
+          <div className="section__head">
+            <p className="section-label">Sản phẩm Việt có câu chuyện</p>
+            <h2>
+              VPG hướng đến những sản phẩm có chất lượng, bản sắc và khả năng
+              kể chuyện rõ ràng khi bước ra thị trường quốc tế.
+            </h2>
+          </div>
+          <div className="product-story__layout">
+            <div className="product-story__video">
+              <video
+                src="/asset/products/product-motion.mp4"
+                aria-label="Video giới thiệu sản phẩm Việt"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            </div>
+            <div className="product-gallery" aria-label="Các ví dụ sản phẩm Việt">
+              {productImages.map((image) => (
+                <figure className="product-tile" key={image.src}>
+                  <img src={image.src} alt={image.alt} />
+                  <figcaption>{image.label}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="journey section" id="journey">
         <div className="section__inner">
           <p className="section-label">Hành trình doanh nghiệp</p>
@@ -170,6 +283,26 @@ export default function Home() {
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{step}</strong>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="fieldwork section">
+        <div className="section__inner">
+          <div className="section__head">
+            <p className="section-label">Hoạt động thực tế</p>
+            <h2>
+              Không dừng ở một buổi hội thảo, VPG tạo điểm chạm thật giữa doanh
+              nghiệp, chuyên gia, địa phương và cơ hội thị trường.
+            </h2>
+          </div>
+          <div className="fieldwork-grid">
+            {eventImages.map((image) => (
+              <figure className="fieldwork-card" key={image.src}>
+                <img src={image.src} alt={image.alt} />
+                <figcaption>{image.label}</figcaption>
+              </figure>
             ))}
           </div>
         </div>
