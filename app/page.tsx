@@ -63,6 +63,15 @@ const partnerTiers = [
   },
 ];
 
+const logisticsSponsors = [
+  {
+    name: "Thái Dương Fulfillment",
+    role: "Nhà tài trợ đồng hành mảng logistics",
+    src: "/asset/logo_partner/thaiduong-fulfillment.jpeg",
+    alt: "Logo Thái Dương Fulfillment",
+  },
+];
+
 const readiness = [
   ["Độ sẵn sàng của sản phẩm", 20],
   ["Chứng nhận và tuân thủ", 15],
@@ -400,6 +409,28 @@ export default function Home() {
                 <span>{tier.contribution}</span>
               </article>
             ))}
+          </div>
+          <div className="sponsor-strip" aria-label="Nhà tài trợ đồng hành mảng logistics">
+            <div className="sponsor-strip__copy">
+              <span>Nhà tài trợ đồng hành</span>
+              <h3>Mảng logistics</h3>
+              <p>
+                Đồng hành cùng doanh nghiệp trong khâu hậu cần, hoàn tất đơn
+                hàng và chuẩn bị năng lực vận hành khi đưa sản phẩm Việt ra thị
+                trường quốc tế.
+              </p>
+            </div>
+            <div className="sponsor-logos">
+              {logisticsSponsors.map((sponsor) => (
+                <figure className="sponsor-logo-card" key={sponsor.name}>
+                  <img src={sponsor.src} alt={sponsor.alt} />
+                  <figcaption>
+                    <strong>{sponsor.name}</strong>
+                    <span>{sponsor.role}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
         </div>
       </section>

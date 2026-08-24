@@ -732,6 +732,84 @@ main {
   color: var(--gold-light);
 }
 
+.sponsor-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 22px;
+  align-items: center;
+  margin-top: 22px;
+  padding: 22px;
+  border: 1px solid rgba(255, 232, 163, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(120deg, rgba(255, 208, 82, 0.14), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.05);
+}
+
+.sponsor-strip__copy span {
+  color: var(--gold-light);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sponsor-strip__copy h3 {
+  margin: 8px 0 10px;
+  color: var(--ivory);
+  font-size: 1.55rem;
+}
+
+.sponsor-strip__copy p {
+  max-width: 640px;
+  margin: 0;
+  color: rgba(255, 250, 240, 0.78);
+}
+
+.sponsor-logos {
+  display: grid;
+  gap: 12px;
+}
+
+.sponsor-logo-card {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-height: 132px;
+  margin: 0;
+  padding: 14px;
+  border-radius: 8px;
+  background: #fffaf0;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.18);
+}
+
+.sponsor-logo-card img {
+  width: 104px;
+  height: 104px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.sponsor-logo-card figcaption {
+  display: grid;
+  gap: 6px;
+}
+
+.sponsor-logo-card strong {
+  color: #0b7f8a;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.sponsor-logo-card span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 740;
+  line-height: 1.35;
+}
+
 .impact {
   background: linear-gradient(180deg, #fff2d4, #fffaf0);
 }
@@ -820,6 +898,10 @@ main {
   .pillar-grid,
   .partner-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sponsor-strip {
+    grid-template-columns: 1fr;
   }
 
   .product-gallery {
@@ -947,6 +1029,15 @@ main {
   .product-tile:nth-child(1),
   .product-tile:nth-child(7) {
     grid-column: span 1;
+  }
+
+  .sponsor-logo-card {
+    grid-template-columns: 86px minmax(0, 1fr);
+  }
+
+  .sponsor-logo-card img {
+    width: 86px;
+    height: 86px;
   }
 
   .score-row {
