@@ -23,17 +23,17 @@ async function render() {
   );
 }
 
-test("server-renders the VPG landing page", async () => {
+test("server-renders the Vproud landing page", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /VPG/);
+  assert.match(html, /Vproud/);
   assert.match(html, /Sản phẩm Việt vươn ra thế giới/);
   assert.match(html, /Sản phẩm Việt\. Thị trường toàn cầu\./);
-  assert.match(html, /Học viện VPG/);
-  assert.match(html, /Hệ sinh thái đối tác VPG/);
+  assert.match(html, /Học viện Vproud/);
+  assert.match(html, /Hệ sinh thái đối tác Vproud/);
   assert.match(html, /Sản phẩm Việt có câu chuyện/);
   assert.match(html, /Hoạt động thực tế/);
   assert.match(html, /\/asset\/products\/1\.jpg/);
@@ -51,7 +51,7 @@ test("keeps starter preview code out of the product surface", async () => {
   ]);
 
   assert.match(page, /const pillars/);
-  assert.match(layout, /VPG \| Sản phẩm Việt vươn ra thế giới/);
+  assert.match(layout, /Vproud \| Sản phẩm Việt vươn ra thế giới/);
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
   assert.doesNotMatch(layout, /Starter Project|codex-preview|_sites-preview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);

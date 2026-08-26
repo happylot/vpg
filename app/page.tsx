@@ -1,6 +1,9 @@
+import { SiteNav } from "./components/site-nav";
+import { events } from "./events/data";
+
 const pillars = [
   {
-    title: "Học viện VPG",
+    title: "Học viện Vproud",
     eyebrow: "01",
     text: "Đào tạo thực chiến về nền tảng xuất khẩu, mức độ sẵn sàng của sản phẩm, bán hàng quốc tế, tiếp thị toàn cầu và ứng dụng AI cho xuất khẩu.",
   },
@@ -10,7 +13,7 @@ const pillars = [
     text: "Các chương trình tại tỉnh thành, kết hợp cập nhật thị trường, lớp chuyên sâu, câu chuyện thực tế, thảo luận chuyên gia và kết nối kinh doanh.",
   },
   {
-    title: "Cộng đồng VPG",
+    title: "Cộng đồng Vproud",
     eyebrow: "03",
     text: "Biến mỗi sự kiện thành một cộng đồng liên tục: doanh nghiệp có hồ sơ, nhu cầu, thị trường mục tiêu và cơ hội kết nối sau chương trình.",
   },
@@ -58,7 +61,7 @@ const partnerTiers = [
   {
     name: "Đối tác chuyên môn",
     detail:
-      "Đóng góp tri thức, kinh nghiệm, câu chuyện thực tế, hoạt động cố vấn và nội dung cho Học viện VPG và các phiên tư vấn xuất khẩu.",
+      "Đóng góp tri thức, kinh nghiệm, câu chuyện thực tế, hoạt động cố vấn và nội dung cho Học viện Vproud và các phiên tư vấn xuất khẩu.",
     contribution: "Đóng góp tri thức",
   },
 ];
@@ -150,22 +153,12 @@ export default function Home() {
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero__visual" aria-hidden="true" />
         <div className="hero__shade" aria-hidden="true" />
-        <nav className="nav" aria-label="Điều hướng VPG">
-          <a className="brand" href="#top" aria-label="Trang chủ VPG">
-            <span>VPG</span>
-            <small>Sản phẩm Việt vươn ra thế giới</small>
-          </a>
-          <div className="nav__links">
-            <a href="#pillars">Trụ cột</a>
-            <a href="#model">Mô hình</a>
-            <a href="#partners">Đối tác</a>
-          </div>
-        </nav>
+        <SiteNav variant="home" />
 
         <div className="hero__content" id="top">
           <div className="hero__copy">
             <p className="kicker">Sản phẩm Việt. Thị trường toàn cầu.</p>
-            <h1 id="hero-title">VPG</h1>
+            <h1 id="hero-title">Vproud</h1>
             <h2>Sản phẩm Việt vươn ra thế giới</h2>
             <p className="hero__lead">
               Dự án cộng đồng do JCI Grace tổ chức, kết nối tri thức, chuyên
@@ -182,7 +175,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero-showcase" aria-label="Ảnh sản phẩm và hoạt động VPG">
+          <div className="hero-showcase" aria-label="Ảnh sản phẩm và hoạt động Vproud">
             <figure className="hero-showcase__main">
               <img
                 src="/asset/products/1.jpg"
@@ -201,7 +194,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero__panel" aria-label="Trọng tâm của VPG">
+        <div className="hero__panel" aria-label="Trọng tâm của Vproud">
           <div>
             <span>Sứ mệnh</span>
             <strong>Đưa sản phẩm Việt ra thế giới</strong>
@@ -228,12 +221,12 @@ export default function Home() {
           </div>
           <div className="intro__copy">
             <p>
-              VPG giúp doanh nghiệp sản xuất, doanh nghiệp nhỏ và vừa, thương
+              Vproud giúp doanh nghiệp sản xuất, doanh nghiệp nhỏ và vừa, thương
               hiệu Việt, hợp tác xã, doanh nghiệp OCOP và các đơn vị đã xuất
               khẩu giảm chi phí thử-sai trong hành trình quốc tế hóa.
             </p>
             <p>
-              Chương trình không chỉ dạy cách xuất khẩu. VPG xây dựng một hệ
+              Chương trình không chỉ dạy cách xuất khẩu. Vproud xây dựng một hệ
               sinh thái để doanh nghiệp hiểu thị trường, chuẩn hóa sản phẩm, tìm
               khách hàng, xuất khẩu và mở rộng thị trường.
             </p>
@@ -246,7 +239,7 @@ export default function Home() {
           <div className="section__head">
             <p className="section-label">Sản phẩm Việt có câu chuyện</p>
             <h2>
-              VPG hướng đến những sản phẩm có chất lượng, bản sắc và khả năng
+              Vproud hướng đến những sản phẩm có chất lượng, bản sắc và khả năng
               kể chuyện rõ ràng khi bước ra thị trường quốc tế.
             </h2>
           </div>
@@ -277,7 +270,7 @@ export default function Home() {
         <div className="section__inner">
           <p className="section-label">Hành trình doanh nghiệp</p>
           <h2>Một lộ trình thống nhất từ nhận biết đến mở rộng thị trường.</h2>
-          <div className="journey__track" aria-label="Hành trình doanh nghiệp trong VPG">
+          <div className="journey__track" aria-label="Hành trình doanh nghiệp trong Vproud">
             {journey.map((step, index) => (
               <div className="journey__step" key={step}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
@@ -293,7 +286,7 @@ export default function Home() {
           <div className="section__head">
             <p className="section-label">Hoạt động thực tế</p>
             <h2>
-              Không dừng ở một buổi hội thảo, VPG tạo điểm chạm thật giữa doanh
+              Không dừng ở một buổi hội thảo, Vproud tạo điểm chạm thật giữa doanh
               nghiệp, chuyên gia, địa phương và cơ hội thị trường.
             </h2>
           </div>
@@ -308,12 +301,46 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="events-teaser section" id="events">
+        <div className="section__inner">
+          <div className="section__head events-teaser__head">
+            <div>
+              <p className="section-label">Sự kiện Vproud</p>
+              <h2>Lịch sự kiện sắp diễn ra trên khắp cả nước.</h2>
+            </div>
+            <a className="button button--ghost button--dark" href="/events">
+              Xem tất cả sự kiện
+            </a>
+          </div>
+          <div className="events-teaser__grid">
+            {events.slice(0, 3).map((event) => (
+              <a
+                className="event-teaser-card"
+                key={event.slug}
+                href={`/events/${event.slug}`}
+              >
+                <figure>
+                  <img src={event.cover} alt={event.title} />
+                </figure>
+                <div className="event-teaser-card__body">
+                  <span>{event.category}</span>
+                  <h3>{event.title}</h3>
+                  <p>
+                    {event.dateLabel} · {event.location}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="pillars section" id="pillars">
         <div className="section__inner">
           <div className="section__head">
             <p className="section-label">5 trụ cột hoạt động</p>
             <h2>
-              Từ đào tạo đến kết nối nhà mua hàng, VPG thiết kế một vòng lặp
+              Từ đào tạo đến kết nối nhà mua hàng, Vproud thiết kế một vòng lặp
               tăng trưởng cho doanh nghiệp.
             </h2>
           </div>
@@ -338,12 +365,12 @@ export default function Home() {
               tăng trưởng.
             </h2>
             <p className="section-copy">
-              Nền tảng VPG được quản trị theo các nguyên tắc: đặt cộng đồng ở
+              Nền tảng Vproud được quản trị theo các nguyên tắc: đặt cộng đồng ở
               trung tâm, tạo giá trị trước khi bán hàng, giữ vai trò trung lập,
               kiểm soát chất lượng và đo lường tác động thực tế.
             </p>
           </div>
-          <div className="model-flow" aria-label="Mô hình vận hành VPG">
+          <div className="model-flow" aria-label="Mô hình vận hành Vproud">
             <div className="flow-node flow-node--top">JCI Grace</div>
             <div className="flow-row">
               <div className="flow-node">Hệ sinh thái đối tác</div>
@@ -386,7 +413,7 @@ export default function Home() {
       <section className="partners section" id="partners">
         <div className="section__inner">
           <div className="section__head">
-            <p className="section-label">Hệ sinh thái đối tác VPG</p>
+            <p className="section-label">Hệ sinh thái đối tác Vproud</p>
             <h2>
               Đối tác đóng góp nguồn lực trước, xây dựng uy tín sau, rồi phát
               sinh cơ hội kinh doanh trên nguyên tắc minh bạch.
@@ -428,11 +455,11 @@ export default function Home() {
         <div className="finale__inner">
           <p className="section-label">Thêm nhiều sản phẩm Việt vươn ra thế giới</p>
           <h2>
-            VPG tạo giá trị cộng đồng trước, phát triển hệ sinh thái bền vững
+            Vproud tạo giá trị cộng đồng trước, phát triển hệ sinh thái bền vững
             sau.
           </h2>
           <a className="button button--primary" href="#partners">
-            Kết nối với VPG
+            Kết nối với Vproud
           </a>
         </div>
       </section>
