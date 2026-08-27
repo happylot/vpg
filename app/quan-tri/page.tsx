@@ -26,11 +26,12 @@ async function isAuthenticated() {
   return token === expected;
 }
 
-function formatDateTime(value: Date) {
-  return value.toLocaleString("vi-VN", {
-    dateStyle: "short",
-    timeStyle: "short",
-  });
+function formatDate(value: Date) {
+  return value.toLocaleDateString("vi-VN", { dateStyle: "short" });
+}
+
+function formatTime(value: Date) {
+  return value.toLocaleTimeString("vi-VN", { timeStyle: "medium" });
 }
 
 export default async function AdminPage() {
@@ -79,7 +80,8 @@ export default async function AdminPage() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Thời gian</th>
+                <th>Ngày đăng ký</th>
+                <th>Giờ đăng ký</th>
                 <th>Sự kiện</th>
                 <th>Họ và tên</th>
                 <th>Số điện thoại</th>
@@ -92,7 +94,8 @@ export default async function AdminPage() {
             <tbody>
               {registrations.map((row) => (
                 <tr key={row.id}>
-                  <td>{formatDateTime(row.createdAt)}</td>
+                  <td>{formatDate(row.createdAt)}</td>
+                  <td>{formatTime(row.createdAt)}</td>
                   <td>{eventTitleBySlug.get(row.eventSlug) ?? row.eventSlug}</td>
                   <td>{row.fullName}</td>
                   <td>{row.phone}</td>
