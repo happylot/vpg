@@ -21,6 +21,13 @@ ENV NODE_ENV=production
 ENV CI=true
 ENV WRANGLER_SEND_METRICS=false
 
+# workerd (unlike Node's own fetch) verifies TLS against the OS trust store,
+# which the slim base image doesn't include by default. Without it, outbound
+# fetch() from inside the Worker fails with a generic internal error.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY package.json package-lock.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
