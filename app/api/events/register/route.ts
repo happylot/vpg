@@ -1,7 +1,7 @@
 import { eventRegistrationsTableSql, withDb } from "../../../../db";
 import { eventRegistrations } from "../../../../db/schema";
 import { getEventBySlug } from "../../../events/data";
-import { notifyNewRegistration } from "./notify";
+import { notifyNewRegistration, notifyRegistrant } from "./notify";
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
@@ -67,17 +67,18 @@ export async function POST(request: Request) {
       return row;
     });
 
+    const registrationDetails = { fullName, phone, email, company, role, note };
+
     try {
-      await notifyNewRegistration(event, {
-        fullName,
-        phone,
-        email,
-        company,
-        role,
-        note,
-      });
+      await notifyNewRegistration(event, registrationDetails);
     } catch (error) {
       console.error("Không thể gửi email thông báo đăng ký:", error);
+    }
+
+    try {
+      await notifyRegistrant(event, registrationDetails);
+    } catch (error) {
+      console.error("Không thể gửi email xác nhận cho người đăng ký:", error);
     }
 
     return Response.json({ registration }, { status: 201 });
