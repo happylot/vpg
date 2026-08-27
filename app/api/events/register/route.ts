@@ -1,6 +1,7 @@
-import { getDb } from "../../../../db";
+import { ensureSchema, getDb } from "../../../../db";
 import { eventRegistrations } from "../../../../db/schema";
 import { getEventBySlug } from "../../../events/data";
+import { notifyNewRegistration } from "./notify";
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
@@ -8,8 +9,16 @@ function toRouteErrorMessage(error: unknown) {
     error instanceof Error && error.cause instanceof Error ? error.cause.message : "";
   const combined = `${message}\n${detail}`;
 
-  if (combined.includes("no such table") || combined.includes('from "event_registrations"')) {
-    return "Bảng đăng ký sự kiện chưa sẵn sàng. Vui lòng chạy `npm run db:generate` rồi triển khai lại để khởi tạo cơ sở dữ liệu.";
+  if (combined.includes("Postgres connection env vars are missing")) {
+    return "Chưa cấu hình kết nối Postgres. Kiểm tra DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD trong .dev.vars.";
+  }
+
+  if (
+    combined.includes("ECONNREFUSED") ||
+    combined.includes("Connection terminated") ||
+    combined.includes("timeout")
+  ) {
+    return "Không kết nối được tới Postgres. Kiểm tra container Docker Postgres đã chạy chưa.";
   }
 
   return message;
@@ -35,7 +44,8 @@ export async function POST(request: Request) {
     const role = payload.role?.trim() ?? "";
     const note = payload.note?.trim() ?? "";
 
-    if (!eventSlug || !getEventBySlug(eventSlug)) {
+    const event = getEventBySlug(eventSlug);
+    if (!eventSlug || !event) {
       return Response.json({ error: "Sự kiện không hợp lệ." }, { status: 400 });
     }
     if (!fullName) {
@@ -45,11 +55,25 @@ export async function POST(request: Request) {
       return Response.json({ error: "Vui lòng nhập số điện thoại." }, { status: 400 });
     }
 
+    await ensureSchema();
     const db = getDb();
     const [registration] = await db
       .insert(eventRegistrations)
       .values({ eventSlug, fullName, phone, email, company, role, note })
       .returning();
+
+    try {
+      await notifyNewRegistration(event, {
+        fullName,
+        phone,
+        email,
+        company,
+        role,
+        note,
+      });
+    } catch (error) {
+      console.error("Không thể gửi email thông báo đăng ký:", error);
+    }
 
     return Response.json({ registration }, { status: 201 });
   } catch (error) {

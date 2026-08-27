@@ -725,6 +725,10 @@ main {
   background: #fffaf0;
 }
 
+.readiness .button {
+  margin-top: 28px;
+}
+
 .score-list {
   display: grid;
   gap: 12px;
@@ -761,6 +765,246 @@ main {
   height: 100%;
   border-radius: 4px;
   background: linear-gradient(90deg, var(--scarlet), var(--gold));
+}
+
+/* Assessment page (/danh-gia) */
+
+.assessment-hero {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
+  overflow: hidden;
+  background: var(--wine);
+  color: var(--ivory);
+  isolation: isolate;
+}
+
+.assessment-hero__content {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 24px 0 56px;
+}
+
+.assessment-hero__content h1 {
+  max-width: 780px;
+  margin: 0;
+  color: var(--gold-light);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.42);
+}
+
+.assessment-hero__lead {
+  max-width: 640px;
+  margin: 18px 0 0;
+  color: rgba(255, 250, 234, 0.9);
+  font-size: 1.08rem;
+  font-weight: 540;
+  line-height: 1.7;
+}
+
+.assessment-section {
+  background: #fffaf0;
+}
+
+.assessment-form {
+  display: grid;
+  gap: 40px;
+  max-width: 880px;
+}
+
+.assessment-group {
+  display: grid;
+  gap: 20px;
+}
+
+.assessment-group__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--scarlet);
+}
+
+.assessment-group__head h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.assessment-group__head span {
+  color: var(--scarlet);
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.assessment-question {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.assessment-question legend {
+  padding: 0 0 14px;
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.assessment-options {
+  display: grid;
+  gap: 10px;
+}
+
+.assessment-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffaf0;
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.assessment-option:hover {
+  border-color: rgba(142, 16, 16, 0.32);
+}
+
+.assessment-option:has(input:checked) {
+  border-color: var(--scarlet);
+  background: rgba(197, 29, 24, 0.06);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.assessment-option input {
+  margin-top: 3px;
+  accent-color: var(--scarlet);
+}
+
+.assessment-form__footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 250, 240, 0.96);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.assessment-form__footer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.assessment-form__footer .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.assessment-result {
+  max-width: 640px;
+  padding: 40px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fffaf0;
+  box-shadow: 0 22px 55px rgba(92, 18, 12, 0.1);
+}
+
+.assessment-result__label {
+  margin: 0 0 8px;
+  color: var(--scarlet);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.assessment-result__score {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.assessment-result__score strong {
+  color: var(--ink);
+  font-size: 3.4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.assessment-result__score span {
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.assessment-result__level {
+  margin: 10px 0 0;
+  color: var(--scarlet);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.assessment-result__desc {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.assessment-result__breakdown {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.assessment-result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+@media (max-width: 760px) {
+  .assessment-hero__content h1 {
+    font-size: 2.1rem;
+  }
+
+  .assessment-form__footer {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .assessment-result {
+    padding: 26px;
+  }
+
+  .assessment-result__score strong {
+    font-size: 2.6rem;
+  }
 }
 
 .partners {

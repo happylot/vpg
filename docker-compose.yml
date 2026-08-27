@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    # Postgres runs natively on the VPS (not in Docker), listening on
+    # 127.0.0.1. Sharing the host's network namespace lets the container
+    # reach it exactly like a process running directly on the VPS would -
+    # no Docker bridge network, no pg_hba.conf changes needed.
+    # Linux-only; the app listens directly on the host at port 3020.
+    network_mode: host
+    env_file:
+      - .dev.vars.production
+    volumes:
+      - ./.dev.vars.production:/app/dist/server/.dev.vars:ro

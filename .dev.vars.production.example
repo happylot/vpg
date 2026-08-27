@@ -1,0 +1,11 @@
+# Copy to `.dev.vars.production` on the server (gitignored) and fill in real values.
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Postgres running natively on the same VPS (not in Docker). The app
+# container uses `network_mode: host` (see docker-compose.yml), so it can
+# reach 127.0.0.1 exactly like a process running directly on the VPS.
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password

@@ -1,8 +1,7 @@
-import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
-export const eventRegistrations = sqliteTable("event_registrations", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const eventRegistrations = pgTable("event_registrations", {
+  id: serial("id").primaryKey(),
   eventSlug: text("event_slug").notNull(),
   fullName: text("full_name").notNull(),
   phone: text("phone").notNull(),
@@ -10,5 +9,7 @@ export const eventRegistrations = sqliteTable("event_registrations", {
   company: text("company").notNull().default(""),
   role: text("role").notNull().default(""),
   note: text("note").notNull().default(""),
-  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

@@ -410,6 +410,9 @@ export default function Home() {
               Mỗi doanh nghiệp được đánh giá trên thang 100 điểm, từ chưa sẵn
               sàng, đang chuẩn bị, sẵn sàng xuất khẩu đến sẵn sàng toàn cầu.
             </p>
+            <a className="button button--primary" href="/danh-gia">
+              Tự đánh giá
+            </a>
           </div>
           <div className="score-list">
             {readiness.map(([label, score]) => (
