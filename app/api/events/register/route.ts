@@ -5,9 +5,10 @@ import { notifyNewRegistration } from "./notify";
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
-  const detail =
-    error instanceof Error && error.cause instanceof Error ? error.cause.message : "";
-  const combined = `${message}\n${detail}`;
+  const cause =
+    error instanceof Error && error.cause instanceof Error ? error.cause : undefined;
+  const causeMessage = cause?.message ?? "";
+  const combined = `${message}\n${causeMessage}`;
 
   if (combined.includes("Postgres connection env vars are missing")) {
     return "Chưa cấu hình kết nối Postgres. Kiểm tra DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD trong .dev.vars.";
@@ -18,10 +19,12 @@ function toRouteErrorMessage(error: unknown) {
     combined.includes("Connection terminated") ||
     combined.includes("timeout")
   ) {
-    return "Không kết nối được tới Postgres. Kiểm tra container Docker Postgres đã chạy chưa.";
+    return "Không kết nối được tới Postgres. Kiểm tra Postgres đã chạy và chấp nhận kết nối chưa.";
   }
 
-  return message;
+  // Surface the underlying Postgres reason (e.g. missing column, permission
+  // denied) instead of the generic "Failed query: ..." wrapper message.
+  return causeMessage || message;
 }
 
 export async function POST(request: Request) {
@@ -77,6 +80,7 @@ export async function POST(request: Request) {
 
     return Response.json({ registration }, { status: 201 });
   } catch (error) {
+    console.error("Đăng ký sự kiện thất bại:", error);
     return Response.json({ error: toRouteErrorMessage(error) }, { status: 500 });
   }
 }
