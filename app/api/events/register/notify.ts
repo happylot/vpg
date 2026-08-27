@@ -1,7 +1,7 @@
 import type { VpgEvent } from "../../../events/data";
 
 const NOTIFY_TO = "tranthuthao9bsoncam1@gmail.com";
-const FROM_ADDRESS = "Vproud Events <onboarding@resend.dev>";
+const FROM_ADDRESS = "Vproud Events <noreply@mcv.network>";
 
 type Registration = {
   fullName: string;
