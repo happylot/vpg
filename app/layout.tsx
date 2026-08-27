@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { BackToTop } from "./components/back-to-top";
 
 export const metadata: Metadata = {
   title: "Vproud | Sản phẩm Việt vươn ra thế giới",
@@ -25,7 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body>{children}</body>
+      <body>
+        {children}
+        <BackToTop />
+      </body>
     </html>
   );
 }

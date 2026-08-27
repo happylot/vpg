@@ -33,176 +33,32 @@ export type VpgEvent = {
 
 export const events: VpgEvent[] = [
   {
-    slug: "ngay-hoi-san-pham-viet-vuon-ra-the-gioi-2026",
-    category: "Sự kiện khởi động",
-    title: "Ngày hội Sản phẩm Việt vươn ra thế giới 2026",
-    summary:
-      "Sự kiện khởi động chuỗi hoạt động Vproud năm 2026, quy tụ doanh nghiệp, chuyên gia và đối tác cùng công bố hành trình đưa sản phẩm Việt ra thị trường quốc tế.",
-    description: [
-      "Ngày hội khởi động đánh dấu năm hoạt động đầu tiên của Vproud, nơi doanh nghiệp Việt Nam gặp mạng lưới chuyên gia, đối tác và nhà mua hàng quốc tế trong một không gian duy nhất.",
-      "Chương trình công bố Thang điểm sẵn sàng xuất khẩu, giới thiệu chuỗi chương trình địa phương năm 2026 và mở đăng ký cho Học viện Vproud.",
-    ],
-    dateLabel: "14/03/2026",
-    timeLabel: "08:30 - 17:00",
-    isoDate: "2026-03-14",
-    location: "Hà Nội",
-    venue: "Trung tâm Hội nghị Quốc gia, Hà Nội",
-    format: "Trực tiếp",
-    price: "Miễn phí",
-    capacity: "500 doanh nghiệp",
-    cover: "/asset/events/9.jpg",
-    highlights: [
-      "Công bố Thang điểm sẵn sàng xuất khẩu dành cho doanh nghiệp Việt",
-      "Kết nối trực tiếp với mạng lưới chuyên gia và đối tác chiến lược Vproud",
-      "Mở đăng ký Học viện Vproud và chuỗi chương trình địa phương 2026",
-      "Khu trưng bày sản phẩm Việt có câu chuyện, có bản sắc",
-    ],
-    audience:
-      "Doanh nghiệp sản xuất, doanh nghiệp nhỏ và vừa, hợp tác xã, doanh nghiệp OCOP và các đơn vị đã hoặc đang chuẩn bị xuất khẩu.",
-    agenda: [
-      {
-        time: "08:30",
-        title: "Đón khách và trưng bày sản phẩm Việt",
-        desc: "Tham quan khu trưng bày sản phẩm có câu chuyện, kết nối sớm với đối tác và chuyên gia.",
-      },
-      {
-        time: "09:30",
-        title: "Khai mạc và giới thiệu mô hình Vproud",
-        desc: "JCI Grace giới thiệu sứ mệnh, mô hình vận hành và chỉ tiêu năm đầu tiên của Vproud.",
-      },
-      {
-        time: "10:30",
-        title: "Công bố Thang điểm sẵn sàng xuất khẩu",
-        desc: "Giới thiệu phương pháp đánh giá 100 điểm và cách doanh nghiệp có thể tự chấm điểm hành trình xuất khẩu.",
-      },
-      {
-        time: "14:00",
-        title: "Bàn tròn chuyên gia: Từ sản phẩm tốt đến thị trường quốc tế",
-        desc: "Chuyên gia hậu cần, pháp lý, thương hiệu và bán hàng xuất khẩu chia sẻ kinh nghiệm thực chiến.",
-      },
-      {
-        time: "16:00",
-        title: "Kết nối doanh nghiệp - đối tác - nhà mua hàng",
-        desc: "Không gian kết nối mở, doanh nghiệp trao đổi trực tiếp với đối tác và nhà mua hàng quan tâm.",
-      },
-    ],
-    speakers: [
-      {
-        name: "Đại diện JCI Grace",
-        role: "Đơn vị khởi xướng Vproud",
-        bio: "Giới thiệu sứ mệnh, mô hình cộng đồng - đối tác - doanh nghiệp thụ hưởng và định hướng năm 2026.",
-      },
-      {
-        name: "Chuyên gia hậu cần quốc tế",
-        role: "Mạng lưới chuyên gia Vproud",
-        bio: "Nhiều năm tư vấn xuất nhập khẩu, am hiểu chứng nhận, thủ tục hải quan và vận chuyển quốc tế.",
-      },
-      {
-        name: "Chuyên gia xây dựng thương hiệu",
-        role: "Mạng lưới chuyên gia Vproud",
-        bio: "Đồng hành cùng thương hiệu Việt trong việc kể chuyện sản phẩm và định vị trên thị trường quốc tế.",
-      },
-    ],
-  },
-  {
-    slug: "hoc-vien-vpg-san-sang-xuat-khau",
-    category: "Đào tạo thực chiến",
-    title: "Học viện Vproud: Sẵn sàng xuất khẩu",
-    summary:
-      "Khóa đào tạo thực chiến giúp doanh nghiệp tự đánh giá mức độ sẵn sàng, chuẩn hóa sản phẩm và xây dựng năng lực bán hàng xuất khẩu.",
-    description: [
-      "Học viện Vproud là chương trình đào tạo cốt lõi, cung cấp kiến thức nền tảng về xuất khẩu, mức độ sẵn sàng của sản phẩm, bán hàng quốc tế, tiếp thị toàn cầu và ứng dụng AI cho xuất khẩu.",
-      "Kết thúc khóa học, doanh nghiệp nhận được bản đánh giá sẵn sàng xuất khẩu và lộ trình cải thiện cụ thể theo thang điểm 100.",
-    ],
-    dateLabel: "18/04/2026",
-    timeLabel: "08:00 - 16:30",
-    isoDate: "2026-04-18",
-    location: "TP. Hồ Chí Minh",
-    venue: "Khách sạn Rex Saigon, Quận 1, TP. Hồ Chí Minh",
-    format: "Trực tiếp",
-    price: "Miễn phí cho thành viên Vproud",
-    capacity: "200 doanh nghiệp",
-    cover: "/asset/events/ai-ceo.jpg",
-    highlights: [
-      "Tự đánh giá mức độ sẵn sàng xuất khẩu theo 8 tiêu chí cốt lõi",
-      "Thực hành xây dựng hồ sơ sản phẩm chuẩn xuất khẩu",
-      "Hướng dẫn ứng dụng AI trong tìm kiếm khách hàng và tiếp thị toàn cầu",
-      "Nhận lộ trình cải thiện cá nhân hóa theo từng doanh nghiệp",
-    ],
-    audience:
-      "Chủ doanh nghiệp, quản lý bán hàng và marketing của doanh nghiệp sản xuất, thương hiệu Việt đang chuẩn bị hoặc mới bắt đầu xuất khẩu.",
-    agenda: [
-      {
-        time: "08:00",
-        title: "Đăng ký và khảo sát sẵn sàng xuất khẩu",
-        desc: "Doanh nghiệp hoàn thành bảng khảo sát nhanh để xác định điểm khởi đầu.",
-      },
-      {
-        time: "09:00",
-        title: "Nền tảng xuất khẩu và mức độ sẵn sàng sản phẩm",
-        desc: "Phân tích 8 tiêu chí đánh giá: sản phẩm, chứng nhận, sản xuất, bán hàng, thương hiệu, giá, số hóa, cam kết lãnh đạo.",
-      },
-      {
-        time: "11:00",
-        title: "Bán hàng quốc tế và tiếp thị toàn cầu",
-        desc: "Xây dựng kênh bán hàng B2B, làm việc với nhà nhập khẩu và sàn thương mại quốc tế.",
-      },
-      {
-        time: "14:00",
-        title: "Ứng dụng AI cho xuất khẩu",
-        desc: "Thực hành dùng công cụ AI để nghiên cứu thị trường, soạn nội dung và tìm khách hàng mục tiêu.",
-      },
-      {
-        time: "16:00",
-        title: "Nhận lộ trình cải thiện cá nhân hóa",
-        desc: "Mỗi doanh nghiệp nhận bản tổng hợp điểm số và khuyến nghị ưu tiên cải thiện.",
-      },
-    ],
-    speakers: [
-      {
-        name: "Giảng viên Học viện Vproud",
-        role: "Đào tạo xuất khẩu thực chiến",
-        bio: "Trực tiếp xây dựng khung đánh giá sẵn sàng xuất khẩu và đồng hành cùng doanh nghiệp OCOP, doanh nghiệp vừa và nhỏ.",
-      },
-      {
-        name: "Chuyên gia thương mại điện tử xuyên biên giới",
-        role: "Mạng lưới chuyên gia Vproud",
-        bio: "Có kinh nghiệm đưa sản phẩm Việt lên các sàn thương mại điện tử quốc tế.",
-      },
-      {
-        name: "Chuyên gia ứng dụng AI cho doanh nghiệp",
-        role: "Mạng lưới chuyên gia Vproud",
-        bio: "Hướng dẫn doanh nghiệp nhỏ và vừa ứng dụng AI vào nghiên cứu thị trường và tiếp thị quốc tế.",
-      },
-    ],
-  },
-  {
-    slug: "chuong-trinh-dia-phuong-hoa-binh",
+    slug: "chuong-trinh-dia-phuong-phu-tho",
     category: "Chuỗi chương trình địa phương",
-    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Hòa Bình",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Phú Thọ",
     summary:
-      "Chương trình tại Hòa Bình kết hợp cập nhật thị trường, lớp chuyên sâu, câu chuyện thực tế và kết nối kinh doanh cho doanh nghiệp địa phương.",
+      "Chương trình tại Phú Thọ cập nhật thị trường xuất khẩu chè, nông sản chế biến và sản phẩm thủ công gắn với vùng đất Tổ.",
     description: [
-      "Chương trình địa phương mang Vproud đến gần hơn với doanh nghiệp sản xuất, hợp tác xã và doanh nghiệp OCOP tại Hòa Bình.",
-      "Nội dung tập trung vào nông sản chế biến, thủ công mỹ nghệ và các sản phẩm mang bản sắc vùng miền có tiềm năng xuất khẩu.",
+      "Chương trình địa phương mang Vproud đến với doanh nghiệp sản xuất, hợp tác xã và doanh nghiệp OCOP tại Phú Thọ - vùng đất giàu bản sắc với sản phẩm chè, nông sản chế biến và thủ công mỹ nghệ.",
+      "Nội dung tập trung vào tiêu chuẩn xuất khẩu chè, đóng gói sản phẩm nông nghiệp và cách kể câu chuyện thương hiệu gắn với văn hóa vùng đất Tổ.",
     ],
-    dateLabel: "12/09/2026",
+    dateLabel: "10/09/2026",
     timeLabel: "08:00 - 12:00",
-    isoDate: "2026-09-12",
-    location: "Hòa Bình",
-    venue: "Trung tâm Văn hóa tỉnh Hòa Bình",
+    isoDate: "2026-09-10",
+    location: "Phú Thọ",
+    venue: "Trung tâm Văn hóa tỉnh Phú Thọ",
     format: "Trực tiếp",
     price: "Miễn phí",
     capacity: "150 doanh nghiệp",
     cover: "/asset/events/hoabinh.jpg",
     highlights: [
-      "Cập nhật thị trường xuất khẩu nông sản chế biến và thủ công mỹ nghệ",
-      "Chia sẻ câu chuyện thực tế từ doanh nghiệp địa phương đã xuất khẩu thành công",
-      "Lớp chuyên sâu về chứng nhận và tiêu chuẩn cho hàng OCOP",
-      "Kết nối kinh doanh trực tiếp giữa doanh nghiệp và chuyên gia Vproud",
+      "Cập nhật thị trường xuất khẩu chè và nông sản chế biến",
+      "Hướng dẫn tiêu chuẩn đóng gói và chứng nhận cho hàng OCOP",
+      "Chia sẻ cách xây dựng câu chuyện thương hiệu gắn với văn hóa vùng đất Tổ",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
     ],
     audience:
-      "Doanh nghiệp sản xuất, hợp tác xã, doanh nghiệp OCOP và hộ kinh doanh tại Hòa Bình và các tỉnh lân cận.",
+      "Doanh nghiệp sản xuất chè, nông sản chế biến, hợp tác xã và doanh nghiệp OCOP tại Phú Thọ và các tỉnh lân cận.",
     agenda: [
       {
         time: "08:00",
@@ -211,12 +67,74 @@ export const events: VpgEvent[] = [
       },
       {
         time: "09:00",
-        title: "Cập nhật thị trường nông sản chế biến và thủ công mỹ nghệ",
+        title: "Cập nhật thị trường xuất khẩu chè và nông sản chế biến",
+        desc: "Thông tin nhu cầu thị trường quốc tế, tiêu chuẩn nhập khẩu chè và xu hướng tiêu dùng.",
+      },
+      {
+        time: "10:15",
+        title: "Xây dựng thương hiệu sản phẩm gắn với văn hóa vùng đất Tổ",
+        desc: "Hướng dẫn cách kể câu chuyện sản phẩm để tạo khác biệt trên thị trường quốc tế.",
+      },
+      {
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
+      },
+    ],
+    speakers: [
+      {
+        name: "Chuyên gia xuất khẩu nông sản",
+        role: "Mạng lưới chuyên gia Vproud",
+        bio: "Tư vấn tiêu chuẩn xuất khẩu chè và nông sản chế biến sang thị trường châu Á, châu Âu.",
+      },
+      {
+        name: "Đại diện doanh nghiệp địa phương",
+        role: "Câu chuyện thực tế",
+        bio: "Doanh nghiệp sản xuất chè tại Phú Thọ đã xuất khẩu thành công sang thị trường quốc tế.",
+      },
+    ],
+  },
+  {
+    slug: "chuong-trinh-dia-phuong-yen-bai",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Yên Bái",
+    summary:
+      "Chương trình tại Yên Bái tập trung vào chè Shan tuyết, quế và nông sản vùng cao có tiềm năng xuất khẩu.",
+    description: [
+      "Chương trình địa phương mang Vproud đến với doanh nghiệp, hợp tác xã và doanh nghiệp OCOP tại Yên Bái, nơi có thế mạnh về chè Shan tuyết, quế và nông sản vùng cao.",
+      "Nội dung tập trung vào chứng nhận hữu cơ, tiêu chuẩn xuất khẩu quế và cách tiếp cận nhà mua hàng quốc tế cho nông sản đặc sản vùng cao.",
+    ],
+    dateLabel: "24/09/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-09-24",
+    location: "Yên Bái",
+    venue: "Trung tâm Văn hóa tỉnh Yên Bái",
+    format: "Trực tiếp",
+    price: "Miễn phí",
+    capacity: "150 doanh nghiệp",
+    cover: "/asset/events/9.jpg",
+    highlights: [
+      "Cập nhật thị trường xuất khẩu chè Shan tuyết và quế",
+      "Hướng dẫn chứng nhận hữu cơ và tiêu chuẩn cho nông sản vùng cao",
+      "Chia sẻ câu chuyện thực tế từ doanh nghiệp địa phương đã xuất khẩu quế",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
+    ],
+    audience:
+      "Doanh nghiệp sản xuất chè, quế, nông sản vùng cao, hợp tác xã và doanh nghiệp OCOP tại Yên Bái và các tỉnh lân cận.",
+    agenda: [
+      {
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
+      },
+      {
+        time: "09:00",
+        title: "Cập nhật thị trường xuất khẩu chè Shan tuyết và quế",
         desc: "Thông tin nhu cầu thị trường, tiêu chuẩn nhập khẩu và xu hướng tiêu dùng quốc tế.",
       },
       {
         time: "10:15",
-        title: "Câu chuyện thực tế: Doanh nghiệp địa phương xuất khẩu thành công",
+        title: "Câu chuyện thực tế: Doanh nghiệp địa phương xuất khẩu quế thành công",
         desc: "Chia sẻ hành trình thực tế từ chuẩn hóa sản phẩm đến ký được đơn hàng xuất khẩu đầu tiên.",
       },
       {
@@ -227,138 +145,386 @@ export const events: VpgEvent[] = [
     ],
     speakers: [
       {
-        name: "Chuyên gia chứng nhận và tuân thủ",
+        name: "Chuyên gia chứng nhận hữu cơ",
         role: "Mạng lưới chuyên gia Vproud",
-        bio: "Hỗ trợ doanh nghiệp OCOP hoàn thiện chứng nhận và tiêu chuẩn cho thị trường xuất khẩu.",
+        bio: "Hỗ trợ doanh nghiệp vùng cao hoàn thiện chứng nhận hữu cơ cho chè và quế xuất khẩu.",
       },
       {
         name: "Đại diện doanh nghiệp địa phương",
         role: "Câu chuyện thực tế",
-        bio: "Doanh nghiệp sản xuất nông sản chế biến tại Hòa Bình đã xuất khẩu thành công sang thị trường châu Á.",
+        bio: "Doanh nghiệp sản xuất quế tại Yên Bái đã xuất khẩu thành công sang thị trường Ấn Độ, Trung Đông.",
       },
     ],
   },
   {
-    slug: "ngay-gap-go-nha-mua-hang-quoc-te",
-    category: "Kết nối toàn cầu",
-    title: "Ngày gặp gỡ nhà mua hàng quốc tế",
+    slug: "chuong-trinh-dia-phuong-bac-ninh",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Bắc Ninh",
     summary:
-      "Kết nối trực tiếp doanh nghiệp Việt với nhà mua hàng, nhà nhập khẩu và nhà phân phối quốc tế trong các phiên gặp gỡ B2B.",
+      "Chương trình tại Bắc Ninh đồng hành cùng làng nghề gốm, tranh dân gian và đồ gỗ mỹ nghệ trên hành trình xuất khẩu.",
     description: [
-      "Ngày gặp gỡ nhà mua hàng quốc tế là điểm chạm quan trọng trong hành trình doanh nghiệp: từ chuẩn bị đến kết nối thị trường thật.",
-      "Doanh nghiệp đã qua đánh giá sẵn sàng xuất khẩu được ưu tiên sắp xếp các phiên gặp gỡ B2B phù hợp với ngành hàng.",
+      "Chương trình địa phương mang Vproud đến với các làng nghề và doanh nghiệp sản xuất tại Bắc Ninh, nơi nổi tiếng với gốm Phù Lãng, tranh Đông Hồ và đồ gỗ mỹ nghệ.",
+      "Nội dung tập trung vào tiêu chuẩn đóng gói, bảo hộ sở hữu trí tuệ cho sản phẩm làng nghề và cách tiếp cận thị trường quà tặng, trang trí quốc tế.",
     ],
-    dateLabel: "24/10/2026",
-    timeLabel: "09:00 - 17:00",
-    isoDate: "2026-10-24",
-    location: "Đà Nẵng",
-    venue: "Trung tâm Hội chợ Triển lãm Đà Nẵng",
+    dateLabel: "08/10/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-10-08",
+    location: "Bắc Ninh",
+    venue: "Trung tâm Văn hóa tỉnh Bắc Ninh",
     format: "Trực tiếp",
-    price: "Miễn phí cho doanh nghiệp đã đánh giá sẵn sàng xuất khẩu",
-    capacity: "100+ nhà mua hàng quốc tế",
-    cover: "/asset/events/9.jpg",
-    highlights: [
-      "Phiên gặp gỡ B2B với nhà mua hàng, nhà nhập khẩu và nhà phân phối quốc tế",
-      "Khu trưng bày sản phẩm theo ngành hàng: nông sản, thủ công mỹ nghệ, quà tặng văn hóa",
-      "Tư vấn 1:1 về hậu cần quốc tế và thủ tục xuất khẩu ngay tại sự kiện",
-      "Cơ hội ký kết ghi nhớ hợp tác với đối tác quốc tế",
-    ],
-    audience:
-      "Doanh nghiệp đã hoàn thành đánh giá sẵn sàng xuất khẩu hoặc đã có sản phẩm đạt tiêu chuẩn xuất khẩu.",
-    agenda: [
-      {
-        time: "09:00",
-        title: "Khai mạc và giới thiệu nhà mua hàng tham dự",
-        desc: "Giới thiệu danh sách nhà mua hàng, nhà nhập khẩu và nhà phân phối quốc tế tham gia chương trình.",
-      },
-      {
-        time: "10:00",
-        title: "Phiên gặp gỡ B2B theo ngành hàng",
-        desc: "Doanh nghiệp gặp gỡ nhà mua hàng theo lịch hẹn đã sắp xếp trước dựa trên ngành hàng và nhu cầu.",
-      },
-      {
-        time: "14:00",
-        title: "Tư vấn 1:1 về hậu cần và thủ tục xuất khẩu",
-        desc: "Chuyên gia hậu cần quốc tế hỗ trợ giải đáp trực tiếp các vướng mắc về vận chuyển và thủ tục.",
-      },
-      {
-        time: "16:00",
-        title: "Tổng kết kết nối và bước tiếp theo",
-        desc: "Doanh nghiệp và nhà mua hàng xác nhận các bước hợp tác tiếp theo sau sự kiện.",
-      },
-    ],
-    speakers: [
-      {
-        name: "Đại diện nhà mua hàng quốc tế",
-        role: "Đối tác kết nối toàn cầu",
-        bio: "Đại diện các nhà nhập khẩu và nhà phân phối quan tâm đến sản phẩm Việt Nam.",
-      },
-      {
-        name: "Chuyên gia hậu cần quốc tế",
-        role: "Mạng lưới chuyên gia Vproud",
-        bio: "Tư vấn trực tiếp về vận chuyển quốc tế, thủ tục hải quan và tối ưu chi phí logistics.",
-      },
-    ],
-  },
-  {
-    slug: "hoi-thao-ai-cho-xuat-khau",
-    category: "Mạng lưới chuyên gia",
-    title: "Hội thảo AI cho xuất khẩu cùng chuyên gia",
-    summary:
-      "Hội thảo trực tuyến cùng mạng lưới chuyên gia Vproud về ứng dụng AI trong nghiên cứu thị trường, tiếp thị và bán hàng xuất khẩu.",
-    description: [
-      "Hội thảo trực tuyến giúp doanh nghiệp tiếp cận nhanh các công cụ AI đang được ứng dụng thực tế trong xuất khẩu.",
-      "Nội dung xoay quanh nghiên cứu thị trường, tạo nội dung tiếp thị đa ngôn ngữ và tìm kiếm khách hàng quốc tế bằng AI.",
-    ],
-    dateLabel: "15/11/2026",
-    timeLabel: "19:30 - 21:30",
-    isoDate: "2026-11-15",
-    location: "Trực tuyến",
-    venue: "Nền tảng trực tuyến Vproud (đường link gửi qua email sau khi đăng ký)",
-    format: "Trực tuyến",
     price: "Miễn phí",
-    capacity: "Không giới hạn",
+    capacity: "150 doanh nghiệp",
     cover: "/asset/events/ai-ceo.jpg",
     highlights: [
-      "Ứng dụng AI trong nghiên cứu và phân tích thị trường xuất khẩu",
-      "Tạo nội dung tiếp thị đa ngôn ngữ bằng công cụ AI",
-      "Tìm kiếm và tiếp cận khách hàng quốc tế hiệu quả hơn",
-      "Hỏi đáp trực tiếp cùng chuyên gia ứng dụng AI cho doanh nghiệp",
+      "Cập nhật thị trường xuất khẩu gốm, tranh dân gian và đồ gỗ mỹ nghệ",
+      "Hướng dẫn bảo hộ sở hữu trí tuệ và thương hiệu cho sản phẩm làng nghề",
+      "Chia sẻ câu chuyện thực tế từ làng nghề đã xuất khẩu thành công",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
     ],
     audience:
-      "Doanh nghiệp, đội ngũ marketing và bán hàng xuất khẩu muốn ứng dụng AI vào công việc hàng ngày.",
+      "Doanh nghiệp làng nghề, cơ sở sản xuất gốm, tranh dân gian, đồ gỗ mỹ nghệ tại Bắc Ninh và các tỉnh lân cận.",
     agenda: [
       {
-        time: "19:30",
-        title: "Giới thiệu bối cảnh ứng dụng AI trong xuất khẩu",
-        desc: "Tổng quan các điểm chạm trong hành trình xuất khẩu có thể tăng tốc bằng AI.",
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
       },
       {
-        time: "20:00",
-        title: "Thực hành: Nghiên cứu thị trường và tạo nội dung bằng AI",
-        desc: "Hướng dẫn trực tiếp các bước sử dụng công cụ AI phổ biến cho nghiên cứu thị trường và soạn nội dung.",
+        time: "09:00",
+        title: "Cập nhật thị trường xuất khẩu sản phẩm làng nghề",
+        desc: "Thông tin nhu cầu thị trường quà tặng, trang trí quốc tế và tiêu chuẩn nhập khẩu.",
       },
       {
-        time: "20:45",
-        title: "Tìm kiếm khách hàng quốc tế bằng AI",
-        desc: "Gợi ý quy trình tìm kiếm và tiếp cận khách hàng, nhà mua hàng quốc tế có ứng dụng AI.",
+        time: "10:15",
+        title: "Bảo hộ sở hữu trí tuệ và thương hiệu cho sản phẩm làng nghề",
+        desc: "Hướng dẫn đăng ký bảo hộ kiểu dáng, nhãn hiệu khi đưa sản phẩm ra thị trường quốc tế.",
       },
       {
-        time: "21:15",
-        title: "Hỏi đáp cùng chuyên gia",
-        desc: "Giải đáp trực tiếp các câu hỏi của doanh nghiệp tham dự.",
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
       },
     ],
     speakers: [
       {
-        name: "Chuyên gia ứng dụng AI cho doanh nghiệp",
+        name: "Chuyên gia sở hữu trí tuệ",
         role: "Mạng lưới chuyên gia Vproud",
-        bio: "Chuyên hỗ trợ doanh nghiệp nhỏ và vừa ứng dụng AI vào tiếp thị và bán hàng xuất khẩu.",
+        bio: "Tư vấn bảo hộ nhãn hiệu, kiểu dáng công nghiệp cho sản phẩm làng nghề khi xuất khẩu.",
       },
       {
-        name: "Chuyên gia bán hàng xuất khẩu",
+        name: "Đại diện doanh nghiệp địa phương",
+        role: "Câu chuyện thực tế",
+        bio: "Cơ sở sản xuất gốm tại Bắc Ninh đã đưa sản phẩm vào chuỗi cửa hàng quà tặng quốc tế.",
+      },
+    ],
+  },
+  {
+    slug: "chuong-trinh-dia-phuong-lang-son",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Lạng Sơn",
+    summary:
+      "Chương trình tại Lạng Sơn cập nhật thị trường biên mậu, nông sản và cơ hội xuất khẩu qua các cửa khẩu biên giới.",
+    description: [
+      "Chương trình địa phương mang Vproud đến với doanh nghiệp tại Lạng Sơn - địa phương cửa ngõ biên mậu với thế mạnh về hồi, na và nông sản xuất khẩu qua biên giới.",
+      "Nội dung tập trung vào thủ tục xuất khẩu qua cửa khẩu, tiêu chuẩn kiểm dịch nông sản và cách đa dạng hóa thị trường ngoài kênh biên mậu truyền thống.",
+    ],
+    dateLabel: "22/10/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-10-22",
+    location: "Lạng Sơn",
+    venue: "Trung tâm Văn hóa tỉnh Lạng Sơn",
+    format: "Trực tiếp",
+    price: "Miễn phí",
+    capacity: "150 doanh nghiệp",
+    cover: "/asset/events/hoabinh.jpg",
+    highlights: [
+      "Cập nhật thủ tục xuất khẩu qua cửa khẩu và quy định biên mậu mới nhất",
+      "Hướng dẫn tiêu chuẩn kiểm dịch cho nông sản xuất khẩu (hồi, na, nông sản tươi)",
+      "Chia sẻ cách đa dạng hóa thị trường ngoài kênh biên mậu truyền thống",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
+    ],
+    audience:
+      "Doanh nghiệp nông sản, thương mại biên mậu, hợp tác xã tại Lạng Sơn và các tỉnh biên giới phía Bắc.",
+    agenda: [
+      {
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
+      },
+      {
+        time: "09:00",
+        title: "Cập nhật thủ tục xuất khẩu qua cửa khẩu và quy định biên mậu",
+        desc: "Thông tin quy định hải quan, kiểm dịch mới nhất cho hàng nông sản qua biên giới.",
+      },
+      {
+        time: "10:15",
+        title: "Đa dạng hóa thị trường ngoài kênh biên mậu",
+        desc: "Gợi ý hướng tiếp cận thị trường quốc tế xa hơn biên mậu truyền thống cho nông sản đặc sản.",
+      },
+      {
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
+      },
+    ],
+    speakers: [
+      {
+        name: "Chuyên gia thủ tục hải quan biên mậu",
         role: "Mạng lưới chuyên gia Vproud",
-        bio: "Nhiều năm kinh nghiệm phát triển kênh bán hàng B2B ra thị trường quốc tế.",
+        bio: "Am hiểu quy định xuất khẩu qua cửa khẩu và thủ tục kiểm dịch nông sản biên giới phía Bắc.",
+      },
+      {
+        name: "Đại diện doanh nghiệp địa phương",
+        role: "Câu chuyện thực tế",
+        bio: "Doanh nghiệp nông sản tại Lạng Sơn đã mở rộng thị trường ngoài kênh biên mậu truyền thống.",
+      },
+    ],
+  },
+  {
+    slug: "chuong-trinh-dia-phuong-ha-tay",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Hà Tây",
+    summary:
+      "Chương trình tại Hà Tây đồng hành cùng làng nghề lụa, mây tre đan và sơn mài trên hành trình đưa sản phẩm ra quốc tế.",
+    description: [
+      "Chương trình địa phương mang Vproud đến với các làng nghề truyền thống vùng Hà Tây, nơi nổi tiếng với lụa Vạn Phúc, mây tre đan và sơn mài.",
+      "Nội dung tập trung vào tiêu chuẩn chất lượng cho hàng thủ công mỹ nghệ, đóng gói bảo quản khi vận chuyển quốc tế và xây dựng câu chuyện thương hiệu làng nghề.",
+    ],
+    dateLabel: "12/11/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-11-12",
+    location: "Hà Tây",
+    venue: "Trung tâm Văn hóa vùng Hà Tây",
+    format: "Trực tiếp",
+    price: "Miễn phí",
+    capacity: "150 doanh nghiệp",
+    cover: "/asset/events/9.jpg",
+    highlights: [
+      "Cập nhật thị trường xuất khẩu lụa, mây tre đan và sơn mài",
+      "Hướng dẫn tiêu chuẩn chất lượng và đóng gói bảo quản khi vận chuyển quốc tế",
+      "Chia sẻ câu chuyện xây dựng thương hiệu làng nghề ra thị trường quốc tế",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
+    ],
+    audience:
+      "Doanh nghiệp làng nghề lụa, mây tre đan, sơn mài và thủ công mỹ nghệ vùng Hà Tây.",
+    agenda: [
+      {
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
+      },
+      {
+        time: "09:00",
+        title: "Cập nhật thị trường xuất khẩu hàng thủ công mỹ nghệ",
+        desc: "Thông tin nhu cầu thị trường quốc tế cho lụa, mây tre đan, sơn mài và tiêu chuẩn nhập khẩu.",
+      },
+      {
+        time: "10:15",
+        title: "Đóng gói, bảo quản khi vận chuyển quốc tế",
+        desc: "Hướng dẫn kỹ thuật đóng gói giúp hàng thủ công mỹ nghệ giữ chất lượng khi vận chuyển đường dài.",
+      },
+      {
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
+      },
+    ],
+    speakers: [
+      {
+        name: "Chuyên gia đóng gói và logistics hàng thủ công",
+        role: "Mạng lưới chuyên gia Vproud",
+        bio: "Tư vấn kỹ thuật đóng gói, bảo quản cho hàng thủ công mỹ nghệ xuất khẩu đường dài.",
+      },
+      {
+        name: "Đại diện doanh nghiệp làng nghề",
+        role: "Câu chuyện thực tế",
+        bio: "Doanh nghiệp lụa Vạn Phúc đã đưa sản phẩm vào các cửa hàng thời trang quốc tế.",
+      },
+    ],
+  },
+  {
+    slug: "chuong-trinh-dia-phuong-hung-yen",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Hưng Yên",
+    summary:
+      "Chương trình tại Hưng Yên tập trung vào nhãn lồng, tương Bần và nông sản chế biến có tiềm năng xuất khẩu.",
+    description: [
+      "Chương trình địa phương mang Vproud đến với doanh nghiệp, hợp tác xã và hộ sản xuất tại Hưng Yên, nơi nổi tiếng với nhãn lồng, tương Bần và nông sản chế biến.",
+      "Nội dung tập trung vào chế biến sâu để kéo dài hạn sử dụng, tiêu chuẩn an toàn thực phẩm và cách tiếp cận nhà mua hàng quốc tế cho nông sản đặc sản.",
+    ],
+    dateLabel: "26/11/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-11-26",
+    location: "Hưng Yên",
+    venue: "Trung tâm Văn hóa tỉnh Hưng Yên",
+    format: "Trực tiếp",
+    price: "Miễn phí",
+    capacity: "150 doanh nghiệp",
+    cover: "/asset/events/ai-ceo.jpg",
+    highlights: [
+      "Cập nhật thị trường xuất khẩu nhãn lồng chế biến và tương Bần",
+      "Hướng dẫn chế biến sâu để kéo dài hạn sử dụng và đạt tiêu chuẩn xuất khẩu",
+      "Chia sẻ câu chuyện thực tế từ doanh nghiệp địa phương đã xuất khẩu thành công",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
+    ],
+    audience:
+      "Doanh nghiệp chế biến nông sản, hợp tác xã và hộ sản xuất tại Hưng Yên và các tỉnh đồng bằng sông Hồng.",
+    agenda: [
+      {
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
+      },
+      {
+        time: "09:00",
+        title: "Cập nhật thị trường xuất khẩu nông sản chế biến",
+        desc: "Thông tin nhu cầu thị trường quốc tế cho nhãn lồng chế biến, tương Bần và tiêu chuẩn an toàn thực phẩm.",
+      },
+      {
+        time: "10:15",
+        title: "Chế biến sâu để kéo dài hạn sử dụng",
+        desc: "Hướng dẫn kỹ thuật chế biến, bảo quản giúp nông sản đạt tiêu chuẩn xuất khẩu đường dài.",
+      },
+      {
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
+      },
+    ],
+    speakers: [
+      {
+        name: "Chuyên gia an toàn thực phẩm xuất khẩu",
+        role: "Mạng lưới chuyên gia Vproud",
+        bio: "Tư vấn tiêu chuẩn an toàn thực phẩm và chế biến sâu cho nông sản xuất khẩu.",
+      },
+      {
+        name: "Đại diện doanh nghiệp địa phương",
+        role: "Câu chuyện thực tế",
+        bio: "Doanh nghiệp chế biến nhãn lồng tại Hưng Yên đã xuất khẩu thành công sang thị trường châu Âu.",
+      },
+    ],
+  },
+  {
+    slug: "chuong-trinh-dia-phuong-hai-phong",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Hải Phòng",
+    summary:
+      "Chương trình tại Hải Phòng tập trung vào hải sản chế biến, logistics cảng biển và cơ hội xuất khẩu qua cửa ngõ hàng hải.",
+    description: [
+      "Chương trình địa phương mang Vproud đến với doanh nghiệp tại Hải Phòng - thành phố cảng biển với thế mạnh hải sản chế biến và logistics xuất khẩu.",
+      "Nội dung tập trung vào tiêu chuẩn xuất khẩu hải sản, tối ưu chi phí logistics qua cảng biển và kết nối trực tiếp với nhà mua hàng quốc tế.",
+    ],
+    dateLabel: "10/12/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-12-10",
+    location: "Hải Phòng",
+    venue: "Trung tâm Hội nghị tỉnh Hải Phòng",
+    format: "Trực tiếp",
+    price: "Miễn phí",
+    capacity: "150 doanh nghiệp",
+    cover: "/asset/events/hoabinh.jpg",
+    highlights: [
+      "Cập nhật thị trường xuất khẩu hải sản chế biến",
+      "Tối ưu chi phí và thủ tục logistics xuất khẩu qua cảng biển",
+      "Chia sẻ câu chuyện thực tế từ doanh nghiệp địa phương đã xuất khẩu thành công",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
+    ],
+    audience:
+      "Doanh nghiệp chế biến hải sản, logistics và xuất nhập khẩu tại Hải Phòng và khu vực duyên hải Bắc Bộ.",
+    agenda: [
+      {
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
+      },
+      {
+        time: "09:00",
+        title: "Cập nhật thị trường xuất khẩu hải sản chế biến",
+        desc: "Thông tin nhu cầu thị trường quốc tế, tiêu chuẩn kiểm dịch và chứng nhận cho hải sản xuất khẩu.",
+      },
+      {
+        time: "10:15",
+        title: "Tối ưu chi phí logistics qua cảng biển",
+        desc: "Hướng dẫn lựa chọn phương thức vận chuyển và tối ưu chi phí logistics khi xuất khẩu qua cảng.",
+      },
+      {
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
+      },
+    ],
+    speakers: [
+      {
+        name: "Chuyên gia logistics cảng biển",
+        role: "Mạng lưới chuyên gia Vproud",
+        bio: "Nhiều năm kinh nghiệm tối ưu chi phí và thủ tục logistics xuất khẩu qua cảng biển.",
+      },
+      {
+        name: "Đại diện doanh nghiệp địa phương",
+        role: "Câu chuyện thực tế",
+        bio: "Doanh nghiệp chế biến hải sản tại Hải Phòng đã xuất khẩu thành công sang thị trường Nhật Bản, Hàn Quốc.",
+      },
+    ],
+  },
+  {
+    slug: "chuong-trinh-dia-phuong-quang-ninh",
+    category: "Chuỗi chương trình địa phương",
+    title: "Chuỗi chương trình địa phương: Kết nối doanh nghiệp Quảng Ninh",
+    summary:
+      "Chương trình tại Quảng Ninh tập trung vào hải sản, gốm sứ và sản phẩm gắn với du lịch có tiềm năng xuất khẩu.",
+    description: [
+      "Chương trình địa phương mang Vproud đến với doanh nghiệp tại Quảng Ninh, nơi có thế mạnh về hải sản, gốm sứ Đông Triều và sản phẩm quà tặng gắn với du lịch Hạ Long.",
+      "Nội dung tập trung vào tiêu chuẩn xuất khẩu hải sản, chứng nhận cho gốm sứ mỹ nghệ và cách khai thác kênh khách du lịch quốc tế cho sản phẩm địa phương.",
+    ],
+    dateLabel: "17/12/2026",
+    timeLabel: "08:00 - 12:00",
+    isoDate: "2026-12-17",
+    location: "Quảng Ninh",
+    venue: "Trung tâm Văn hóa tỉnh Quảng Ninh",
+    format: "Trực tiếp",
+    price: "Miễn phí",
+    capacity: "150 doanh nghiệp",
+    cover: "/asset/events/9.jpg",
+    highlights: [
+      "Cập nhật thị trường xuất khẩu hải sản và gốm sứ mỹ nghệ",
+      "Hướng dẫn chứng nhận chất lượng cho gốm sứ Đông Triều xuất khẩu",
+      "Chia sẻ cách khai thác kênh khách du lịch quốc tế cho sản phẩm địa phương",
+      "Kết nối kinh doanh trực tiếp với chuyên gia và đối tác Vproud",
+    ],
+    audience:
+      "Doanh nghiệp chế biến hải sản, sản xuất gốm sứ, quà tặng du lịch tại Quảng Ninh và khu vực Đông Bắc Bộ.",
+    agenda: [
+      {
+        time: "08:00",
+        title: "Đón tiếp và giới thiệu chương trình Vproud tại địa phương",
+        desc: "Giới thiệu mục tiêu chuỗi chương trình địa phương và cách doanh nghiệp tham gia hệ sinh thái Vproud.",
+      },
+      {
+        time: "09:00",
+        title: "Cập nhật thị trường xuất khẩu hải sản và gốm sứ mỹ nghệ",
+        desc: "Thông tin nhu cầu thị trường quốc tế, tiêu chuẩn kiểm dịch và chứng nhận chất lượng.",
+      },
+      {
+        time: "10:15",
+        title: "Khai thác kênh khách du lịch quốc tế cho sản phẩm địa phương",
+        desc: "Gợi ý cách đưa sản phẩm quà tặng, đặc sản tiếp cận khách du lịch quốc tế qua Hạ Long.",
+      },
+      {
+        time: "11:00",
+        title: "Kết nối kinh doanh trực tiếp",
+        desc: "Doanh nghiệp trao đổi trực tiếp với chuyên gia và đối tác đồng hành Vproud.",
+      },
+    ],
+    speakers: [
+      {
+        name: "Chuyên gia chứng nhận chất lượng xuất khẩu",
+        role: "Mạng lưới chuyên gia Vproud",
+        bio: "Tư vấn chứng nhận chất lượng cho hải sản và gốm sứ mỹ nghệ xuất khẩu.",
+      },
+      {
+        name: "Đại diện doanh nghiệp địa phương",
+        role: "Câu chuyện thực tế",
+        bio: "Doanh nghiệp gốm sứ tại Quảng Ninh đã đưa sản phẩm vào chuỗi quà tặng du lịch quốc tế.",
       },
     ],
   },

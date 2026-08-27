@@ -167,7 +167,13 @@ export default function Home() {
         <div className="hero__content" id="top">
           <div className="hero__copy">
             <p className="kicker">Sản phẩm Việt. Thị trường toàn cầu.</p>
-            <h1 id="hero-title">Vproud</h1>
+            <h1 id="hero-title">
+              <img
+                className="hero__logo"
+                src="/asset/brand/logo-vproud.png"
+                alt="Vproud"
+              />
+            </h1>
             <h2>Sản phẩm Việt vươn ra thế giới</h2>
             <p className="hero__lead">
               Dự án cộng đồng do JCI Grace tổ chức, kết nối tri thức, chuyên

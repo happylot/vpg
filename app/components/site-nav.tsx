@@ -9,7 +9,11 @@ export function SiteNav({ variant = "home" }: SiteNavProps) {
   return (
     <nav className="nav" aria-label="Điều hướng Vproud">
       <a className="brand" href="/" aria-label="Trang chủ Vproud">
-        <span>Vproud</span>
+        <img
+          className="brand__logo"
+          src="/asset/brand/logo-vproud.png"
+          alt="Vproud"
+        />
         <small>Sản phẩm Việt vươn ra thế giới</small>
       </a>
       <div className="nav__links">
