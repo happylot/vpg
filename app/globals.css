@@ -2471,3 +2471,152 @@ main {
     display: none;
   }
 }
+
+/* Admin registrations page (/quan-tri) */
+
+.admin-login {
+  display: grid;
+  max-width: 420px;
+  min-height: 70vh;
+  align-content: center;
+  gap: 8px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.admin-login h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+
+.admin-login p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.96rem;
+}
+
+.admin-login__form {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-login__form label {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-login__form span {
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.admin-login__form input {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.98rem;
+}
+
+.admin-login__form input:focus {
+  outline: none;
+  border-color: var(--scarlet);
+}
+
+.admin-login__error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(197, 29, 24, 0.3);
+  border-radius: 6px;
+  background: rgba(197, 29, 24, 0.06);
+  color: var(--scarlet);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.admin-page {
+  width: min(1280px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+.admin-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.admin-page__header h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.9rem;
+  font-weight: 900;
+}
+
+.admin-page__count {
+  margin: 6px 0 0;
+  color: var(--scarlet);
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.admin-page__empty {
+  padding: 28px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.admin-table th {
+  background: #fff2d4;
+  color: var(--wine);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(142, 16, 16, 0.04);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 760px) {
+  .admin-page {
+    padding: 28px 0 60px;
+  }
+
+  .admin-page__header h1 {
+    font-size: 1.5rem;
+  }
+}
