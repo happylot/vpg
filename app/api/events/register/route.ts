@@ -1,4 +1,4 @@
-import { ensureSchema, getDb } from "../../../../db";
+import { eventRegistrationsTableSql, withDb } from "../../../../db";
 import { eventRegistrations } from "../../../../db/schema";
 import { getEventBySlug } from "../../../events/data";
 import { notifyNewRegistration } from "./notify";
@@ -58,12 +58,14 @@ export async function POST(request: Request) {
       return Response.json({ error: "Vui lòng nhập số điện thoại." }, { status: 400 });
     }
 
-    await ensureSchema();
-    const db = getDb();
-    const [registration] = await db
-      .insert(eventRegistrations)
-      .values({ eventSlug, fullName, phone, email, company, role, note })
-      .returning();
+    const registration = await withDb(async ({ db, sql }) => {
+      await sql.unsafe(eventRegistrationsTableSql);
+      const [row] = await db
+        .insert(eventRegistrations)
+        .values({ eventSlug, fullName, phone, email, company, role, note })
+        .returning();
+      return row;
+    });
 
     try {
       await notifyNewRegistration(event, {

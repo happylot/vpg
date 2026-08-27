@@ -2,12 +2,7 @@ import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 
-let client: ReturnType<typeof postgres> | undefined;
-let schemaEnsured = false;
-
-function getClient() {
-  if (client) return client;
-
+function createClient() {
   const host = process.env.DB_HOST;
   const port = process.env.DB_PORT;
   const database = process.env.DB_DATABASE;
@@ -20,41 +15,47 @@ function getClient() {
     );
   }
 
-  client = postgres({
+  return postgres({
     host,
     port: port ? Number(port) : 5432,
     database,
     username,
     password,
     ssl: false,
+    max: 1,
   });
-
-  return client;
 }
 
-export function getDb() {
-  return drizzle(getClient(), { schema });
+// Cloudflare Workers forbids reusing an I/O object (like an open Postgres
+// socket) across requests - each request gets its own isolated context. So
+// unlike a typical Node server, we cannot cache a shared client at module
+// scope. Instead, open a fresh connection per call and always close it
+// before returning, all within the same request.
+export async function withDb<T>(
+  run: (ctx: {
+    db: ReturnType<typeof drizzle<typeof schema>>;
+    sql: ReturnType<typeof postgres>;
+  }) => Promise<T>
+): Promise<T> {
+  const client = createClient();
+  try {
+    const db = drizzle(client, { schema });
+    return await run({ db, sql: client });
+  } finally {
+    await client.end({ timeout: 5 });
+  }
 }
 
-// Idempotent bootstrap so local/dev environments work without a separate
-// manual migration step. Production should still apply `drizzle/*.sql`
-// through a real migration run when possible.
-export async function ensureSchema() {
-  if (schemaEnsured) return;
-
-  await getClient()`
-    CREATE TABLE IF NOT EXISTS event_registrations (
-      id serial PRIMARY KEY,
-      event_slug text NOT NULL,
-      full_name text NOT NULL,
-      phone text NOT NULL,
-      email text NOT NULL DEFAULT '',
-      company text NOT NULL DEFAULT '',
-      role text NOT NULL DEFAULT '',
-      note text NOT NULL DEFAULT '',
-      created_at timestamptz NOT NULL DEFAULT now()
-    )
-  `;
-
-  schemaEnsured = true;
-}
+export const eventRegistrationsTableSql = `
+  CREATE TABLE IF NOT EXISTS event_registrations (
+    id serial PRIMARY KEY,
+    event_slug text NOT NULL,
+    full_name text NOT NULL,
+    phone text NOT NULL,
+    email text NOT NULL DEFAULT '',
+    company text NOT NULL DEFAULT '',
+    role text NOT NULL DEFAULT '',
+    note text NOT NULL DEFAULT '',
+    created_at timestamptz NOT NULL DEFAULT now()
+  )
+`;
