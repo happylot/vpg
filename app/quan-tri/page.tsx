@@ -1,11 +1,16 @@
 import { desc } from "drizzle-orm";
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
-import { withDb } from "../../db";
+import {
+  eventRegistrationsAlterSql,
+  eventRegistrationsTableSql,
+  withDb,
+} from "../../db";
 import { eventRegistrations } from "../../db/schema";
 import { events } from "../events/data";
 import { ADMIN_COOKIE, hashAdminPassword } from "./auth";
 import { LoginForm } from "./login-form";
+import { ReadToggle } from "./read-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +32,11 @@ async function isAuthenticated() {
 }
 
 function formatDate(value: Date) {
-  return value.toLocaleDateString("vi-VN", { dateStyle: "short" });
+  return value.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }
 
 function formatTime(value: Date) {
@@ -45,16 +54,20 @@ export default async function AdminPage() {
     );
   }
 
-  const registrations = await withDb(async ({ db }) =>
-    db
+  const registrations = await withDb(async ({ db, sql }) => {
+    await sql.unsafe(eventRegistrationsTableSql);
+    await sql.unsafe(eventRegistrationsAlterSql);
+    return db
       .select()
       .from(eventRegistrations)
-      .orderBy(desc(eventRegistrations.createdAt)),
-  );
+      .orderBy(desc(eventRegistrations.createdAt));
+  });
 
   const eventTitleBySlug = new Map(
     events.map((event) => [event.slug, event.title]),
   );
+
+  const unreadCount = registrations.filter((row) => !row.isRead).length;
 
   return (
     <main className="admin-page">
@@ -64,6 +77,11 @@ export default async function AdminPage() {
           <h1>Danh sách đăng ký sự kiện</h1>
           <p className="admin-page__count">
             {registrations.length} lượt đăng ký
+            {unreadCount > 0 && (
+              <span className="admin-page__unread-badge">
+                {unreadCount} chưa đọc
+              </span>
+            )}
           </p>
         </div>
         <form action="/api/admin/logout" method="post">
@@ -80,6 +98,7 @@ export default async function AdminPage() {
           <table className="admin-table">
             <thead>
               <tr>
+                <th>Trạng thái</th>
                 <th>Ngày đăng ký</th>
                 <th>Giờ đăng ký</th>
                 <th>Sự kiện</th>
@@ -93,7 +112,13 @@ export default async function AdminPage() {
             </thead>
             <tbody>
               {registrations.map((row) => (
-                <tr key={row.id}>
+                <tr
+                  key={row.id}
+                  className={row.isRead ? undefined : "admin-table__row--unread"}
+                >
+                  <td>
+                    <ReadToggle id={row.id} isRead={row.isRead} />
+                  </td>
                   <td>{formatDate(row.createdAt)}</td>
                   <td>{formatTime(row.createdAt)}</td>
                   <td>{eventTitleBySlug.get(row.eventSlug) ?? row.eventSlug}</td>

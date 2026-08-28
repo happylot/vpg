@@ -2611,6 +2611,63 @@ main {
   border-bottom: none;
 }
 
+.admin-table__row--unread {
+  background: rgba(244, 182, 64, 0.1);
+  font-weight: 700;
+}
+
+.admin-table__row--unread:hover {
+  background: rgba(244, 182, 64, 0.16);
+}
+
+.admin-page__unread-badge {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--scarlet);
+  color: var(--ivory);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.admin-read-toggle {
+  padding: 6px 12px;
+  border: 1px solid rgba(142, 16, 16, 0.28);
+  border-radius: 999px;
+  background: rgba(142, 16, 16, 0.06);
+  color: var(--scarlet);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-read-toggle:hover {
+  background: rgba(142, 16, 16, 0.14);
+}
+
+.admin-read-toggle--read {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--muted);
+}
+
+.admin-read-toggle--read:hover {
+  background: rgba(23, 92, 82, 0.08);
+  color: var(--green);
+}
+
+.admin-read-toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 760px) {
   .admin-page {
     padding: 28px 0 60px;

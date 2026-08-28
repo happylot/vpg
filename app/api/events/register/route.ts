@@ -1,4 +1,8 @@
-import { eventRegistrationsTableSql, withDb } from "../../../../db";
+import {
+  eventRegistrationsAlterSql,
+  eventRegistrationsTableSql,
+  withDb,
+} from "../../../../db";
 import { eventRegistrations } from "../../../../db/schema";
 import { getEventBySlug } from "../../../events/data";
 import { notifyNewRegistration, notifyRegistrant } from "./notify";
@@ -60,6 +64,7 @@ export async function POST(request: Request) {
 
     const registration = await withDb(async ({ db, sql }) => {
       await sql.unsafe(eventRegistrationsTableSql);
+      await sql.unsafe(eventRegistrationsAlterSql);
       const [row] = await db
         .insert(eventRegistrations)
         .values({ eventSlug, fullName, phone, email, company, role, note })

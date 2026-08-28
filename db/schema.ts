@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const eventRegistrations = pgTable("event_registrations", {
   id: serial("id").primaryKey(),
@@ -9,6 +9,7 @@ export const eventRegistrations = pgTable("event_registrations", {
   company: text("company").notNull().default(""),
   role: text("role").notNull().default(""),
   note: text("note").notNull().default(""),
+  isRead: boolean("is_read").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

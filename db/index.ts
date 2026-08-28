@@ -56,6 +56,14 @@ export const eventRegistrationsTableSql = `
     company text NOT NULL DEFAULT '',
     role text NOT NULL DEFAULT '',
     note text NOT NULL DEFAULT '',
+    is_read boolean NOT NULL DEFAULT false,
     created_at timestamptz NOT NULL DEFAULT now()
   )
+`;
+
+// Adds columns introduced after the table already existed in production
+// (e.g. the 17 test rows created before `is_read` existed).
+export const eventRegistrationsAlterSql = `
+  ALTER TABLE event_registrations
+  ADD COLUMN IF NOT EXISTS is_read boolean NOT NULL DEFAULT false
 `;
