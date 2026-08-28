@@ -34,16 +34,21 @@ async function isAuthenticated() {
 async function fetchRegistrations(): Promise<Registration[]> {
   const headersList = await headers();
   const cookieHeader = headersList.get("cookie") ?? "";
+  const originalHost = headersList.get("host") ?? "";
   const origin = process.env.APP_ORIGIN ?? "http://127.0.0.1:3000";
 
   const response = await fetch(`${origin}/api/admin/registrations/list`, {
-    headers: { cookie: cookieHeader },
+    headers: {
+      cookie: cookieHeader,
+      ...(originalHost ? { host: originalHost } : {}),
+    },
     cache: "no-store",
   });
 
   if (!response.ok) {
+    const body = await response.text().catch(() => "");
     throw new Error(
-      `Không lấy được danh sách đăng ký (HTTP ${response.status}).`,
+      `Không lấy được danh sách đăng ký (HTTP ${response.status}) tại ${origin}/api/admin/registrations/list. Body: ${body}`,
     );
   }
 
