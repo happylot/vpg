@@ -7,9 +7,13 @@ export const metadata: Metadata = {
   description:
     "Vproud là dự án cộng đồng do JCI Grace tổ chức nhằm giúp doanh nghiệp Việt Nam nâng cao năng lực và đưa sản phẩm ra thị trường quốc tế.",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.png", sizes: "any", type: "image/png" },
+    ],
+    shortcut: "/favicon-32.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "Vproud | Sản phẩm Việt vươn ra thế giới",
