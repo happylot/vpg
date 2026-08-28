@@ -25,14 +25,24 @@ export async function GET() {
     return Response.json({ error: "Chưa đăng nhập." }, { status: 401 });
   }
 
-  const registrations = await withDb(async ({ db, sql }) => {
-    await sql.unsafe(eventRegistrationsTableSql);
-    await sql.unsafe(eventRegistrationsAlterSql);
-    return db
-      .select()
-      .from(eventRegistrations)
-      .orderBy(desc(eventRegistrations.createdAt));
-  });
+  try {
+    const registrations = await withDb(async ({ db, sql }) => {
+      await sql.unsafe(eventRegistrationsTableSql);
+      await sql.unsafe(eventRegistrationsAlterSql);
+      return db
+        .select()
+        .from(eventRegistrations)
+        .orderBy(desc(eventRegistrations.createdAt));
+    });
 
-  return Response.json({ registrations });
+    return Response.json({ registrations });
+  } catch (error) {
+    console.error("Lỗi truy vấn danh sách đăng ký:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    const cause =
+      error instanceof Error && error.cause instanceof Error
+        ? error.cause.message
+        : "";
+    return Response.json({ error: message, cause }, { status: 500 });
+  }
 }
