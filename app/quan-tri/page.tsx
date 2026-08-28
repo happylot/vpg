@@ -1,12 +1,6 @@
-import { desc } from "drizzle-orm";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import type { Metadata } from "next";
-import {
-  eventRegistrationsAlterSql,
-  eventRegistrationsTableSql,
-  withDb,
-} from "../../db";
-import { eventRegistrations } from "../../db/schema";
+import type { eventRegistrations } from "../../db/schema";
 import { events } from "../events/data";
 import { ADMIN_COOKIE, hashAdminPassword } from "./auth";
 import { LoginForm } from "./login-form";
@@ -18,6 +12,8 @@ export const metadata: Metadata = {
   title: "Quản trị đăng ký | Vproud",
   robots: { index: false, follow: false },
 };
+
+type Registration = typeof eventRegistrations.$inferSelect;
 
 async function isAuthenticated() {
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -31,16 +27,40 @@ async function isAuthenticated() {
   return token === expected;
 }
 
-function formatDate(value: Date) {
-  return value.toLocaleDateString("vi-VN", {
+// React Server Component rendering runs in a separate workerd context that
+// cannot open raw TCP sockets to Postgres directly (unlike route handlers,
+// which can). So this fetches the data through our own API route instead of
+// calling the database directly here.
+async function fetchRegistrations(): Promise<Registration[]> {
+  const headersList = await headers();
+  const cookieHeader = headersList.get("cookie") ?? "";
+  const origin = process.env.APP_ORIGIN ?? "http://127.0.0.1:3000";
+
+  const response = await fetch(`${origin}/api/admin/registrations/list`, {
+    headers: { cookie: cookieHeader },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Không lấy được danh sách đăng ký (HTTP ${response.status}).`,
+    );
+  }
+
+  const data = (await response.json()) as { registrations: Registration[] };
+  return data.registrations;
+}
+
+function formatDate(value: string | Date) {
+  return new Date(value).toLocaleDateString("vi-VN", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
 }
 
-function formatTime(value: Date) {
-  return value.toLocaleTimeString("vi-VN", { timeStyle: "medium" });
+function formatTime(value: string | Date) {
+  return new Date(value).toLocaleTimeString("vi-VN", { timeStyle: "medium" });
 }
 
 export default async function AdminPage() {
@@ -54,16 +74,9 @@ export default async function AdminPage() {
     );
   }
 
-  let registrations: (typeof eventRegistrations.$inferSelect)[];
+  let registrations: Registration[];
   try {
-    registrations = await withDb(async ({ db, sql }) => {
-      await sql.unsafe(eventRegistrationsTableSql);
-      await sql.unsafe(eventRegistrationsAlterSql);
-      return db
-        .select()
-        .from(eventRegistrations)
-        .orderBy(desc(eventRegistrations.createdAt));
-    });
+    registrations = await fetchRegistrations();
   } catch (error) {
     console.error("Không thể tải danh sách đăng ký:", error);
     return (

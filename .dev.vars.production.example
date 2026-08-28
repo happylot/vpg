@@ -12,3 +12,7 @@ DB_PASSWORD=your_password
 
 # Password to access /quan-tri (the registrations admin list)
 ADMIN_PASSWORD=change_me
+
+# Base URL the server uses to call its own API routes from Server
+# Components. Must match the Dockerfile's exposed port (3020).
+APP_ORIGIN=http://127.0.0.1:3020
