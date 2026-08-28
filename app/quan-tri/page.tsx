@@ -35,7 +35,10 @@ async function fetchRegistrations(): Promise<Registration[]> {
   const headersList = await headers();
   const cookieHeader = headersList.get("cookie") ?? "";
   const originalHost = headersList.get("host") ?? "";
-  const origin = process.env.APP_ORIGIN ?? "http://127.0.0.1:3000";
+  // Falls back to the Docker/production port (3020, see Dockerfile) since a
+  // misconfigured APP_ORIGIN there is much harder to notice than in local
+  // dev, where `npm run dev` prints the actual port on every start.
+  const origin = process.env.APP_ORIGIN ?? "http://127.0.0.1:3020";
 
   const response = await fetch(`${origin}/api/admin/registrations/list`, {
     headers: {
