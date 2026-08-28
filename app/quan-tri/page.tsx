@@ -54,14 +54,27 @@ export default async function AdminPage() {
     );
   }
 
-  const registrations = await withDb(async ({ db, sql }) => {
-    await sql.unsafe(eventRegistrationsTableSql);
-    await sql.unsafe(eventRegistrationsAlterSql);
-    return db
-      .select()
-      .from(eventRegistrations)
-      .orderBy(desc(eventRegistrations.createdAt));
-  });
+  let registrations: (typeof eventRegistrations.$inferSelect)[];
+  try {
+    registrations = await withDb(async ({ db, sql }) => {
+      await sql.unsafe(eventRegistrationsTableSql);
+      await sql.unsafe(eventRegistrationsAlterSql);
+      return db
+        .select()
+        .from(eventRegistrations)
+        .orderBy(desc(eventRegistrations.createdAt));
+    });
+  } catch (error) {
+    console.error("Không thể tải danh sách đăng ký:", error);
+    return (
+      <main className="admin-page">
+        <p className="admin-page__empty">
+          Không thể tải danh sách đăng ký. Xem log server để biết chi tiết
+          (docker compose logs app).
+        </p>
+      </main>
+    );
+  }
 
   const eventTitleBySlug = new Map(
     events.map((event) => [event.slug, event.title]),
