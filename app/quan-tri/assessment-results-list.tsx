@@ -36,23 +36,11 @@ function formatTime(value: string) {
   return new Date(value).toLocaleTimeString("vi-VN", { timeStyle: "medium" });
 }
 
-function groupScoredByCategory(entries: ScoredEntry[]) {
-  const groups: { category: string; entries: ScoredEntry[] }[] = [];
-  for (const entry of entries) {
-    let group = groups.find((g) => g.category === entry.category);
-    if (!group) {
-      group = { category: entry.category, entries: [] };
-      groups.push(group);
-    }
-    group.entries.push(entry);
-  }
-  return groups;
-}
-
 export function AssessmentResultsList() {
   const [results, setResults] = useState<AssessmentResult[] | null>(null);
   const [error, setError] = useState("");
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   async function load() {
     try {
@@ -90,6 +78,7 @@ export function AssessmentResultsList() {
 
   function toggleExpand(id: number) {
     setExpandedId((prev) => (prev === id ? null : id));
+    setExpandedCategory(null);
     if (results?.find((row) => row.id === id && !row.isRead)) {
       toggleRead(id, true);
     }
@@ -198,31 +187,49 @@ export function AssessmentResultsList() {
                               {row.totalScore}/100 điểm — {row.levelLabel}
                             </h4>
                             <div className="admin-detail__scores">
-                              {row.categoryScores.map((c) => (
-                                <div className="score-row" key={c.category}>
-                                  <span>{c.category}</span>
-                                  <div className="score-row__bar">
-                                    <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+                              {row.categoryScores.map((c) => {
+                                const isCategoryOpen =
+                                  expandedId === row.id && expandedCategory === c.category;
+                                const questions = row.scoredEntries.filter(
+                                  (entry) => entry.category === c.category,
+                                );
+                                return (
+                                  <div className="admin-score-group" key={c.category}>
+                                    <button
+                                      type="button"
+                                      className={`score-row score-row--clickable${
+                                        isCategoryOpen ? " score-row--open" : ""
+                                      }`}
+                                      onClick={() =>
+                                        setExpandedCategory((prev) =>
+                                          prev === c.category ? null : c.category,
+                                        )
+                                      }
+                                    >
+                                      <span>{c.category}</span>
+                                      <div className="score-row__bar">
+                                        <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+                                      </div>
+                                      <strong>
+                                        {c.score}/{c.max} {isCategoryOpen ? "▾" : "▸"}
+                                      </strong>
+                                    </button>
+                                    {isCategoryOpen && (
+                                      <div className="admin-detail__qa-group">
+                                        {questions.map((entry, i) => (
+                                          <div className="admin-detail__qa" key={i}>
+                                            <p className="admin-detail__question">{entry.question}</p>
+                                            <p className="admin-detail__answer">
+                                              {entry.selected} <span>({entry.points} điểm)</span>
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
                                   </div>
-                                  <strong>
-                                    {c.score}/{c.max}
-                                  </strong>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
-                            {groupScoredByCategory(row.scoredEntries).map((group) => (
-                              <div className="admin-detail__qa-group" key={group.category}>
-                                <h5>{group.category}</h5>
-                                {group.entries.map((entry, i) => (
-                                  <div className="admin-detail__qa" key={i}>
-                                    <p className="admin-detail__question">{entry.question}</p>
-                                    <p className="admin-detail__answer">
-                                      {entry.selected} <span>({entry.points} điểm)</span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            ))}
                           </div>
 
                           <div className="admin-detail__section">

@@ -2836,12 +2836,45 @@ main {
 
 .admin-detail__scores {
   display: grid;
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 16px;
 }
 
+.admin-score-group {
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-score-group:last-child {
+  border-bottom: none;
+}
+
+.score-row--clickable {
+  width: 100%;
+  border: none;
+  background: none;
+  border-bottom: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 160ms ease;
+}
+
+.score-row--clickable:hover {
+  background: rgba(142, 16, 16, 0.05);
+}
+
+.score-row--open {
+  background: rgba(142, 16, 16, 0.07);
+}
+
+.score-row--clickable strong {
+  white-space: nowrap;
+}
+
 .admin-detail__qa-group {
-  margin-bottom: 14px;
+  margin: 0 0 10px;
+  padding: 4px 4px 10px;
 }
 
 .admin-detail__qa-group h5 {
