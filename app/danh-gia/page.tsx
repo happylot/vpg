@@ -19,9 +19,10 @@ export default function DanhGiaPage() {
           <p className="kicker">Thang điểm sẵn sàng xuất khẩu</p>
           <h1>Đánh giá mức độ sẵn sàng xuất khẩu của doanh nghiệp</h1>
           <p className="assessment-hero__lead">
-            Trả lời 12 câu hỏi trong khoảng 5 phút để biết doanh nghiệp của
-            bạn đang ở đâu trên thang 100 điểm - từ chưa sẵn sàng, đang chuẩn
-            bị, sẵn sàng xuất khẩu đến sẵn sàng toàn cầu.
+            Trả lời khảo sát gồm 3 phần - thông tin doanh nghiệp, 20 câu chấm
+            điểm theo đúng tình trạng xuất khẩu của bạn và nhu cầu hỗ trợ - để
+            biết doanh nghiệp của bạn đang ở đâu trên thang 100 điểm, từ chưa
+            sẵn sàng, đang chuẩn bị, sẵn sàng xuất khẩu đến sẵn sàng toàn cầu.
           </p>
         </div>
       </section>

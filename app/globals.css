@@ -858,6 +858,78 @@ main {
   line-height: 1.5;
 }
 
+.assessment-question legend em,
+.assessment-field__label em {
+  color: var(--scarlet);
+  font-style: normal;
+}
+
+.assessment-business-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.assessment-field {
+  display: grid;
+  gap: 8px;
+}
+
+.assessment-field--wide {
+  grid-column: 1 / -1;
+}
+
+.assessment-field__label {
+  color: var(--ink);
+  font-size: 0.96rem;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.assessment-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffaf0;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.96rem;
+}
+
+.assessment-field input::placeholder {
+  color: rgba(60, 40, 30, 0.4);
+}
+
+.assessment-field input:focus {
+  outline: none;
+  border-color: var(--scarlet);
+}
+
+.assessment-option__other-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.assessment-option__other {
+  flex: 1 1 180px;
+  min-width: 140px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fffaf0;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.assessment-option__other:focus {
+  outline: none;
+  border-color: var(--scarlet);
+}
+
 .assessment-options {
   display: grid;
   gap: 10px;
@@ -990,6 +1062,10 @@ main {
 @media (max-width: 760px) {
   .assessment-hero__content h1 {
     font-size: 2.1rem;
+  }
+
+  .assessment-business-grid {
+    grid-template-columns: 1fr;
   }
 
   .assessment-form__footer {
