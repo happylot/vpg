@@ -305,7 +305,25 @@ export function AssessmentForm() {
 
   function handleSupportSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    submitAssessment();
     goToStep("result");
+  }
+
+  function submitAssessment() {
+    const payload = {
+      business,
+      branch,
+      profile: branch === "branch2" ? profile : undefined,
+      answers,
+      support,
+    };
+    fetch("/api/assessment/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }).catch((error) => {
+      console.error("Không thể lưu kết quả đánh giá:", error);
+    });
   }
 
   function resetAll() {

@@ -67,3 +67,23 @@ export const eventRegistrationsAlterSql = `
   ALTER TABLE event_registrations
   ADD COLUMN IF NOT EXISTS is_read boolean NOT NULL DEFAULT false
 `;
+
+export const assessmentResultsTableSql = `
+  CREATE TABLE IF NOT EXISTS assessment_results (
+    id serial PRIMARY KEY,
+    company_name text NOT NULL DEFAULT '',
+    contact_name text NOT NULL DEFAULT '',
+    phone text NOT NULL DEFAULT '',
+    email text NOT NULL DEFAULT '',
+    branch text NOT NULL DEFAULT 'branch1',
+    total_score integer NOT NULL DEFAULT 0,
+    level_label text NOT NULL DEFAULT '',
+    business_entries jsonb NOT NULL DEFAULT '[]'::jsonb,
+    profile_entries jsonb,
+    scored_entries jsonb NOT NULL DEFAULT '[]'::jsonb,
+    category_scores jsonb NOT NULL DEFAULT '[]'::jsonb,
+    support_entries jsonb NOT NULL DEFAULT '[]'::jsonb,
+    is_read boolean NOT NULL DEFAULT false,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )
+`;

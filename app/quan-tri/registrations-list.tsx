@@ -92,25 +92,12 @@ export function RegistrationsList() {
 
   return (
     <>
-      <div className="admin-page__header">
-        <div>
-          <p className="section-label">Quản trị</p>
-          <h1>Danh sách đăng ký sự kiện</h1>
-          <p className="admin-page__count">
-            {registrations.length} lượt đăng ký
-            {unreadCount > 0 && (
-              <span className="admin-page__unread-badge">
-                {unreadCount} chưa đọc
-              </span>
-            )}
-          </p>
-        </div>
-        <form action="/api/admin/logout" method="post">
-          <button type="submit" className="button button--dark">
-            Đăng xuất
-          </button>
-        </form>
-      </div>
+      <p className="admin-page__count">
+        {registrations.length} lượt đăng ký
+        {unreadCount > 0 && (
+          <span className="admin-page__unread-badge">{unreadCount} chưa đọc</span>
+        )}
+      </p>
 
       {registrations.length === 0 ? (
         <p className="admin-page__empty">Chưa có ai đăng ký sự kiện nào.</p>

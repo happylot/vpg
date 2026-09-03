@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
+import { AdminTabs } from "./admin-tabs";
 import { ADMIN_COOKIE, hashAdminPassword } from "./auth";
 import { LoginForm } from "./login-form";
-import { RegistrationsList } from "./registrations-list";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +28,7 @@ export default async function AdminPage() {
 
   return (
     <main className="admin-page">
-      {authed ? <RegistrationsList /> : <LoginForm />}
+      {authed ? <AdminTabs /> : <LoginForm />}
     </main>
   );
 }
