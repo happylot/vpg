@@ -108,8 +108,14 @@ function FieldsGroup({
                 type={field.type ?? "text"}
                 required={field.required}
                 placeholder={field.placeholder}
+                inputMode={field.type === "tel" ? "numeric" : undefined}
+                pattern={field.type === "tel" ? "[0-9]*" : undefined}
                 value={typeof answers[field.id] === "string" ? (answers[field.id] as string) : ""}
-                onChange={(e) => handlers.setText(field.id, e.target.value)}
+                onChange={(e) => {
+                  const value =
+                    field.type === "tel" ? e.target.value.replace(/[^0-9]/g, "") : e.target.value;
+                  handlers.setText(field.id, value);
+                }}
               />
             </label>
           );
