@@ -18,12 +18,32 @@ export default function DanhGiaPage() {
         <div className="assessment-hero__content">
           <p className="kicker">Thang điểm sẵn sàng xuất khẩu</p>
           <h1>Đánh giá mức độ sẵn sàng xuất khẩu của doanh nghiệp</h1>
-          <p className="assessment-hero__lead">
-            Trả lời khảo sát gồm 3 phần - thông tin doanh nghiệp, 20 câu chấm
-            điểm theo đúng tình trạng xuất khẩu của bạn và nhu cầu hỗ trợ - để
-            biết doanh nghiệp của bạn đang ở đâu trên thang 100 điểm, từ chưa
-            sẵn sàng, đang chuẩn bị, sẵn sàng xuất khẩu đến sẵn sàng toàn cầu.
-          </p>
+          <div className="assessment-hero__lead">
+            <p>
+              Công ty Cổ phần Kết nối Thương mại Toàn cầu MCV là đơn vị kết
+              nối thương mại và đồng hành cùng doanh nghiệp Việt trên hành
+              trình xuất khẩu — từ chuẩn hóa sản phẩm, kết nối đối tác quốc tế
+              đến vận hành đơn hàng xuyên biên giới.
+            </p>
+            <p>
+              Chúng tôi thiết lập bảng khảo sát với mong muốn giúp doanh
+              nghiệp của Quý Anh/Chị sẽ được chấm điểm trên 8 tiêu chí xuất
+              khẩu (sản phẩm, chứng nhận, sản xuất, bán hàng quốc tế, thương
+              hiệu, giá, năng lực số, cam kết lãnh đạo) và nhận về bản kết quả
+              kèm khuyến nghị lộ trình riêng — biết doanh nghiệp mình đang
+              đứng ở đâu và cần chuẩn bị gì để đưa sản phẩm ra thị trường thế
+              giới.
+            </p>
+            <p>
+              Vui lòng trả lời đúng thực tế hiện tại — không có câu trả lời
+              đẹp hay xấu, chỉ có bức tranh chính xác để chúng tôi tư vấn
+              đúng.
+            </p>
+            <p className="assessment-hero__lead-note">
+              Chúng tôi cam kết thông tin của Anh/Chị chỉ dùng cho mục đích
+              đánh giá, tư vấn, được bảo mật và không chia sẻ cho bên thứ ba.
+            </p>
+          </div>
         </div>
       </section>
 
