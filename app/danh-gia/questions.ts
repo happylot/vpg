@@ -685,16 +685,16 @@ export const businessInfoFields: BusinessField[] = [
   {
     kind: "checkbox",
     id: "targetMarkets",
-    label: "Thị trường mong muốn hướng tới (chọn tối đa 2)",
+    label: "Thị trường mong muốn hướng tới",
     options: ["Mỹ", "EU", "Nhật Bản", "Hàn Quốc", "Trung Quốc", "ASEAN", "Trung Đông"],
     allowOther: true,
-    maxSelect: 2,
+    maxSelect: 8,
     required: true,
   },
   {
     kind: "checkbox",
     id: "challenges",
-    label: "Khó khăn lớn nhất hiện nay (chọn tối đa 2)",
+    label: "Khó khăn lớn nhất hiện nay",
     options: [
       "Chứng nhận – pháp lý",
       "Tìm khách hàng",
@@ -704,7 +704,7 @@ export const businessInfoFields: BusinessField[] = [
       "Bao bì – thương hiệu",
       "Chưa biết bắt đầu từ đâu",
     ],
-    maxSelect: 2,
+    maxSelect: 7,
     required: true,
   },
   {
@@ -802,7 +802,7 @@ export const supportFields: BusinessField[] = [
   {
     kind: "checkbox",
     id: "supportNeeds",
-    label: "Anh/chị mong muốn nhận hỗ trợ nào từ Vproud? (chọn tối đa 3)",
+    label: "Anh/chị mong muốn nhận hỗ trợ nào từ Vproud?",
     options: [
       "Đào tạo xuất khẩu",
       "Đánh giá chuyên sâu 1-1",
@@ -812,7 +812,7 @@ export const supportFields: BusinessField[] = [
       "Kết nối nhà mua hàng quốc tế",
       "Bán hàng qua sàn TMĐT xuyên biên giới",
     ],
-    maxSelect: 3,
+    maxSelect: 7,
     required: false,
   },
   {

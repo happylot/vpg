@@ -92,21 +92,30 @@ export function RegistrationForm({
           <input type="tel" name="phone" required placeholder="09xx xxx xxx" />
         </label>
         <label className="register-form__field">
-          <span>Email</span>
-          <input type="email" name="email" placeholder="ban@doanhnghiep.vn" />
+          <span>
+            Email <em>*</em>
+          </span>
+          <input type="email" name="email" required placeholder="ban@doanhnghiep.vn" />
         </label>
         <label className="register-form__field">
-          <span>Doanh nghiệp / Tổ chức</span>
-          <input type="text" name="company" placeholder="Tên doanh nghiệp" />
+          <span>
+            Doanh nghiệp / Tổ chức <em>*</em>
+          </span>
+          <input type="text" name="company" required placeholder="Tên doanh nghiệp" />
         </label>
         <label className="register-form__field">
-          <span>Chức vụ</span>
-          <input type="text" name="role" placeholder="Ví dụ: Giám đốc kinh doanh" />
+          <span>
+            Chức vụ <em>*</em>
+          </span>
+          <input type="text" name="role" required placeholder="Ví dụ: Giám đốc kinh doanh" />
         </label>
         <label className="register-form__field register-form__field--wide">
-          <span>Ghi chú</span>
+          <span>
+            Ghi chú <em>*</em>
+          </span>
           <textarea
             name="note"
+            required
             rows={3}
             placeholder="Câu hỏi hoặc mong muốn của bạn khi tham gia sự kiện"
           />

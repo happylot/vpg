@@ -61,6 +61,18 @@ export async function POST(request: Request) {
     if (!phone) {
       return Response.json({ error: "Vui lòng nhập số điện thoại." }, { status: 400 });
     }
+    if (!email) {
+      return Response.json({ error: "Vui lòng nhập email." }, { status: 400 });
+    }
+    if (!company) {
+      return Response.json({ error: "Vui lòng nhập doanh nghiệp / tổ chức." }, { status: 400 });
+    }
+    if (!role) {
+      return Response.json({ error: "Vui lòng nhập chức vụ." }, { status: 400 });
+    }
+    if (!note) {
+      return Response.json({ error: "Vui lòng nhập ghi chú." }, { status: 400 });
+    }
 
     const registration = await withDb(async ({ db, sql }) => {
       await sql.unsafe(eventRegistrationsTableSql);

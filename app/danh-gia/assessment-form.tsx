@@ -372,7 +372,7 @@ export function AssessmentForm() {
         </div>
 
         <div className="assessment-result__actions">
-          <button type="button" className="button button--ghost" onClick={resetAll}>
+          <button type="button" className="button button--ghost button--dark" onClick={resetAll}>
             Làm lại đánh giá
           </button>
           <a className="button button--primary" href="/events">
