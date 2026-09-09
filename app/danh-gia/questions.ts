@@ -774,7 +774,7 @@ export const branch2ProfileFields: BusinessField[] = [
   {
     kind: "checkbox",
     id: "bottlenecks",
-    label: "Điểm nghẽn lớn nhất hiện nay (chọn tối đa 2)",
+    label: "Điểm nghẽn lớn nhất hiện nay",
     options: [
       "Tìm khách mới",
       "Chi phí logistics",
@@ -785,7 +785,7 @@ export const branch2ProfileFields: BusinessField[] = [
       "Giá kém cạnh tranh",
       "Nhân sự xuất khẩu",
     ],
-    maxSelect: 2,
+    maxSelect: 8,
     required: false,
   },
   {
