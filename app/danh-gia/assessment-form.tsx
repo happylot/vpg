@@ -431,7 +431,7 @@ export function AssessmentForm() {
         </div>
 
         <div className="assessment-form__footer">
-          <button type="button" className="button button--ghost" onClick={goBack}>
+          <button type="button" className="button button--ghost button--dark" onClick={goBack}>
             Quay lại
           </button>
           <p>Phần C — Nhu cầu hỗ trợ</p>
@@ -501,7 +501,7 @@ export function AssessmentForm() {
       ))}
 
       <div className="assessment-form__footer">
-        <button type="button" className="button button--ghost" onClick={goBack}>
+        <button type="button" className="button button--ghost button--dark" onClick={goBack}>
           Quay lại
         </button>
         <p>
