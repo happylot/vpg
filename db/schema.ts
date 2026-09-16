@@ -46,3 +46,17 @@ export const assessmentResults = pgTable("assessment_results", {
     .notNull()
     .defaultNow(),
 });
+
+export const partnerInquiries = pgTable("partner_inquiries", {
+  id: serial("id").primaryKey(),
+  companyName: text("company_name").notNull(),
+  contactName: text("contact_name").notNull().default(""),
+  phone: text("phone").notNull(),
+  email: text("email").notNull().default(""),
+  productIndustry: text("product_industry").notNull().default(""),
+  note: text("note").notNull().default(""),
+  isRead: boolean("is_read").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});

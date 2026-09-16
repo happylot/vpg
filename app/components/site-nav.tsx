@@ -21,6 +21,7 @@ export function SiteNav({ variant = "home" }: SiteNavProps) {
         <a href={`${base}#model`}>Mô hình</a>
         <a href="/events">Sự kiện</a>
         <a href={`${base}#partners`}>Đối tác</a>
+        <a href="/hop-tac">Hợp tác cùng MCV</a>
       </div>
     </nav>
   );

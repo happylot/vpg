@@ -89,7 +89,17 @@ export function RegistrationForm({
           <span>
             Số điện thoại <em>*</em>
           </span>
-          <input type="tel" name="phone" required placeholder="09xx xxx xxx" />
+          <input
+            type="tel"
+            name="phone"
+            required
+            placeholder="09xx xxx xxx"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            onChange={(e) => {
+              e.target.value = e.target.value.replace(/[^0-9]/g, "");
+            }}
+          />
         </label>
         <label className="register-form__field">
           <span>

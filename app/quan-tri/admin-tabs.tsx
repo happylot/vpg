@@ -2,9 +2,16 @@
 
 import { useState } from "react";
 import { AssessmentResultsList } from "./assessment-results-list";
+import { PartnerInquiriesList } from "./partner-inquiries-list";
 import { RegistrationsList } from "./registrations-list";
 
-type Tab = "registrations" | "assessments";
+type Tab = "registrations" | "assessments" | "partners";
+
+const TAB_LABELS: Record<Tab, string> = {
+  registrations: "Danh sách đăng ký sự kiện",
+  assessments: "Kết quả đánh giá",
+  partners: "Đăng ký hợp tác nhà máy",
+};
 
 export function AdminTabs() {
   const [tab, setTab] = useState<Tab>("registrations");
@@ -14,7 +21,7 @@ export function AdminTabs() {
       <div className="admin-page__header">
         <div>
           <p className="section-label">Quản trị</p>
-          <h1>{tab === "registrations" ? "Danh sách đăng ký sự kiện" : "Kết quả đánh giá"}</h1>
+          <h1>{TAB_LABELS[tab]}</h1>
         </div>
         <form action="/api/admin/logout" method="post">
           <button type="submit" className="button button--dark">
@@ -24,23 +31,21 @@ export function AdminTabs() {
       </div>
 
       <div className="admin-tabs">
-        <button
-          type="button"
-          className={`admin-tab${tab === "registrations" ? " admin-tab--active" : ""}`}
-          onClick={() => setTab("registrations")}
-        >
-          Danh sách đăng ký sự kiện
-        </button>
-        <button
-          type="button"
-          className={`admin-tab${tab === "assessments" ? " admin-tab--active" : ""}`}
-          onClick={() => setTab("assessments")}
-        >
-          Kết quả đánh giá
-        </button>
+        {(Object.keys(TAB_LABELS) as Tab[]).map((key) => (
+          <button
+            key={key}
+            type="button"
+            className={`admin-tab${tab === key ? " admin-tab--active" : ""}`}
+            onClick={() => setTab(key)}
+          >
+            {TAB_LABELS[key]}
+          </button>
+        ))}
       </div>
 
-      {tab === "registrations" ? <RegistrationsList /> : <AssessmentResultsList />}
+      {tab === "registrations" && <RegistrationsList />}
+      {tab === "assessments" && <AssessmentResultsList />}
+      {tab === "partners" && <PartnerInquiriesList />}
     </>
   );
 }

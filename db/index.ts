@@ -87,3 +87,17 @@ export const assessmentResultsTableSql = `
     created_at timestamptz NOT NULL DEFAULT now()
   )
 `;
+
+export const partnerInquiriesTableSql = `
+  CREATE TABLE IF NOT EXISTS partner_inquiries (
+    id serial PRIMARY KEY,
+    company_name text NOT NULL,
+    contact_name text NOT NULL DEFAULT '',
+    phone text NOT NULL,
+    email text NOT NULL DEFAULT '',
+    product_industry text NOT NULL DEFAULT '',
+    note text NOT NULL DEFAULT '',
+    is_read boolean NOT NULL DEFAULT false,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )
+`;
