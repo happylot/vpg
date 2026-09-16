@@ -39,6 +39,24 @@ function isFieldComplete(field: BusinessField, value: string | string[] | undefi
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function formatFieldValue(value: string | string[] | undefined) {
+  if (Array.isArray(value)) return value.length > 0 ? value.join(", ") : "—";
+  return value && value.trim() ? value : "—";
+}
+
+function AnswersSummaryList({ fields, answers }: { fields: BusinessField[]; answers: FieldAnswers }) {
+  return (
+    <dl className="assessment-answers__list">
+      {fields.map((field) => (
+        <div className="assessment-answers__item" key={field.id}>
+          <dt>{field.label}</dt>
+          <dd>{formatFieldValue(answers[field.id])}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function makeFieldHandlers(
   setAnswers: React.Dispatch<React.SetStateAction<FieldAnswers>>,
   setOtherValues: React.Dispatch<React.SetStateAction<OtherValues>>,
@@ -263,6 +281,8 @@ export function AssessmentForm() {
   const supportHandlers = makeFieldHandlers(setSupport, setSupportOther);
 
   const [answers, setAnswers] = useState<Answers>({});
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [showAllAnswers, setShowAllAnswers] = useState(false);
 
   const exportExperience = typeof business.exportExperience === "string" ? business.exportExperience : "";
   const branch = exportExperience === "Chưa từng" ? "branch1" : "branch2";
@@ -358,18 +378,72 @@ export function AssessmentForm() {
         <p className="assessment-result__desc">{level.desc}</p>
 
         <div className="score-list assessment-result__breakdown">
-          {categoryScores.map((c) => (
-            <div className="score-row" key={c.category}>
-              <span>{c.category}</span>
-              <div className="score-row__bar">
-                <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+          {groups.map((group, index) => {
+            const c = categoryScores[index];
+            const isOpen = expandedCategory === c.category;
+            return (
+              <div className="assessment-score-group" key={c.category}>
+                <button
+                  type="button"
+                  className={`score-row score-row--clickable${isOpen ? " score-row--open" : ""}`}
+                  onClick={() => setExpandedCategory((prev) => (prev === c.category ? null : c.category))}
+                >
+                  <span>{c.category}</span>
+                  <div className="score-row__bar">
+                    <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+                  </div>
+                  <strong>
+                    {c.score}/{c.max} {isOpen ? "▾" : "▸"}
+                  </strong>
+                </button>
+                {isOpen && (
+                  <div className="assessment-answers__qa-group">
+                    {group.questions.map((question) => {
+                      const optionIndex = answers[question.id];
+                      const option = optionIndex !== undefined ? question.options[optionIndex] : undefined;
+                      return (
+                        <div className="assessment-answers__qa" key={question.id}>
+                          <p className="assessment-answers__question">{question.text}</p>
+                          <p className="assessment-answers__answer">
+                            {option?.label ?? "(chưa trả lời)"}{" "}
+                            <span>({option?.points ?? 0} điểm)</span>
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-              <strong>
-                {c.score}/{c.max}
-              </strong>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        <button
+          type="button"
+          className="button button--ghost button--dark assessment-result__toggle"
+          onClick={() => setShowAllAnswers((prev) => !prev)}
+        >
+          {showAllAnswers ? "Ẩn toàn bộ câu trả lời" : "Xem toàn bộ câu trả lời"}
+        </button>
+
+        {showAllAnswers && (
+          <div className="assessment-answers">
+            <div className="assessment-answers__section">
+              <h4>A — Thông tin doanh nghiệp</h4>
+              <AnswersSummaryList fields={businessInfoFields} answers={business} />
+            </div>
+            {branch === "branch2" && (
+              <div className="assessment-answers__section">
+                <h4>Hiện trạng xuất khẩu</h4>
+                <AnswersSummaryList fields={branch2ProfileFields} answers={profile} />
+              </div>
+            )}
+            <div className="assessment-answers__section">
+              <h4>C — Nhu cầu hỗ trợ</h4>
+              <AnswersSummaryList fields={supportFields} answers={support} />
+            </div>
+          </div>
+        )}
 
         <div className="assessment-result__actions">
           <button type="button" className="button button--ghost button--dark" onClick={resetAll}>

@@ -3622,3 +3622,91 @@ main {
 .partner-section .register-form__success p {
   color: var(--muted);
 }
+
+/* Trang tự đánh giá — xem lại chi tiết ở trang kết quả */
+
+.assessment-score-group {
+  border-bottom: 1px solid var(--line);
+}
+
+.assessment-score-group:last-child {
+  border-bottom: none;
+}
+
+.assessment-answers__qa-group {
+  margin: 0 0 10px;
+  padding: 4px 4px 14px;
+}
+
+.assessment-answers__qa {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+
+.assessment-answers__qa:first-of-type {
+  border-top: none;
+}
+
+.assessment-answers__question {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.assessment-answers__answer {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.assessment-answers__answer span {
+  color: var(--scarlet);
+  font-weight: 800;
+}
+
+.assessment-result__toggle {
+  margin-top: 24px;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.assessment-answers {
+  display: grid;
+  gap: 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.assessment-answers__section h4 {
+  margin: 0 0 12px;
+  color: var(--scarlet);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.assessment-answers__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px 20px;
+  margin: 0;
+}
+
+.assessment-answers__item dt {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.assessment-answers__item dd {
+  margin: 2px 0 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+}

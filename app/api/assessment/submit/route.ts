@@ -9,6 +9,7 @@ import {
   supportFields,
   type BusinessField,
 } from "../../../danh-gia/questions";
+import { notifyAdminOfAssessment, notifyAssessmentTaker } from "./notify";
 
 type FieldValues = Record<string, string | string[] | undefined>;
 
@@ -127,6 +128,34 @@ export async function POST(request: Request) {
         .returning();
       return row;
     });
+
+    const notifyDetails = {
+      companyName,
+      contactName,
+      phone,
+      email,
+      branch,
+      totalScore,
+      levelLabel: level.label,
+      levelDesc: level.desc,
+      businessEntries,
+      profileEntries,
+      scoredEntries,
+      categoryScores,
+      supportEntries,
+    };
+
+    try {
+      await notifyAdminOfAssessment(notifyDetails);
+    } catch (error) {
+      console.error("Không thể gửi email thông báo đánh giá mới:", error);
+    }
+
+    try {
+      await notifyAssessmentTaker(notifyDetails);
+    } catch (error) {
+      console.error("Không thể gửi email kết quả cho người làm đánh giá:", error);
+    }
 
     return Response.json({ result: saved }, { status: 201 });
   } catch (error) {
