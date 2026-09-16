@@ -82,16 +82,36 @@ export async function notifyNewPartnerInquiry(inquiry: Inquiry) {
 export async function notifyPartnerApplicant(inquiry: Inquiry) {
   if (!inquiry.email) return;
 
+  const rows: Array<[string, string]> = [
+    ["Tên doanh nghiệp / Nhà máy", inquiry.companyName],
+    ["Người liên hệ", inquiry.contactName || "(không cung cấp)"],
+    ["Số điện thoại", inquiry.phone],
+    ["Email", inquiry.email || "(không cung cấp)"],
+    ["Ngành hàng / Sản phẩm", inquiry.productIndustry || "(không cung cấp)"],
+    ["Ghi chú", inquiry.note || "(không có)"],
+  ];
+
   const html = `
     <div style="font-family: Arial, sans-serif; color: #211513;">
       <h2 style="color: #8e1010;">Cảm ơn ${escapeHtml(inquiry.contactName || inquiry.companyName)} đã quan tâm hợp tác cùng MCV!</h2>
       <p>
-        Chúng tôi đã nhận được thông tin hợp tác từ
-        <strong>${escapeHtml(inquiry.companyName)}</strong>. Đội ngũ MCV sẽ
+        Chúng tôi đã nhận được thông tin hợp tác của bạn. Đội ngũ MCV sẽ
         liên hệ với bạn qua số điện thoại (${escapeHtml(inquiry.phone)}) hoặc
         email này trong thời gian sớm nhất để trao đổi chi tiết mô hình hợp
         tác và các bước triển khai tiếp theo.
       </p>
+      <h3 style="color: #8e1010; margin-top: 20px;">Thông tin bạn đã gửi</h3>
+      <table cellpadding="6" style="border-collapse: collapse;">
+        ${rows
+          .map(
+            ([label, value]) => `
+          <tr>
+            <td style="font-weight: bold; vertical-align: top; padding-right: 12px;">${escapeHtml(label)}</td>
+            <td>${escapeHtml(value)}</td>
+          </tr>`,
+          )
+          .join("")}
+      </table>
     </div>
   `;
 

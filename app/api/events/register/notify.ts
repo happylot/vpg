@@ -95,6 +95,15 @@ export async function notifyRegistrant(
 ) {
   if (!registration.email) return;
 
+  const registrationRows: Array<[string, string]> = [
+    ["Họ và tên", registration.fullName],
+    ["Số điện thoại", registration.phone],
+    ["Email", registration.email || "(không cung cấp)"],
+    ["Doanh nghiệp / Tổ chức", registration.company || "(không cung cấp)"],
+    ["Chức vụ", registration.role || "(không cung cấp)"],
+    ["Ghi chú", registration.note || "(không có)"],
+  ];
+
   const html = `
     <div style="font-family: Arial, sans-serif; color: #211513;">
       <h2 style="color: #8e1010;">Cảm ơn ${escapeHtml(registration.fullName)} đã đăng ký!</h2>
@@ -113,6 +122,20 @@ export async function notifyRegistrant(
           <td>${escapeHtml(event.venue)}</td>
         </tr>
       </table>
+
+      <h3 style="color: #8e1010; margin-top: 20px;">Thông tin bạn đã đăng ký</h3>
+      <table cellpadding="6" style="border-collapse: collapse;">
+        ${registrationRows
+          .map(
+            ([label, value]) => `
+          <tr>
+            <td style="font-weight: bold; vertical-align: top; padding-right: 12px;">${escapeHtml(label)}</td>
+            <td>${escapeHtml(value)}</td>
+          </tr>`,
+          )
+          .join("")}
+      </table>
+
       <p style="margin-top: 16px;">
         Ban tổ chức Vproud sẽ liên hệ xác nhận với bạn qua số điện thoại
         (${escapeHtml(registration.phone)}) hoặc email này trước ngày diễn ra
