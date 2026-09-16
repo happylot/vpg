@@ -3265,14 +3265,13 @@ main {
   margin: 0;
 }
 
-.partner-video video {
+.partner-video iframe {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: #000;
-  object-fit: contain;
 }
 
 .partner-video figcaption {

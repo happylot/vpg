@@ -451,13 +451,21 @@ export default function HopTacPage() {
           <h2>Xem MCV đồng hành cùng nhà máy Việt như thế nào</h2>
           <div className="partner-video-grid">
             <figure className="partner-video">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <video controls preload="metadata" src="/asset/partners/chien-luoc-xuat-khau-my.mp4" />
+              <iframe
+                src="https://www.youtube.com/embed/lTag2WNOvQ0"
+                title="Chiến lược xuất khẩu Mỹ"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
               <figcaption>Chiến lược xuất khẩu Mỹ</figcaption>
             </figure>
             <figure className="partner-video">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <video controls preload="metadata" src="/asset/partners/cach-xuong-viet-ban-truc-tiep-sang-my.mp4" />
+              <iframe
+                src="https://www.youtube.com/embed/koOKm8xY9K0"
+                title="Cách xưởng Việt bán hàng trực tiếp sang Mỹ"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
               <figcaption>Cách xưởng Việt bán hàng trực tiếp sang Mỹ</figcaption>
             </figure>
           </div>
