@@ -1,4 +1,4 @@
-const NOTIFY_TO = "tranthuthao9bsoncam1@gmail.com";
+const NOTIFY_TO = ["tranthuthao9bsoncam1@gmail.com", "phuc189@gmail.com"];
 const FROM_ADDRESS = "Vproud Events <noreply@mcv.network>";
 
 type Inquiry = {
@@ -18,12 +18,14 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;");
 }
 
-async function sendEmail(options: { to: string; subject: string; html: string }) {
+async function sendEmail(options: { to: string | string[]; subject: string; html: string }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("RESEND_API_KEY chưa được cấu hình - bỏ qua gửi email.");
     return;
   }
+
+  const to = Array.isArray(options.to) ? options.to : [options.to];
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -33,7 +35,7 @@ async function sendEmail(options: { to: string; subject: string; html: string })
     },
     body: JSON.stringify({
       from: FROM_ADDRESS,
-      to: [options.to],
+      to,
       subject: options.subject,
       html: options.html,
     }),
@@ -41,7 +43,7 @@ async function sendEmail(options: { to: string; subject: string; html: string })
 
   if (!response.ok) {
     const detail = await response.text();
-    console.error(`Gửi email tới ${options.to} thất bại:`, detail);
+    console.error(`Gửi email tới ${to.join(", ")} thất bại:`, detail);
   }
 }
 
