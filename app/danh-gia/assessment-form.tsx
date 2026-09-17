@@ -355,80 +355,91 @@ export function AssessmentForm() {
 
   if (step === "result") {
     return (
-      <div className="assessment-result">
-        <p className="assessment-result__label">Kết quả đánh giá</p>
-        <div className="assessment-result__score">
-          <strong>{totalScore}</strong>
-          <span>/ 100 điểm</span>
-        </div>
-        <p className="assessment-result__level">
-          {companyName ? `${companyName} — ${level.label}` : level.label}
-        </p>
-        <p className="assessment-result__desc">{level.desc}</p>
+      <>
+        <div className="assessment-result">
+          <p className="assessment-result__label">Kết quả đánh giá</p>
+          <div className="assessment-result__score">
+            <strong>{totalScore}</strong>
+            <span>/ 100 điểm</span>
+          </div>
+          <p className="assessment-result__level">
+            {companyName ? `${companyName} — ${level.label}` : level.label}
+          </p>
+          <p className="assessment-result__desc">{level.desc}</p>
 
-        <div className="score-list assessment-result__breakdown">
-          {groups.map((group, index) => {
-            const c = categoryScores[index];
-            const isOpen = expandedCategory === c.category;
-            return (
-              <div className="assessment-score-group" key={c.category}>
-                <button
-                  type="button"
-                  className={`score-row score-row--clickable${isOpen ? " score-row--open" : ""}`}
-                  onClick={() => setExpandedCategory((prev) => (prev === c.category ? null : c.category))}
-                >
-                  <span>{c.category}</span>
-                  <div className="score-row__bar">
-                    <i style={{ width: `${(c.score / c.max) * 100}%` }} />
-                  </div>
-                  <strong>
-                    {c.score}/{c.max} {isOpen ? "▾" : "▸"}
-                  </strong>
-                </button>
-                {isOpen && (
-                  <div className="assessment-answers__qa-group">
-                    {group.questions.map((question) => {
-                      const optionIndex = answers[question.id];
-                      const option = optionIndex !== undefined ? question.options[optionIndex] : undefined;
-                      return (
-                        <div className="assessment-answers__qa" key={question.id}>
-                          <p className="assessment-answers__question">{question.text}</p>
-                          <p className="assessment-answers__answer">
-                            {option?.label ?? "(chưa trả lời)"}{" "}
-                            <span>({option?.points ?? 0} điểm)</span>
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          <div className="score-list assessment-result__breakdown">
+            {groups.map((group, index) => {
+              const c = categoryScores[index];
+              const isOpen = expandedCategory === c.category;
+              return (
+                <div className="assessment-score-group" key={c.category}>
+                  <button
+                    type="button"
+                    className={`score-row score-row--clickable${isOpen ? " score-row--open" : ""}`}
+                    onClick={() => setExpandedCategory((prev) => (prev === c.category ? null : c.category))}
+                  >
+                    <span>{c.category}</span>
+                    <div className="score-row__bar">
+                      <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+                    </div>
+                    <strong>
+                      {c.score}/{c.max} {isOpen ? "▾" : "▸"}
+                    </strong>
+                  </button>
+                  {isOpen && (
+                    <div className="assessment-answers__qa-group">
+                      {group.questions.map((question) => {
+                        const optionIndex = answers[question.id];
+                        const option = optionIndex !== undefined ? question.options[optionIndex] : undefined;
+                        return (
+                          <div className="assessment-answers__qa" key={question.id}>
+                            <p className="assessment-answers__question">{question.text}</p>
+                            <p className="assessment-answers__answer">
+                              {option?.label ?? "(chưa trả lời)"}{" "}
+                              <span>({option?.points ?? 0} điểm)</span>
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="assessment-result__actions">
+            <button type="button" className="button button--ghost button--dark" onClick={resetAll}>
+              Làm lại đánh giá
+            </button>
+            <a className="button button--primary" href="/events">
+              Xem chương trình phù hợp
+            </a>
+          </div>
         </div>
 
         {reportToken && (
-          <a
-            className="assessment-report-link"
-            href={`/danh-gia/ket-qua/${reportToken}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <h3>Báo cáo chi tiết bài đánh giá</h3>
-            <p>Xem lại toàn bộ câu hỏi và câu trả lời bạn đã điền, cùng điểm số từng tiêu chí.</p>
-            <span>Xem báo cáo →</span>
-          </a>
+          <div className="assessment-report">
+            <p className="section-label">Báo cáo chi tiết</p>
+            <h2>Xem lại toàn bộ câu trả lời của bạn</h2>
+            <div className="assessment-report-grid">
+              <a
+                className="partner-resource-card"
+                href={`/danh-gia/ket-qua/${reportToken}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <h3>{companyName ? `Báo cáo đánh giá — ${companyName}` : "Báo cáo đánh giá"}</h3>
+                <p>
+                  Toàn bộ câu hỏi, đáp án đã chọn và điểm số chi tiết theo từng tiêu chí trong
+                  bài đánh giá của bạn.
+                </p>
+                <span>Xem báo cáo →</span>
+              </a>
+            </div>
+          </div>
         )}
-
-        <div className="assessment-result__actions">
-          <button type="button" className="button button--ghost button--dark" onClick={resetAll}>
-            Làm lại đánh giá
-          </button>
-          <a className="button button--primary" href="/events">
-            Xem chương trình phù hợp
-          </a>
-        </div>
-      </div>
+      </>
     );
   }
 
