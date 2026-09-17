@@ -8,6 +8,7 @@ type CategoryScore = { category: string; max: number; score: number };
 
 type AssessmentResult = {
   id: number;
+  reportToken: string;
   companyName: string;
   contactName: string;
   phone: string;
@@ -142,13 +143,25 @@ export function AssessmentResultsList() {
                     <td>{row.totalScore}/100</td>
                     <td>{row.levelLabel}</td>
                     <td>
-                      <button
-                        type="button"
-                        className="admin-detail-toggle"
-                        onClick={() => toggleExpand(row.id)}
-                      >
-                        {expandedId === row.id ? "Ẩn chi tiết" : "Xem chi tiết"}
-                      </button>
+                      <div className="admin-row-actions">
+                        <button
+                          type="button"
+                          className="admin-detail-toggle"
+                          onClick={() => toggleExpand(row.id)}
+                        >
+                          {expandedId === row.id ? "Ẩn chi tiết" : "Xem chi tiết"}
+                        </button>
+                        {row.reportToken && (
+                          <a
+                            className="admin-detail-toggle"
+                            href={`/api/assessment/report/${row.reportToken}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Xem PDF
+                          </a>
+                        )}
+                      </div>
                     </td>
                   </tr>
                   {expandedId === row.id && (

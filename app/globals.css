@@ -2788,7 +2788,13 @@ main {
   color: var(--scarlet);
 }
 
+.admin-row-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .admin-detail-toggle {
+  display: inline-block;
   padding: 6px 12px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -2797,6 +2803,7 @@ main {
   font-size: 0.78rem;
   font-weight: 800;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
   transition:
     background 160ms ease,
