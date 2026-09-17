@@ -110,15 +110,13 @@ export function AssessmentResultsList() {
             <thead>
               <tr>
                 <th>Trạng thái</th>
-                <th>Ngày</th>
-                <th>Giờ</th>
+                <th>Thời gian</th>
                 <th>Doanh nghiệp</th>
                 <th>Người liên hệ</th>
-                <th>Số điện thoại</th>
+                <th>SĐT</th>
                 <th>Nhánh</th>
-                <th>Điểm</th>
-                <th>Xếp loại</th>
-                <th className="admin-table__sticky-col"></th>
+                <th>Kết quả</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -134,22 +132,36 @@ export function AssessmentResultsList() {
                         {row.isRead ? "Đã đọc" : "Chưa đọc"}
                       </button>
                     </td>
-                    <td>{formatDate(row.createdAt)}</td>
-                    <td>{formatTime(row.createdAt)}</td>
-                    <td>{row.companyName || "—"}</td>
-                    <td>{row.contactName || "—"}</td>
+                    <td>
+                      <div className="admin-table__datetime">
+                        <span>{formatDate(row.createdAt)}</span>
+                        <span className="admin-table__muted">{formatTime(row.createdAt)}</span>
+                      </div>
+                    </td>
+                    <td className="admin-table__ellipsis" title={row.companyName}>
+                      {row.companyName || "—"}
+                    </td>
+                    <td className="admin-table__ellipsis" title={row.contactName}>
+                      {row.contactName || "—"}
+                    </td>
                     <td>{row.phone || "—"}</td>
                     <td>{row.branch === "branch1" ? "Nhánh 1" : "Nhánh 2"}</td>
-                    <td>{row.totalScore}/100</td>
-                    <td>{row.levelLabel}</td>
-                    <td className="admin-table__sticky-col">
+                    <td>
+                      <div className="admin-table__score">
+                        <strong>{row.totalScore}/100</strong>
+                        <span className="admin-table__muted admin-table__ellipsis" title={row.levelLabel}>
+                          {row.levelLabel}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
                       <div className="admin-row-actions">
                         <button
                           type="button"
                           className="admin-detail-toggle"
                           onClick={() => toggleExpand(row.id)}
                         >
-                          {expandedId === row.id ? "Ẩn chi tiết" : "Xem chi tiết"}
+                          {expandedId === row.id ? "Ẩn" : "Chi tiết"}
                         </button>
                         {row.reportToken && (
                           <a
@@ -158,7 +170,7 @@ export function AssessmentResultsList() {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            Xem PDF
+                            PDF
                           </a>
                         )}
                       </div>
@@ -166,7 +178,7 @@ export function AssessmentResultsList() {
                   </tr>
                   {expandedId === row.id && (
                     <tr className="admin-detail-row">
-                      <td colSpan={10}>
+                      <td colSpan={8}>
                         <div className="admin-detail">
                           <div className="admin-detail__section">
                             <h4>A — Thông tin doanh nghiệp</h4>
