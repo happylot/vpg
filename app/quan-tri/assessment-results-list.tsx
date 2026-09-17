@@ -118,7 +118,7 @@ export function AssessmentResultsList() {
                 <th>Nhánh</th>
                 <th>Điểm</th>
                 <th>Xếp loại</th>
-                <th></th>
+                <th className="admin-table__sticky-col"></th>
               </tr>
             </thead>
             <tbody>
@@ -142,7 +142,7 @@ export function AssessmentResultsList() {
                     <td>{row.branch === "branch1" ? "Nhánh 1" : "Nhánh 2"}</td>
                     <td>{row.totalScore}/100</td>
                     <td>{row.levelLabel}</td>
-                    <td>
+                    <td className="admin-table__sticky-col">
                       <div className="admin-row-actions">
                         <button
                           type="button"

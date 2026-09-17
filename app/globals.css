@@ -2710,6 +2710,31 @@ main {
   background: rgba(244, 182, 64, 0.16);
 }
 
+.admin-table__sticky-col {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background: #fff;
+  box-shadow: -8px 0 8px -8px rgba(33, 21, 19, 0.2);
+}
+
+.admin-table th.admin-table__sticky-col {
+  z-index: 2;
+  background: #fff2d4;
+}
+
+.admin-table tbody tr:hover .admin-table__sticky-col {
+  background: #faf5f5;
+}
+
+.admin-table__row--unread .admin-table__sticky-col {
+  background: #fef8ec;
+}
+
+.admin-table__row--unread:hover .admin-table__sticky-col {
+  background: #fdf3e0;
+}
+
 .admin-page__unread-badge {
   display: inline-block;
   margin-left: 10px;
