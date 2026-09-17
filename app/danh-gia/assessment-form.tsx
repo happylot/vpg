@@ -425,7 +425,7 @@ export function AssessmentForm() {
             <div className="assessment-report-grid">
               <a
                 className="partner-resource-card"
-                href={`/danh-gia/ket-qua/${reportToken}`}
+                href={`/api/assessment/report/${reportToken}`}
                 target="_blank"
                 rel="noreferrer"
               >
