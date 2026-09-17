@@ -71,6 +71,7 @@ export const eventRegistrationsAlterSql = `
 export const assessmentResultsTableSql = `
   CREATE TABLE IF NOT EXISTS assessment_results (
     id serial PRIMARY KEY,
+    report_token text NOT NULL DEFAULT '',
     company_name text NOT NULL DEFAULT '',
     contact_name text NOT NULL DEFAULT '',
     phone text NOT NULL DEFAULT '',
@@ -86,6 +87,12 @@ export const assessmentResultsTableSql = `
     is_read boolean NOT NULL DEFAULT false,
     created_at timestamptz NOT NULL DEFAULT now()
   )
+`;
+
+// Adds the report_token column for rows created before it existed.
+export const assessmentResultsAlterSql = `
+  ALTER TABLE assessment_results
+  ADD COLUMN IF NOT EXISTS report_token text NOT NULL DEFAULT ''
 `;
 
 export const partnerInquiriesTableSql = `

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { assessmentResultsTableSql, withDb } from "../../../../db";
+import { assessmentResultsAlterSql, assessmentResultsTableSql, withDb } from "../../../../db";
 import { assessmentResults } from "../../../../db/schema";
 import { ADMIN_COOKIE, hashAdminPassword } from "../../../quan-tri/auth";
 
@@ -29,6 +29,7 @@ export async function PATCH(request: Request) {
 
   await withDb(async ({ db, sql }) => {
     await sql.unsafe(assessmentResultsTableSql);
+    await sql.unsafe(assessmentResultsAlterSql);
     await db
       .update(assessmentResults)
       .set({ isRead: payload.isRead ?? true })

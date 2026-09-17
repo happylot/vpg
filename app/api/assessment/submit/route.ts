@@ -1,4 +1,4 @@
-import { assessmentResultsTableSql, withDb } from "../../../../db";
+import { assessmentResultsAlterSql, assessmentResultsTableSql, withDb } from "../../../../db";
 import { assessmentResults } from "../../../../db/schema";
 import {
   assessmentQuestionsBranch1,
@@ -107,11 +107,15 @@ export async function POST(request: Request) {
     const profileEntries = branch === "branch2" ? buildEntries(branch2ProfileFields, profile) : null;
     const supportEntries = buildEntries(supportFields, support);
 
+    const reportToken = crypto.randomUUID();
+
     const saved = await withDb(async ({ db, sql }) => {
       await sql.unsafe(assessmentResultsTableSql);
+      await sql.unsafe(assessmentResultsAlterSql);
       const [row] = await db
         .insert(assessmentResults)
         .values({
+          reportToken,
           companyName,
           contactName,
           phone,

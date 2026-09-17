@@ -39,24 +39,6 @@ function isFieldComplete(field: BusinessField, value: string | string[] | undefi
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function formatFieldValue(value: string | string[] | undefined) {
-  if (Array.isArray(value)) return value.length > 0 ? value.join(", ") : "—";
-  return value && value.trim() ? value : "—";
-}
-
-function AnswersSummaryList({ fields, answers }: { fields: BusinessField[]; answers: FieldAnswers }) {
-  return (
-    <dl className="assessment-answers__list">
-      {fields.map((field) => (
-        <div className="assessment-answers__item" key={field.id}>
-          <dt>{field.label}</dt>
-          <dd>{formatFieldValue(answers[field.id])}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
 function makeFieldHandlers(
   setAnswers: React.Dispatch<React.SetStateAction<FieldAnswers>>,
   setOtherValues: React.Dispatch<React.SetStateAction<OtherValues>>,
@@ -282,7 +264,7 @@ export function AssessmentForm() {
 
   const [answers, setAnswers] = useState<Answers>({});
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [showAllAnswers, setShowAllAnswers] = useState(false);
+  const [reportToken, setReportToken] = useState<string | null>(null);
 
   const exportExperience = typeof business.exportExperience === "string" ? business.exportExperience : "";
   const branch = exportExperience === "Chưa từng" ? "branch1" : "branch2";
@@ -335,7 +317,7 @@ export function AssessmentForm() {
     goToStep("result");
   }
 
-  function submitAssessment() {
+  async function submitAssessment() {
     const payload = {
       business,
       branch,
@@ -343,13 +325,19 @@ export function AssessmentForm() {
       answers,
       support,
     };
-    fetch("/api/assessment/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    }).catch((error) => {
+    try {
+      const response = await fetch("/api/assessment/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await response.json()) as { result?: { reportToken?: string } };
+      if (response.ok && data.result?.reportToken) {
+        setReportToken(data.result.reportToken);
+      }
+    } catch (error) {
       console.error("Không thể lưu kết quả đánh giá:", error);
-    });
+    }
   }
 
   function resetAll() {
@@ -362,6 +350,7 @@ export function AssessmentForm() {
     setSupport({});
     setSupportOther({});
     setAnswers({});
+    setReportToken(null);
   }
 
   if (step === "result") {
@@ -418,31 +407,17 @@ export function AssessmentForm() {
           })}
         </div>
 
-        <button
-          type="button"
-          className="button button--ghost button--dark assessment-result__toggle"
-          onClick={() => setShowAllAnswers((prev) => !prev)}
-        >
-          {showAllAnswers ? "Ẩn toàn bộ câu trả lời" : "Xem toàn bộ câu trả lời"}
-        </button>
-
-        {showAllAnswers && (
-          <div className="assessment-answers">
-            <div className="assessment-answers__section">
-              <h4>A — Thông tin doanh nghiệp</h4>
-              <AnswersSummaryList fields={businessInfoFields} answers={business} />
-            </div>
-            {branch === "branch2" && (
-              <div className="assessment-answers__section">
-                <h4>Hiện trạng xuất khẩu</h4>
-                <AnswersSummaryList fields={branch2ProfileFields} answers={profile} />
-              </div>
-            )}
-            <div className="assessment-answers__section">
-              <h4>C — Nhu cầu hỗ trợ</h4>
-              <AnswersSummaryList fields={supportFields} answers={support} />
-            </div>
-          </div>
+        {reportToken && (
+          <a
+            className="assessment-report-link"
+            href={`/danh-gia/ket-qua/${reportToken}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <h3>Báo cáo chi tiết bài đánh giá</h3>
+            <p>Xem lại toàn bộ câu hỏi và câu trả lời bạn đã điền, cùng điểm số từng tiêu chí.</p>
+            <span>Xem báo cáo →</span>
+          </a>
         )}
 
         <div className="assessment-result__actions">

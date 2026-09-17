@@ -3638,6 +3638,52 @@ main {
   padding: 4px 4px 14px;
 }
 
+.assessment-answers__qa-group h5 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.assessment-report-link {
+  display: block;
+  margin-top: 24px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.assessment-report-link:hover {
+  border-color: rgba(142, 16, 16, 0.32);
+  box-shadow: 0 14px 32px rgba(92, 18, 12, 0.08);
+}
+
+.assessment-report-link h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.assessment-report-link p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.assessment-report-link span {
+  color: var(--scarlet);
+  font-size: 0.88rem;
+  font-weight: 900;
+}
+
 .assessment-answers__qa {
   padding: 10px 0;
   border-top: 1px solid var(--line);
@@ -3665,13 +3711,6 @@ main {
 .assessment-answers__answer span {
   color: var(--scarlet);
   font-weight: 800;
-}
-
-.assessment-result__toggle {
-  margin-top: 24px;
-  width: 100%;
-  text-align: center;
-  justify-content: center;
 }
 
 .assessment-answers {

@@ -29,6 +29,7 @@ export type AssessmentCategoryScore = { category: string; max: number; score: nu
 
 export const assessmentResults = pgTable("assessment_results", {
   id: serial("id").primaryKey(),
+  reportToken: text("report_token").notNull().default(""),
   companyName: text("company_name").notNull().default(""),
   contactName: text("contact_name").notNull().default(""),
   phone: text("phone").notNull().default(""),
