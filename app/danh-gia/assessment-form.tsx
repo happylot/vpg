@@ -266,6 +266,14 @@ export function AssessmentForm() {
   const [answers, setAnswers] = useState<Answers>({});
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [reportToken, setReportToken] = useState<string | null>(null);
+  const [aiRecommendation, setAiRecommendation] = useState<AiRecommendation | null>(null);
+
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpPendingToken, setOtpPendingToken] = useState<string | null>(null);
+  const [otpCode, setOtpCode] = useState("");
+  const [otpError, setOtpError] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [verifiedToken, setVerifiedToken] = useState<string | null>(null);
 
   const exportExperience = typeof business.exportExperience === "string" ? business.exportExperience : "";
   const branch = exportExperience === "Chưa từng" ? "branch1" : "branch2";
