@@ -18,6 +18,10 @@ DB_PASSWORD=your_password
 # Password to access /quan-tri (the registrations admin list)
 ADMIN_PASSWORD=change_me
 
+# Secret used to sign the email-OTP tokens for /danh-gia (any long random
+# string). Generate one with: node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+OTP_SECRET=change_me_to_a_long_random_string
+
 # Base URL the server uses to call its own API routes from Server
 # Components (must match the port `npm run dev` actually listens on).
 APP_ORIGIN=http://127.0.0.1:3000

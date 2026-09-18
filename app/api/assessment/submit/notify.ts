@@ -29,11 +29,11 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;");
 }
 
-async function sendEmail(options: { to: string | string[]; subject: string; html: string }) {
+export async function sendEmail(options: { to: string | string[]; subject: string; html: string }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("RESEND_API_KEY chưa được cấu hình - bỏ qua gửi email.");
-    return;
+    throw new Error("RESEND_API_KEY chưa được cấu hình.");
   }
 
   const to = Array.isArray(options.to) ? options.to : [options.to];
@@ -55,7 +55,24 @@ async function sendEmail(options: { to: string | string[]; subject: string; html
   if (!response.ok) {
     const detail = await response.text();
     console.error(`Gửi email tới ${to.join(", ")} thất bại:`, detail);
+    throw new Error(`Gửi email thất bại: ${detail}`);
   }
+}
+
+export async function sendOtpEmail(email: string, otp: string) {
+  const html = `
+    <div style="font-family: Arial, sans-serif; color: #211513;">
+      <p>Mã xác nhận của bạn để bắt đầu bài đánh giá sẵn sàng xuất khẩu cùng Vproud:</p>
+      <p style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #8e1010;">${otp}</p>
+      <p style="color: #55423d;">Mã có hiệu lực trong 10 phút. Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email.</p>
+    </div>
+  `;
+
+  await sendEmail({
+    to: email,
+    subject: `Mã xác nhận đánh giá sẵn sàng xuất khẩu: ${otp}`,
+    html,
+  });
 }
 
 function renderFieldEntries(entries: [string, string][]) {
