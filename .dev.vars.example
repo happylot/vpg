@@ -1,6 +1,13 @@
 # Copy this file to `.dev.vars` (gitignored) and fill in your real values for local dev.
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+# Used to generate the AI recommendation panel shown alongside assessment
+# results (result screen, PDF report, admin panel). If unset, submissions
+# are saved without a recommendation instead of failing.
+ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# Optional: override the default model (claude-sonnet-5) used for that call.
+# ANTHROPIC_MODEL=claude-sonnet-5
+
 # Postgres connection (used by db/index.ts)
 DB_HOST=127.0.0.1
 DB_PORT=5432

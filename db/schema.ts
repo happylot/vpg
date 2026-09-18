@@ -26,6 +26,10 @@ export type AssessmentScoredEntry = {
   points: number;
 };
 export type AssessmentCategoryScore = { category: string; max: number; score: number };
+// AI-generated recommendation — one advice item per weak category, plus a
+// short overall summary. Generated once at submit time and cached on the row.
+export type AssessmentRecommendationItem = { category: string; advice: string };
+export type AssessmentRecommendation = { summary: string; items: AssessmentRecommendationItem[] };
 
 export const assessmentResults = pgTable("assessment_results", {
   id: serial("id").primaryKey(),
@@ -42,6 +46,7 @@ export const assessmentResults = pgTable("assessment_results", {
   scoredEntries: jsonb("scored_entries").notNull().$type<AssessmentScoredEntry[]>(),
   categoryScores: jsonb("category_scores").notNull().$type<AssessmentCategoryScore[]>(),
   supportEntries: jsonb("support_entries").notNull().$type<AssessmentFieldEntry[]>(),
+  aiRecommendation: jsonb("ai_recommendation").$type<AssessmentRecommendation | null>(),
   isRead: boolean("is_read").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
