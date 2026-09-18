@@ -77,6 +77,23 @@ export function AssessmentResultsList() {
     }
   }
 
+  async function deleteResult(id: number, companyName: string) {
+    const label = companyName || `#${id}`;
+    if (!window.confirm(`Xóa kết quả đánh giá của "${label}"? Hành động này không thể hoàn tác.`)) {
+      return;
+    }
+    setResults((prev) => (prev ? prev.filter((row) => row.id !== id) : prev));
+    try {
+      await fetch("/api/admin/assessment-results", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+    } catch {
+      load();
+    }
+  }
+
   function toggleExpand(id: number) {
     setExpandedId((prev) => (prev === id ? null : id));
     setExpandedCategory(null);
@@ -173,6 +190,13 @@ export function AssessmentResultsList() {
                             Tải PDF
                           </a>
                         )}
+                        <button
+                          type="button"
+                          className="admin-detail-toggle admin-detail-toggle--danger"
+                          onClick={() => deleteResult(row.id, row.companyName)}
+                        >
+                          Xóa
+                        </button>
                       </div>
                     </td>
                   </tr>
