@@ -19,7 +19,9 @@ type RecommendationInput = {
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const DEFAULT_MODEL = "claude-sonnet-5";
-const REQUEST_TIMEOUT_MS = 25000;
+// Observed real-world latency for a full JSON recommendation can run 15-30s,
+// so the cutoff needs real headroom above that rather than a "reasonable-looking" number.
+const REQUEST_TIMEOUT_MS = 55000;
 const MAX_ITEMS = 6;
 
 function buildPrompt(input: RecommendationInput) {
@@ -44,15 +46,14 @@ function buildPrompt(input: RecommendationInput) {
   };
 
   const system = [
-    "Bạn là chuyên gia tư vấn xuất khẩu cho doanh nghiệp vừa và nhỏ tại Việt Nam.",
-    "Dựa trên kết quả bài tự đánh giá mức độ sẵn sàng xuất khẩu (điểm theo từng tiêu chí và các câu hỏi bị điểm thấp),",
-    "hãy đưa ra khuyến nghị hành động cụ thể, thực tế, ưu tiên tiêu chí có điểm/tổng điểm thấp nhất trước,",
-    "giúp doanh nghiệp biết cần làm gì để hoàn thiện các tiêu chí còn yếu.",
-    "Chỉ trả lời bằng một khối JSON hợp lệ duy nhất, đúng schema sau, không thêm bất kỳ chữ nào khác, không dùng markdown code fence:",
+    "Bạn là chuyên gia thực chiến về xuất khẩu cho doanh nghiệp SME tại Việt Nam.",
+    "Nhiệm vụ của bạn là đưa ra nhận xét cực kỳ ngắn gọn, trực diện và mang lại giá trị hành động cao nhất dựa trên kết quả đánh giá (chú trọng các câu hỏi điểm thấp).",
+    "Chỉ trả lời bằng một khối JSON hợp lệ duy nhất, đúng schema sau, tuyệt đối không dùng markdown code fence hay thêm text phụ:",
     '{"summary": string, "items": [{"category": string, "advice": string}]}',
-    "\"summary\" là 1-2 câu tổng quan điểm mạnh/yếu chính.",
-    `"items" liệt kê tối đa ${MAX_ITEMS} tiêu chí cần cải thiện nhất, mỗi "category" phải trùng đúng tên tiêu chí trong dữ liệu, "advice" là 1-3 câu khuyến nghị hành động cụ thể, thiết thực để hoàn thiện tiêu chí đó.`,
-    "Nếu doanh nghiệp đã tốt ở hầu hết các mặt, đưa ra khuyến nghị để mở rộng/nâng cao hơn nữa thay vì để trống.",
+    '"summary": 1-2 câu nhận xét thẳng thắn, súc tích về vị thế năng lực hiện tại và điểm then chốt cần đột phá.',
+    `"items": liệt kê tối đa ${MAX_ITEMS} tiêu chí cấp bách nhất cần cải thiện, "category" phải khớp chính xác tên tiêu chí trong dữ liệu.`,
+    '"advice": 1-2 câu hành động cụ thể. KHÔNG khuyên lý thuyết chung chung. ĐẶC BIỆT: Với các vấn đề chuyên sâu, phức tạp và khó tự triển khai, hãy khéo léo gợi ý việc tìm kiếm chuyên gia đồng hành/tư vấn bên ngoài như một hướng giải quyết thiết thực. Lời khuyên cần tự nhiên, khách quan, chân thành như một lời chia sẻ, tuyệt đối không dùng văn phong chèo kéo, quảng cáo hay sales.',
+    "Nếu doanh nghiệp đã đạt điểm cao ở hầu hết các mặt, hãy gợi ý chiến lược ngách hoặc tối ưu nâng cao thay vì để trống.",
   ].join(" ");
 
   const user = `Dữ liệu đánh giá (JSON):\n${JSON.stringify(context, null, 2)}`;

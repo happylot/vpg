@@ -512,20 +512,32 @@ export function AssessmentForm() {
 
             {aiRecommendation && (
               <div className="assessment-recommendation">
-                <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
+                <div className="assessment-recommendation__header">
+                  <span className="assessment-recommendation__icon">✦</span>
+                  <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
+                </div>
                 {aiRecommendation.summary && (
                   <p className="assessment-recommendation__summary">{aiRecommendation.summary}</p>
                 )}
+                {aiRecommendation.items.length > 0 && (
+                  <div className="assessment-recommendation__section-title">
+                    Các điểm cần ưu tiên cải thiện
+                  </div>
+                )}
                 <ul className="assessment-recommendation__list">
                   {aiRecommendation.items.map((item, i) => (
-                    <li key={i}>
-                      <strong>{item.category}</strong>
-                      <span>{item.advice}</span>
+                    <li key={i} className="assessment-recommendation__item">
+                      <div className="assessment-recommendation__item-header">
+                        <span className="assessment-recommendation__number">{i + 1}</span>
+                        <strong className="assessment-recommendation__category">{item.category}</strong>
+                      </div>
+                      <p className="assessment-recommendation__advice">{item.advice}</p>
                     </li>
                   ))}
                 </ul>
               </div>
             )}
+
           </div>
 
           <div className="assessment-result__actions">

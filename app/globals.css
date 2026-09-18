@@ -1109,58 +1109,114 @@ main {
 }
 
 .assessment-recommendation {
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
   background: #fff;
+  overflow: hidden;
+}
+
+.assessment-recommendation__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, var(--ivory) 0%, #fff 100%);
+  border-bottom: 1.5px solid var(--line);
+}
+
+.assessment-recommendation__icon {
+  color: var(--scarlet);
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .assessment-recommendation__label {
-  margin: 0 0 8px;
+  margin: 0;
   color: var(--scarlet);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 900;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .assessment-recommendation__summary {
-  margin: 0 0 14px;
+  margin: 0;
+  padding: 16px 20px;
   color: var(--ink);
-  font-size: 0.94rem;
-  line-height: 1.6;
+  font-size: 0.97rem;
+  font-weight: 500;
+  line-height: 1.7;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.assessment-recommendation__section-title {
+  padding: 10px 20px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
 }
 
 .assessment-recommendation__list {
   display: grid;
-  gap: 12px;
+  gap: 0;
   margin: 0;
-  padding: 0;
+  padding: 12px 16px 16px;
   list-style: none;
 }
 
-.assessment-recommendation__list li {
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
+.assessment-recommendation__item {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  margin-bottom: 8px;
 }
 
-.assessment-recommendation__list li:first-child {
-  padding-top: 0;
-  border-top: none;
+.assessment-recommendation__item:last-child {
+  margin-bottom: 0;
 }
 
-.assessment-recommendation__list strong {
-  display: block;
-  color: var(--ink);
-  font-size: 0.88rem;
+.assessment-recommendation__item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.assessment-recommendation__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--scarlet);
+  color: #fff;
+  font-size: 0.72rem;
   font-weight: 900;
-  margin-bottom: 4px;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
-.assessment-recommendation__list span {
-  color: var(--muted);
+.assessment-recommendation__category {
+  color: var(--ink);
   font-size: 0.9rem;
-  line-height: 1.6;
+  font-weight: 800;
 }
+
+.assessment-recommendation__advice {
+  margin: 0 0 0 32px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
 
 .assessment-result__actions {
   display: flex;
