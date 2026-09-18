@@ -3,12 +3,14 @@ import { eq } from "drizzle-orm";
 import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
 import { assessmentResultsAlterSql, assessmentResultsTableSql, withDb } from "../../../../../db";
 import { assessmentResults } from "../../../../../db/schema";
+import { readToken } from "../../otp/token";
 import { beVietnamProBoldBase64, beVietnamProRegularBase64 } from "./fonts";
 
 type FieldEntry = { label: string; value: string };
 type ScoredEntry = { category: string; question: string; selected: string; points: number };
 type CategoryScore = { category: string; max: number; score: number };
 type Recommendation = { summary: string; items: { category: string; advice: string }[] };
+type VerifiedOtpPayload = { email: string; exp: number; purpose: "otp-verified" };
 
 const PAGE_WIDTH = 595.28;
 const PAGE_HEIGHT = 841.89;
@@ -227,6 +229,13 @@ async function buildReportPdf(row: typeof assessmentResults.$inferSelect) {
 export async function GET(request: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
 
+  const otpSecret = process.env.OTP_SECRET;
+  const otpToken = request.headers.get("x-otp-token") ?? "";
+  const verified = otpSecret ? await readToken<VerifiedOtpPayload>(otpToken, otpSecret) : null;
+  if (!verified || verified.purpose !== "otp-verified" || Date.now() > verified.exp) {
+    return new Response("Vui lòng xác nhận email trước khi tải báo cáo.", { status: 401 });
+  }
+
   try {
     const row = await withDb(async ({ db, sql }) => {
       await sql.unsafe(assessmentResultsTableSql);
@@ -241,6 +250,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ toke
 
     if (!row) {
       return new Response("Không tìm thấy báo cáo.", { status: 404 });
+    }
+    if (row.email.toLowerCase() !== verified.email.toLowerCase()) {
+      return new Response("Bạn không có quyền truy cập báo cáo này.", { status: 403 });
     }
 
     const pdfBytes = await buildReportPdf(row);

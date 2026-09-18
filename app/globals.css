@@ -1697,6 +1697,35 @@ main {
   padding: 4px 0;
 }
 
+.assessment-chat__limit-note {
+  margin: 0;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--scarlet);
+  background: var(--ivory);
+  border-top: 1px solid var(--line);
+}
+
+.assessment-chat__limit-note--muted {
+  color: var(--muted);
+  font-weight: 600;
+  background: transparent;
+  border-top: none;
+}
+
+.assessment-chat__limit-note a {
+  color: var(--scarlet);
+  text-decoration: underline;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.assessment-chat__limit-note a:hover {
+  color: var(--red);
+}
+
 .assessment-chat__input-row {
   display: flex;
   gap: 8px;

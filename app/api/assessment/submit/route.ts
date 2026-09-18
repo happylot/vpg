@@ -79,7 +79,9 @@ export async function POST(request: Request) {
     const companyName = fieldValueToText(business.companyName).trim();
     const contactName = fieldValueToText(business.contactName).trim();
     const phone = fieldValueToText(business.phone).trim();
-    const email = fieldValueToText(business.email).trim();
+    // Always the OTP-verified email, never the (editable) form field — this is what
+    // gates chat/history access later, and where the result email actually gets sent.
+    const email = verified.email;
 
     if (!companyName || !phone) {
       return Response.json({ error: "Thiếu tên doanh nghiệp hoặc số điện thoại." }, { status: 400 });

@@ -16,6 +16,9 @@ type VerifiedOtpPayload = { email: string; exp: number; purpose: "otp-verified" 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const DEFAULT_MODEL = "claude-sonnet-5";
 const REQUEST_TIMEOUT_MS = 55000;
+// Keeps AI usage cost bounded per report. Mirrored client-side in assessment-chat.tsx
+// for immediate UI feedback, but this is the authoritative limit.
+const MAX_USER_TURNS = 3;
 
 function buildSystemPrompt(result: {
   companyName: string;
@@ -145,6 +148,14 @@ export async function POST(request: Request) {
         .from(assessmentChatMessages)
         .where(eq(assessmentChatMessages.sessionId, session.id))
         .orderBy(assessmentChatMessages.createdAt);
+
+      const userTurnCount = messages.filter((m) => m.role === "user").length;
+      if (userTurnCount >= MAX_USER_TURNS) {
+        throw Object.assign(
+          new Error(`Bạn đã dùng hết ${MAX_USER_TURNS} lượt hỏi cho bài đánh giá này.`),
+          { status: 403 },
+        );
+      }
 
       const sysPrompt = buildSystemPrompt({
         companyName: result.companyName,

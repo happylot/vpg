@@ -360,6 +360,8 @@ export function AssessmentForm() {
   const [viewedResult, setViewedResult] = useState<ViewedResult | null>(null);
   const [historyDetailLoading, setHistoryDetailLoading] = useState(false);
   const [historyDetailError, setHistoryDetailError] = useState("");
+  const [reportOpening, setReportOpening] = useState(false);
+  const [reportError, setReportError] = useState("");
 
   const exportExperience = typeof business.exportExperience === "string" ? business.exportExperience : "";
   const branch = exportExperience === "Chưa từng" ? "branch1" : "branch2";
@@ -507,6 +509,29 @@ export function AssessmentForm() {
       setHistoryDetailError("Không kết nối được server.");
     } finally {
       setHistoryDetailLoading(false);
+    }
+  }
+
+  async function openReportPdf() {
+    if (!reportToken || !verifiedToken || reportOpening) return;
+    setReportError("");
+    setReportOpening(true);
+    try {
+      const response = await fetch(`/api/assessment/report/${encodeURIComponent(reportToken)}`, {
+        headers: { "x-otp-token": verifiedToken },
+      });
+      if (!response.ok) {
+        setReportError("Không tải được báo cáo PDF, vui lòng thử lại.");
+        return;
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank", "noopener,noreferrer");
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      setReportError("Không kết nối được server, vui lòng thử lại.");
+    } finally {
+      setReportOpening(false);
     }
   }
 
@@ -702,29 +727,38 @@ export function AssessmentForm() {
         )}
 
         {!isLoading && !historyDetailError && (
-          <div className="assessment-result__cta-row">
-            {reportToken && (
-              <a
-                className="assessment-result__cta-card"
-                href={`/api/assessment/report/${reportToken}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+          <>
+            <div className="assessment-result__cta-row">
+              {reportToken && verifiedToken && (
+                <button
+                  type="button"
+                  className="assessment-result__cta-card"
+                  onClick={openReportPdf}
+                  disabled={reportOpening}
+                >
+                  <span className="assessment-result__cta-icon">
+                    <IconFileText />
+                  </span>
+                  <span className="assessment-result__cta-title">
+                    {reportOpening ? "Đang mở báo cáo..." : "Xem chi tiết báo cáo"}
+                  </span>
+                  <span className="assessment-result__cta-sub">Tải báo cáo PDF đầy đủ</span>
+                </button>
+              )}
+              <a className="assessment-result__cta-card" href="/events">
                 <span className="assessment-result__cta-icon">
-                  <IconFileText />
+                  <IconCompass />
                 </span>
-                <span className="assessment-result__cta-title">Xem chi tiết báo cáo</span>
-                <span className="assessment-result__cta-sub">Tải báo cáo PDF đầy đủ</span>
+                <span className="assessment-result__cta-title">Xem chương trình phù hợp</span>
+                <span className="assessment-result__cta-sub">Chương trình hỗ trợ xuất khẩu dành cho bạn</span>
               </a>
+            </div>
+            {reportError && (
+              <p className="register-form__error" role="alert">
+                {reportError}
+              </p>
             )}
-            <a className="assessment-result__cta-card" href="/events">
-              <span className="assessment-result__cta-icon">
-                <IconCompass />
-              </span>
-              <span className="assessment-result__cta-title">Xem chương trình phù hợp</span>
-              <span className="assessment-result__cta-sub">Chương trình hỗ trợ xuất khẩu dành cho bạn</span>
-            </a>
-          </div>
+          </>
         )}
       </>
     );

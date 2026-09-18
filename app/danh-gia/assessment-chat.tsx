@@ -12,6 +12,22 @@ type Props = {
   verifiedToken: string;
 };
 
+// Keeps AI usage cost bounded per report. The server (app/api/assessment/chat/route.ts)
+// enforces this authoritatively — this copy only drives the UI's own feedback.
+const MAX_USER_TURNS = 3;
+
+const CEO_PHONE = "03587999999";
+
+// Rotates through the input's placeholder so it always suggests a concrete question
+// to ask, instead of a generic "type here" hint.
+const PLACEHOLDER_EXAMPLES = [
+  "Tôi cần cải thiện điều gì trước tiên?",
+  "Doanh nghiệp tôi cần chứng nhận gì để xuất khẩu?",
+  "Lộ trình xuất khẩu phù hợp với tôi là gì?",
+  "Thị trường nào phù hợp với sản phẩm của tôi?",
+  "Tôi nên bắt đầu chuẩn bị từ đâu?",
+];
+
 // Minimal inline-markdown: handles **bold** segments and newlines.
 function renderMessageText(text: string) {
   return text.split("\n").map((line, idx) => {
@@ -58,6 +74,9 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [placeholderExample] = useState(
+    () => PLACEHOLDER_EXAMPLES[Math.floor(Math.random() * PLACEHOLDER_EXAMPLES.length)],
+  );
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -98,6 +117,8 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
   async function sendMessage() {
     const text = input.trim();
     if (!text || loading) return;
+    const currentUserTurns = messages.filter((m) => m.role === "user").length;
+    if (currentUserTurns >= MAX_USER_TURNS) return;
 
     setInput("");
     setError("");
@@ -164,6 +185,10 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
   }
 
   if (!historyLoaded) return null;
+
+  const userTurnCount = messages.filter((m) => m.role === "user").length;
+  const turnsLeft = Math.max(0, MAX_USER_TURNS - userTurnCount);
+  const limitReached = turnsLeft <= 0;
 
   return (
     <div className="assessment-chat">
@@ -260,22 +285,37 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
         <div ref={bottomRef} />
       </div>
 
+      {limitReached ? (
+        <p className="assessment-chat__limit-note">
+          Bạn đã dùng hết {MAX_USER_TURNS} lượt hỏi cho bài đánh giá này. Hãy liên hệ trực tiếp với
+          CEO: <a href={`tel:${CEO_PHONE}`}>{CEO_PHONE}</a>
+        </p>
+      ) : (
+        <p className="assessment-chat__limit-note assessment-chat__limit-note--muted">
+          Còn {turnsLeft}/{MAX_USER_TURNS} lượt hỏi cho bài đánh giá này.
+        </p>
+      )}
+
       <div className="assessment-chat__input-row">
         <textarea
           ref={inputRef}
           className="assessment-chat__input"
-          placeholder="Nhập câu hỏi của bạn... (Enter để gửi, Shift+Enter xuống dòng)"
+          placeholder={
+            limitReached
+              ? "Bạn đã dùng hết lượt hỏi cho bài đánh giá này"
+              : `Ví dụ: “${placeholderExample}” · Enter để gửi`
+          }
           value={input}
           rows={2}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          disabled={loading}
+          disabled={loading || limitReached}
         />
         <button
           type="button"
           className="assessment-chat__send"
           onClick={sendMessage}
-          disabled={loading || !input.trim()}
+          disabled={loading || limitReached || !input.trim()}
           aria-label="Gửi"
         >
           {loading ? <span className="assessment-chat__send-spinner" aria-hidden="true" /> : <IconSend />}
