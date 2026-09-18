@@ -12,6 +12,46 @@ type Props = {
   verifiedToken: string;
 };
 
+// Minimal inline-markdown: handles **bold** segments and newlines.
+function renderMessageText(text: string) {
+  return text.split("\n").map((line, idx) => {
+    if (!line.trim()) return <br key={idx} />;
+
+    const parts = line.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+    const lineContent = parts.map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+        return <strong key={i}>{part.slice(2, -2)}</strong>;
+      }
+      return <span key={i}>{part}</span>;
+    });
+
+    return (
+      <p key={idx} style={{ margin: "0 0 6px 0" }}>
+        {lineContent}
+      </p>
+    );
+  });
+}
+
+function IconSend() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m21.5 2.5-8.4 19-3.3-8.3-8.3-3.3Z" />
+      <path d="M21.5 2.5 9.8 14.2" />
+    </svg>
+  );
+}
+
 export function AssessmentChat({ reportToken, verifiedToken }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -61,7 +101,7 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
 
     setInput("");
     setError("");
-    setMessages((prev) => [...prev, { role: "user", content: text }]);
+    setMessages((prev) => [...prev, { role: "user", content: text }, { role: "assistant", content: "" }]);
     setLoading(true);
 
     try {
@@ -74,14 +114,41 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
         body: JSON.stringify({ reportToken, message: text }),
       });
 
-      const data = (await response.json()) as { reply?: string; error?: string };
-      if (!response.ok || !data.reply) {
-        setError(data.error || "Không nhận được phản hồi, vui lòng thử lại.");
+      if (!response.ok || !response.body) {
+        let errMsg = "Không nhận được phản hồi, vui lòng thử lại.";
+        try {
+          const data = (await response.json()) as { error?: string };
+          if (data.error) errMsg = data.error;
+        } catch {
+          // response wasn't JSON — keep default message
+        }
+        setMessages((prev) => prev.slice(0, -1));
+        setError(errMsg);
         return;
       }
 
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply! }]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulated = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulated += decoder.decode(value, { stream: true });
+        const chunk = accumulated;
+        setMessages((prev) => {
+          const next = [...prev];
+          next[next.length - 1] = { role: "assistant", content: chunk };
+          return next;
+        });
+      }
+
+      if (!accumulated) {
+        setMessages((prev) => prev.slice(0, -1));
+        setError("Không nhận được phản hồi, vui lòng thử lại.");
+      }
     } catch {
+      setMessages((prev) => prev.slice(0, -1));
       setError("Không kết nối được server, vui lòng thử lại.");
     } finally {
       setLoading(false);
@@ -101,11 +168,17 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
   return (
     <div className="assessment-chat">
       <div className="assessment-chat__header">
-        <span className="assessment-chat__header-icon">💬</span>
+        <img
+          src="/bao-han-avatar.jpg"
+          alt="Bảo Hân"
+          className="assessment-chat__header-avatar"
+        />
         <div>
-          <p className="assessment-chat__title">Hỏi đáp với chuyên gia AI</p>
+          <p className="assessment-chat__title">
+            Hỏi đáp với chuyên gia xuất khẩu Bảo Hân để cải thiện mức độ sẵn sàng của bạn
+          </p>
           <p className="assessment-chat__subtitle">
-            Đặt câu hỏi về kết quả đánh giá của bạn — AI sẽ tư vấn dựa trên báo cáo này
+            Đặt câu hỏi về kết quả đánh giá của bạn — Bảo Hân sẽ tư vấn dựa trên báo cáo này
           </p>
         </div>
       </div>
@@ -113,7 +186,13 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
       <div className="assessment-chat__messages">
         {messages.length === 0 && (
           <div className="assessment-chat__empty">
-            <p>Bạn có thể hỏi về bất kỳ điểm nào trong kết quả đánh giá.</p>
+            <img
+              src="/bao-han-avatar.jpg"
+              alt=""
+              aria-hidden="true"
+              className="assessment-chat__empty-avatar"
+            />
+            <p>Bạn có thể hỏi Bảo Hân về bất kỳ điểm nào trong kết quả đánh giá.</p>
             <div className="assessment-chat__suggestions">
               {[
                 "Tôi cần cải thiện gì nhất?",
@@ -136,28 +215,41 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
           </div>
         )}
 
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`assessment-chat__message assessment-chat__message--${msg.role}`}
-          >
-            <span className="assessment-chat__message-label">
-              {msg.role === "user" ? "Bạn" : "Chuyên gia AI"}
-            </span>
-            <p className="assessment-chat__message-text">{msg.content}</p>
-          </div>
-        ))}
+        {messages.map((msg, i) => {
+          const isStreamingPlaceholder =
+            msg.role === "assistant" && i === messages.length - 1 && loading && msg.content === "";
 
-        {loading && (
-          <div className="assessment-chat__message assessment-chat__message--assistant">
-            <span className="assessment-chat__message-label">Chuyên gia AI</span>
-            <p className="assessment-chat__typing">
-              <span></span>
-              <span></span>
-              <span></span>
-            </p>
-          </div>
-        )}
+          if (msg.role === "assistant") {
+            return (
+              <div key={i} className="assessment-chat__message assessment-chat__message--assistant">
+                <img
+                  src="/bao-han-avatar.jpg"
+                  alt="Bảo Hân"
+                  className="assessment-chat__message-avatar"
+                />
+                <div className="assessment-chat__message-body">
+                  <span className="assessment-chat__message-label">Bảo Hân</span>
+                  {isStreamingPlaceholder ? (
+                    <p className="assessment-chat__typing">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </p>
+                  ) : (
+                    <div className="assessment-chat__message-text">{renderMessageText(msg.content)}</div>
+                  )}
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div key={i} className="assessment-chat__message assessment-chat__message--user">
+              <span className="assessment-chat__message-label">Bạn</span>
+              <p className="assessment-chat__message-text">{msg.content}</p>
+            </div>
+          );
+        })}
 
         {error && (
           <p className="assessment-chat__error" role="alert">
@@ -186,7 +278,7 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
           disabled={loading || !input.trim()}
           aria-label="Gửi"
         >
-          {loading ? "…" : "→"}
+          {loading ? <span className="assessment-chat__send-spinner" aria-hidden="true" /> : <IconSend />}
         </button>
       </div>
     </div>

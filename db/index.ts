@@ -97,6 +97,12 @@ export const assessmentResultsAlterSql = `
   ADD COLUMN IF NOT EXISTS ai_recommendation jsonb
 `;
 
+// Speeds up "list my past reports" lookups by (case-insensitive) email.
+export const assessmentResultsEmailIndexSql = `
+  CREATE INDEX IF NOT EXISTS assessment_results_email_idx
+  ON assessment_results (lower(email))
+`;
+
 export const partnerInquiriesTableSql = `
   CREATE TABLE IF NOT EXISTS partner_inquiries (
     id serial PRIMARY KEY,

@@ -14,17 +14,90 @@ import {
 } from "./questions";
 import { AssessmentChat } from "./assessment-chat";
 
+function IconSparkle({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+      <path d="M12 2.5c.28 0 .53.18.62.45l1.64 4.9 4.9 1.64a.66.66 0 0 1 0 1.24l-4.9 1.64-1.64 4.9a.66.66 0 0 1-1.24 0l-1.64-4.9-4.9-1.64a.66.66 0 0 1 0-1.24l4.9-1.64 1.64-4.9c.09-.27.34-.45.62-.45Z" />
+    </svg>
+  );
+}
+
+function IconFileText({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 2v6h6" />
+      <path d="M8.5 13h7M8.5 17h7" />
+    </svg>
+  );
+}
+
+function IconCompass({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9.5" />
+      <path d="m15.5 8.5-2 5-5 2 2-5Z" />
+    </svg>
+  );
+}
 
 type Answers = Record<string, number>;
 type FieldAnswers = Record<string, string | string[]>;
 type OtherValues = Record<string, string>;
-type Step = "otp-email" | "otp-code" | "business" | "assessment" | "support" | "result";
+type Step = "otp-email" | "otp-code" | "history" | "business" | "assessment" | "support" | "result";
 type AiRecommendation = {
   levelLabel: string;
   levelDesc: string;
   summary: string;
   items: { category: string; advice: string }[];
 };
+type PastReport = {
+  reportToken: string;
+  companyName: string;
+  totalScore: number;
+  levelLabel: string;
+  createdAt: string;
+};
+type ViewedResult = {
+  reportToken: string;
+  companyName: string;
+  totalScore: number;
+  aiRecommendation: AiRecommendation | null;
+};
+
+function formatReportDate(value: string) {
+  try {
+    return new Date(value).toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
 
 function groupByCategory(questions: AssessmentQuestion[]) {
   const groups: { category: string; categoryMax: number; questions: AssessmentQuestion[] }[] = [];
@@ -274,6 +347,7 @@ export function AssessmentForm() {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [reportToken, setReportToken] = useState<string | null>(null);
   const [aiRecommendation, setAiRecommendation] = useState<AiRecommendation | null>(null);
+  const [resultLoading, setResultLoading] = useState(false);
 
   const [otpEmail, setOtpEmail] = useState("");
   const [otpPendingToken, setOtpPendingToken] = useState<string | null>(null);
@@ -281,6 +355,11 @@ export function AssessmentForm() {
   const [otpError, setOtpError] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
   const [verifiedToken, setVerifiedToken] = useState<string | null>(null);
+
+  const [pastReports, setPastReports] = useState<PastReport[]>([]);
+  const [viewedResult, setViewedResult] = useState<ViewedResult | null>(null);
+  const [historyDetailLoading, setHistoryDetailLoading] = useState(false);
+  const [historyDetailError, setHistoryDetailError] = useState("");
 
   const exportExperience = typeof business.exportExperience === "string" ? business.exportExperience : "";
   const branch = exportExperience === "Chưa từng" ? "branch1" : "branch2";
@@ -303,7 +382,6 @@ export function AssessmentForm() {
   }, [groups, answers]);
 
   const totalScore = categoryScores.reduce((sum, c) => sum + c.score, 0);
-  const level = getReadinessLevel(totalScore);
   const companyName = typeof business.companyName === "string" ? business.companyName : "";
 
   function selectAnswer(questionId: string, optionIndex: number) {
@@ -387,12 +465,79 @@ export function AssessmentForm() {
       }
       setVerifiedToken(data.token);
       setBusiness((prev) => ({ ...prev, email: otpEmail.trim() }));
+
+      try {
+        const historyResponse = await fetch("/api/assessment/history", {
+          headers: { "x-otp-token": data.token },
+        });
+        const historyData = (await historyResponse.json()) as { reports?: PastReport[] };
+        if (historyResponse.ok && historyData.reports && historyData.reports.length > 0) {
+          setPastReports(historyData.reports);
+          goToStep("history");
+          return;
+        }
+      } catch {
+        // History lookup is a convenience — fall through to a new assessment.
+      }
       goToStep("business");
     } catch {
       setOtpError("Không thể xác nhận mã, vui lòng kiểm tra kết nối mạng.");
     } finally {
       setOtpLoading(false);
     }
+  }
+
+  async function viewPastReport(token: string) {
+    setHistoryDetailError("");
+    setHistoryDetailLoading(true);
+    setViewedResult(null);
+    setReportToken(token);
+    goToStep("result");
+    try {
+      const response = await fetch(`/api/assessment/history/${encodeURIComponent(token)}`, {
+        headers: { "x-otp-token": verifiedToken ?? "" },
+      });
+      const data = (await response.json()) as { result?: ViewedResult; error?: string };
+      if (!response.ok || !data.result) {
+        setHistoryDetailError(data.error || "Không tải được bài đánh giá.");
+        return;
+      }
+      setViewedResult(data.result);
+    } catch {
+      setHistoryDetailError("Không kết nối được server.");
+    } finally {
+      setHistoryDetailLoading(false);
+    }
+  }
+
+  function startNewAssessment() {
+    setViewedResult(null);
+    setReportToken(null);
+    setAiRecommendation(null);
+    setBusiness((prev) => ({ email: prev.email }));
+    setBusinessOther({});
+    setProfile({});
+    setProfileOther({});
+    setSupport({});
+    setSupportOther({});
+    setAnswers({});
+    goToStep("business");
+  }
+
+  async function goToHistory() {
+    if (verifiedToken) {
+      try {
+        const response = await fetch("/api/assessment/history", {
+          headers: { "x-otp-token": verifiedToken },
+        });
+        const data = (await response.json()) as { reports?: PastReport[] };
+        if (response.ok && data.reports) setPastReports(data.reports);
+      } catch {
+        // Keep whatever list we already have.
+      }
+    }
+    setViewedResult(null);
+    goToStep("history");
   }
 
   function handleBusinessSubmit(event: FormEvent<HTMLFormElement>) {
@@ -414,8 +559,9 @@ export function AssessmentForm() {
 
   function handleSupportSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    submitAssessment();
+    setResultLoading(true);
     goToStep("result");
+    submitAssessment().finally(() => setResultLoading(false));
   }
 
   async function submitAssessment() {
@@ -447,74 +593,115 @@ export function AssessmentForm() {
     }
   }
 
-  function resetAll() {
-    setStep("business");
-    window.history.replaceState({ assessmentStep: "business" }, "");
-    setBusiness({});
-    setBusinessOther({});
-    setProfile({});
-    setProfileOther({});
-    setSupport({});
-    setSupportOther({});
-    setAnswers({});
-    setReportToken(null);
-    setAiRecommendation(null);
-  }
-
   if (step === "result") {
+    const displayCompanyName = viewedResult ? viewedResult.companyName : companyName;
+    const displayTotalScore = viewedResult ? viewedResult.totalScore : totalScore;
+    const displayAiRecommendation = viewedResult ? viewedResult.aiRecommendation : aiRecommendation;
+    const displayLevel = getReadinessLevel(displayTotalScore);
+    const isLoading = resultLoading || historyDetailLoading;
+
     return (
       <>
         <div className="assessment-result">
-          {/* ── Score header ── */}
-          <p className="assessment-result__label">Kết quả đánh giá</p>
-          <div className="assessment-result__score">
-            <strong>{totalScore}</strong>
-            <span>/ 100 điểm</span>
-          </div>
-
-          <div className="assessment-result__identity">
-            {companyName && (
-              <span className="assessment-result__company">{companyName}</span>
-            )}
-            <span className="assessment-result__level-badge">
-              {aiRecommendation?.levelLabel ?? level.label}
-            </span>
-          </div>
-
-          <p className="assessment-result__desc">
-            {aiRecommendation?.levelDesc ?? level.desc}
-          </p>
-
-          {/* ── Recommendation ── */}
-          {aiRecommendation && (
-            <div className="assessment-recommendation assessment-recommendation--full">
-              <div className="assessment-recommendation__header">
-                <span className="assessment-recommendation__icon">✦</span>
-                <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
-              </div>
-              {aiRecommendation.summary && (
-                <p className="assessment-recommendation__summary">{aiRecommendation.summary}</p>
-              )}
-              {aiRecommendation.items.length > 0 && (
-                <div className="assessment-recommendation__section-title">
-                  Các điểm cần ưu tiên cải thiện
-                </div>
-              )}
-              <ul className="assessment-recommendation__list">
-                {aiRecommendation.items.map((item, i) => (
-                  <li key={i} className="assessment-recommendation__item">
-                    <div className="assessment-recommendation__item-header">
-                      <span className="assessment-recommendation__number">{i + 1}</span>
-                      <strong className="assessment-recommendation__category">{item.category}</strong>
-                    </div>
-                    <p className="assessment-recommendation__advice">{item.advice}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {pastReports.length > 0 && (
+            <button type="button" className="assessment-result__back-link" onClick={goToHistory}>
+              ← Quay lại danh sách bài đánh giá
+            </button>
           )}
 
-          {/* ── CTA row ── */}
+          {/* ── Score header ── */}
+          <p className="assessment-result__label">Kết quả đánh giá</p>
+
+          {historyDetailError ? (
+            <p className="register-form__error" role="alert">
+              {historyDetailError}
+            </p>
+          ) : isLoading ? (
+            <div className="assessment-result__skeleton" role="status" aria-live="polite">
+              <div className="assessment-result__skeleton-bar assessment-result__skeleton-bar--score" />
+              <div className="assessment-result__skeleton-bar assessment-result__skeleton-bar--badge" />
+              <div className="assessment-result__skeleton-bar" />
+              <div className="assessment-result__skeleton-bar assessment-result__skeleton-bar--short" />
+              <div className="assessment-result__skeleton-card" />
+              <p className="assessment-result__skeleton-caption">
+                <span className="assessment-result__spinner" aria-hidden="true" />
+                {historyDetailLoading
+                  ? "Đang tải bài đánh giá..."
+                  : "Đang phân tích câu trả lời và tạo khuyến nghị dành riêng cho doanh nghiệp của bạn..."}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="assessment-result__score">
+                <strong>{displayTotalScore}</strong>
+                <span>/ 100 điểm</span>
+              </div>
+
+              <div
+                className="assessment-result__score-bar"
+                role="img"
+                aria-label={`${displayTotalScore} trên 100 điểm`}
+              >
+                <div
+                  className="assessment-result__score-bar-fill"
+                  style={{ width: `${Math.min(100, Math.max(0, displayTotalScore))}%` }}
+                />
+              </div>
+
+              <div className="assessment-result__identity">
+                {displayCompanyName && (
+                  <span className="assessment-result__company">{displayCompanyName}</span>
+                )}
+                <span className="assessment-result__level-badge">
+                  {displayAiRecommendation?.levelLabel ?? displayLevel.label}
+                </span>
+              </div>
+
+              <p className="assessment-result__desc">
+                {displayAiRecommendation?.levelDesc ?? displayLevel.desc}
+              </p>
+
+              {/* ── Recommendation ── */}
+              {displayAiRecommendation && (
+                <div className="assessment-recommendation assessment-recommendation--full">
+                  <div className="assessment-recommendation__header">
+                    <span className="assessment-recommendation__icon">
+                      <IconSparkle />
+                    </span>
+                    <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
+                  </div>
+                  {displayAiRecommendation.summary && (
+                    <p className="assessment-recommendation__summary">{displayAiRecommendation.summary}</p>
+                  )}
+                  {displayAiRecommendation.items.length > 0 && (
+                    <div className="assessment-recommendation__section-title">
+                      Các điểm cần ưu tiên cải thiện
+                    </div>
+                  )}
+                  <ul className="assessment-recommendation__list">
+                    {displayAiRecommendation.items.map((item, i) => (
+                      <li key={i} className="assessment-recommendation__item">
+                        <div className="assessment-recommendation__item-header">
+                          <span className="assessment-recommendation__number">{i + 1}</span>
+                          <strong className="assessment-recommendation__category">{item.category}</strong>
+                        </div>
+                        <p className="assessment-recommendation__advice">{item.advice}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {!isLoading && !historyDetailError && reportToken && verifiedToken && (
+          <div className="assessment-chat-wrapper">
+            <AssessmentChat key={reportToken} reportToken={reportToken} verifiedToken={verifiedToken} />
+          </div>
+        )}
+
+        {!isLoading && !historyDetailError && (
           <div className="assessment-result__cta-row">
             {reportToken && (
               <a
@@ -523,44 +710,64 @@ export function AssessmentForm() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <span className="assessment-result__cta-icon">📄</span>
-                <span className="assessment-result__cta-title">Xem chi tiết đánh giá</span>
+                <span className="assessment-result__cta-icon">
+                  <IconFileText />
+                </span>
+                <span className="assessment-result__cta-title">Xem chi tiết báo cáo</span>
                 <span className="assessment-result__cta-sub">Tải báo cáo PDF đầy đủ</span>
               </a>
             )}
-            {reportToken && verifiedToken && (
-              <button
-                type="button"
-                className="assessment-result__cta-card assessment-result__cta-card--primary"
-                onClick={() =>
-                  document
-                    .querySelector(".assessment-chat")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                <span className="assessment-result__cta-icon">💬</span>
-                <span className="assessment-result__cta-title">Chat với chuyên gia tư vấn</span>
-                <span className="assessment-result__cta-sub">Hỗ trợ 24/7 — Miễn phí</span>
-              </button>
-            )}
-          </div>
-
-          <div className="assessment-result__secondary-actions">
-            <button type="button" className="button button--ghost button--dark" onClick={resetAll}>
-              Làm lại đánh giá
-            </button>
-            <a className="button button--primary" href="/events">
-              Xem chương trình phù hợp
+            <a className="assessment-result__cta-card" href="/events">
+              <span className="assessment-result__cta-icon">
+                <IconCompass />
+              </span>
+              <span className="assessment-result__cta-title">Xem chương trình phù hợp</span>
+              <span className="assessment-result__cta-sub">Chương trình hỗ trợ xuất khẩu dành cho bạn</span>
             </a>
-          </div>
-        </div>
-
-        {reportToken && verifiedToken && (
-          <div className="assessment-chat-wrapper">
-            <AssessmentChat reportToken={reportToken} verifiedToken={verifiedToken} />
           </div>
         )}
       </>
+    );
+  }
+
+  if (step === "history") {
+    return (
+      <div className="assessment-history">
+        <p className="assessment-result__label">Bài đánh giá của bạn</p>
+        <h3 className="assessment-history__title">
+          Email này đã có {pastReports.length} bài đánh giá trước đó
+        </h3>
+        <p className="assessment-history__desc">
+          Xem lại kết quả cũ hoặc bắt đầu một bài đánh giá mới.
+        </p>
+
+        <ul className="assessment-history__list">
+          {pastReports.map((report) => (
+            <li key={report.reportToken} className="assessment-history__item">
+              <div className="assessment-history__item-info">
+                <strong>{report.companyName || "(Chưa rõ tên doanh nghiệp)"}</strong>
+                <span className="assessment-history__item-meta">
+                  {report.totalScore}/100 điểm · {report.levelLabel} · {formatReportDate(report.createdAt)}
+                </span>
+              </div>
+              <button
+                type="button"
+                className="button button--ghost button--dark"
+                onClick={() => viewPastReport(report.reportToken)}
+              >
+                Xem lại
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <div className="assessment-form__footer">
+          <p>Hoặc bắt đầu một đánh giá mới</p>
+          <button type="button" className="button button--primary" onClick={startNewAssessment}>
+            Làm bài đánh giá mới
+          </button>
+        </div>
+      </div>
     );
   }
 

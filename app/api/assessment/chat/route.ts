@@ -49,7 +49,7 @@ function buildSystemPrompt(result: {
     : "(chưa có khuyến nghị)";
 
   return [
-    "Bạn là chuyên gia tư vấn xuất khẩu thực chiến cho doanh nghiệp SME Việt Nam.",
+    "Bạn tên là Bảo Hân, chuyên gia tư vấn xuất khẩu thực chiến cho doanh nghiệp SME Việt Nam.",
     "Bạn đang tư vấn trực tiếp cho doanh nghiệp dựa trên kết quả bài đánh giá mức độ sẵn sàng xuất khẩu của họ.",
     "Hãy trả lời ngắn gọn, thực tế, đi thẳng vào vấn đề người dùng đặt ra.",
     "Nếu câu hỏi liên quan đến điểm yếu cụ thể, hãy gợi ý hành động cụ thể (ví dụ: cần chứng nhận gì, quy trình nào, đơn vị nào hỗ trợ).",
@@ -124,10 +124,20 @@ export async function POST(request: Request) {
         .limit(1);
 
       if (!session) {
-        [session] = await db
+        const inserted = await db
           .insert(assessmentChatSessions)
           .values({ reportToken, email })
+          .onConflictDoNothing({ target: assessmentChatSessions.reportToken })
           .returning();
+        session = inserted[0];
+        if (!session) {
+          // Lost the race to a concurrent request that inserted first — reuse its row.
+          [session] = await db
+            .select()
+            .from(assessmentChatSessions)
+            .where(eq(assessmentChatSessions.reportToken, reportToken))
+            .limit(1);
+        }
       }
 
       const messages = await db
@@ -160,51 +170,96 @@ export async function POST(request: Request) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-    let assistantReply = "";
-    try {
-      const response = await fetch(ANTHROPIC_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify({
-          model,
-          max_tokens: 1024,
-          system: systemPrompt,
-          messages: anthropicMessages,
-        }),
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        const detail = await response.text();
-        console.error(`Anthropic API lỗi (${response.status}):`, detail);
-        return Response.json({ error: "Không thể kết nối AI, vui lòng thử lại." }, { status: 502 });
-      }
-
-      const data = (await response.json()) as {
-        content?: { type: string; text?: string }[];
-      };
-      assistantReply = data.content?.find((b) => b.type === "text")?.text ?? "";
-    } finally {
-      clearTimeout(timeout);
-    }
-
-    if (!assistantReply) {
-      return Response.json({ error: "AI không trả lời được, vui lòng thử lại." }, { status: 502 });
-    }
-
-    await withDb(async ({ db, sql }) => {
-      await sql.unsafe(assessmentChatMessagesTableSql);
-      await db.insert(assessmentChatMessages).values([
-        { sessionId, role: "user", content: userMessage },
-        { sessionId, role: "assistant", content: assistantReply },
-      ]);
+    const upstream = await fetch(ANTHROPIC_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 1024,
+        system: systemPrompt,
+        stream: true,
+        messages: anthropicMessages,
+      }),
+      signal: controller.signal,
     });
 
-    return Response.json({ reply: assistantReply });
+    if (!upstream.ok || !upstream.body) {
+      clearTimeout(timeout);
+      const detail = await upstream.text().catch(() => "");
+      console.error(`Anthropic API lỗi (${upstream.status}):`, detail);
+      return Response.json({ error: "Không thể kết nối AI, vui lòng thử lại." }, { status: 502 });
+    }
+
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+
+    const stream = new ReadableStream<Uint8Array>({
+      async start(streamController) {
+        const reader = upstream.body!.getReader();
+        let buffer = "";
+        let assistantReply = "";
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const jsonStr = line.slice(6).trim();
+              if (!jsonStr) continue;
+              try {
+                const event = JSON.parse(jsonStr) as {
+                  type?: string;
+                  delta?: { type?: string; text?: string };
+                };
+                if (event.type === "content_block_delta" && event.delta?.type === "text_delta") {
+                  const textChunk = event.delta.text ?? "";
+                  if (textChunk) {
+                    assistantReply += textChunk;
+                    streamController.enqueue(encoder.encode(textChunk));
+                  }
+                }
+              } catch {
+                // ignore malformed SSE chunk
+              }
+            }
+          }
+        } catch (streamError) {
+          console.error("Lỗi khi đọc stream từ Anthropic:", streamError);
+        } finally {
+          clearTimeout(timeout);
+          streamController.close();
+        }
+
+        if (assistantReply) {
+          try {
+            await withDb(async ({ db, sql }) => {
+              await sql.unsafe(assessmentChatMessagesTableSql);
+              await db.insert(assessmentChatMessages).values([
+                { sessionId, role: "user", content: userMessage },
+                { sessionId, role: "assistant", content: assistantReply },
+              ]);
+            });
+          } catch (dbError) {
+            console.error("Không thể lưu lịch sử chat:", dbError);
+          }
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-cache",
+      },
+    });
   } catch (error) {
     const err = error as { status?: number; message?: string };
     const status = err.status ?? 500;

@@ -829,6 +829,66 @@ main {
   max-width: 880px;
 }
 
+.assessment-history {
+  max-width: 720px;
+  padding: 40px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 0 22px 55px rgba(92, 18, 12, 0.1);
+}
+
+.assessment-history__title {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.assessment-history__desc {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.assessment-history__list {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.assessment-history__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.assessment-history__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.assessment-history__item-info strong {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.assessment-history__item-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .assessment-group {
   display: grid;
   gap: 20px;
@@ -1035,12 +1095,37 @@ main {
 }
 
 .assessment-result {
-  max-width: 680px;
+  max-width: 800px;
   padding: 40px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--paper);
   box-shadow: 0 22px 55px rgba(92, 18, 12, 0.1);
+}
+
+.assessment-result__back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.assessment-result__back-link:hover {
+  color: var(--scarlet);
+}
+
+.assessment-result__back-link:focus-visible {
+  outline: 2px solid var(--scarlet);
+  outline-offset: 2px;
 }
 
 .assessment-result__label {
@@ -1069,6 +1154,21 @@ main {
   color: var(--muted);
   font-size: 1.1rem;
   font-weight: 700;
+}
+
+.assessment-result__score-bar {
+  margin-top: 14px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.assessment-result__score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--scarlet), var(--gold));
+  transition: width 0.6s ease;
 }
 
 .assessment-result__identity {
@@ -1108,22 +1208,96 @@ main {
   margin-top: 24px;
 }
 
+/* ── Synced loading state (score + recommendation appear together) ── */
+.assessment-result__skeleton {
+  padding: 4px 0 8px;
+}
+
+.assessment-result__skeleton-bar {
+  height: 16px;
+  width: 60%;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, var(--line) 25%, rgba(197, 29, 24, 0.08) 37%, var(--line) 63%);
+  background-size: 400% 100%;
+  animation: assessment-shimmer 1.6s ease infinite;
+}
+
+.assessment-result__skeleton-bar--score {
+  width: 140px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.assessment-result__skeleton-bar--badge {
+  width: 34%;
+  height: 22px;
+  border-radius: 999px;
+}
+
+.assessment-result__skeleton-bar--short {
+  width: 40%;
+}
+
+.assessment-result__skeleton-card {
+  height: 180px;
+  border-radius: 12px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, var(--line) 25%, rgba(197, 29, 24, 0.08) 37%, var(--line) 63%);
+  background-size: 400% 100%;
+  animation: assessment-shimmer 1.6s ease infinite;
+}
+
+.assessment-result__skeleton-caption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@keyframes assessment-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.assessment-result__spinner {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2.5px solid var(--line);
+  border-top-color: var(--scarlet);
+  animation: assessment-spin 0.8s linear infinite;
+}
+
+@keyframes assessment-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ── CTA cards ── */
 .assessment-result__cta-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
+  gap: 14px;
+  max-width: 800px;
+  margin: 32px auto 0;
 }
 
 .assessment-result__cta-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 18px 16px;
+  gap: 8px;
+  padding: 22px 18px;
   border-radius: 12px;
   border: 1.5px solid var(--line);
   background: #fff;
@@ -1131,53 +1305,46 @@ main {
   cursor: pointer;
   font-family: inherit;
   text-decoration: none;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, transform 0.15s;
 }
 
 .assessment-result__cta-card:hover {
   border-color: var(--scarlet);
-  box-shadow: 0 4px 16px rgba(92, 18, 12, 0.08);
+  box-shadow: 0 10px 24px rgba(92, 18, 12, 0.1);
+  transform: translateY(-2px);
 }
 
-.assessment-result__cta-card--primary {
-  background: var(--ivory);
-  border-color: rgba(197, 29, 24, 0.3);
-}
-
-.assessment-result__cta-card--primary:hover {
-  background: var(--gold-light);
-  border-color: var(--scarlet);
+.assessment-result__cta-card:focus-visible {
+  outline: 2px solid var(--scarlet);
+  outline-offset: 2px;
 }
 
 .assessment-result__cta-icon {
-  font-size: 1.6rem;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--ivory);
+  color: var(--scarlet);
 }
 
 .assessment-result__cta-title {
   color: var(--ink);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 800;
   line-height: 1.3;
 }
 
 .assessment-result__cta-sub {
   color: var(--muted);
-  font-size: 0.78rem;
-}
-
-/* ── Secondary actions (reset / events) ── */
-.assessment-result__secondary-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 16px;
-  justify-content: flex-end;
+  font-size: 0.8rem;
 }
 
 .assessment-recommendation {
   border: 1.5px solid var(--line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: #fff;
   overflow: hidden;
 }
@@ -1192,9 +1359,10 @@ main {
 }
 
 .assessment-recommendation__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--scarlet);
-  font-size: 1rem;
-  line-height: 1;
   flex-shrink: 0;
 }
 
@@ -1295,31 +1463,36 @@ main {
 /* ─── Assessment Chat ──────────────────────────────────────── */
 
 .assessment-chat-wrapper {
-  margin-top: 48px;
+  max-width: 800px;
+  margin: 28px auto 0;
 }
 
 .assessment-chat {
   border: 1.5px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
+  border-radius: 12px;
+  background: var(--paper);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 22px 55px rgba(92, 18, 12, 0.1);
 }
 
 .assessment-chat__header {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   background: linear-gradient(90deg, var(--ivory) 0%, #fff 100%);
   border-bottom: 1.5px solid var(--line);
 }
 
-.assessment-chat__header-icon {
-  font-size: 1.3rem;
+.assessment-chat__header-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
   flex-shrink: 0;
-  margin-top: 2px;
+  border: 1.5px solid var(--line);
 }
 
 .assessment-chat__title {
@@ -1327,6 +1500,7 @@ main {
   color: var(--ink);
   font-size: 0.95rem;
   font-weight: 800;
+  line-height: 1.4;
 }
 
 .assessment-chat__subtitle {
@@ -1339,23 +1513,32 @@ main {
 .assessment-chat__messages {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-height: 420px;
-  min-height: 140px;
+  gap: 16px;
+  max-height: 620px;
+  min-height: 260px;
 }
 
 .assessment-chat__empty {
   text-align: center;
-  padding: 8px 0 4px;
+  padding: 20px 12px 4px;
+}
+
+.assessment-chat__empty-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 12px;
+  border: 1.5px solid var(--line);
 }
 
 .assessment-chat__empty p {
   color: var(--muted);
-  font-size: 0.88rem;
-  margin: 0 0 12px;
+  font-size: 0.9rem;
+  margin: 0 0 14px;
 }
 
 .assessment-chat__suggestions {
@@ -1366,19 +1549,29 @@ main {
 }
 
 .assessment-chat__suggestion {
-  padding: 6px 12px;
+  padding: 8px 14px;
+  min-height: 36px;
   border: 1px solid var(--line);
   border-radius: 20px;
   background: var(--ivory);
   color: var(--ink);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
   font-family: inherit;
 }
 
 .assessment-chat__suggestion:hover {
   background: var(--gold-light);
+  border-color: var(--scarlet);
+  transform: translateY(-1px);
+}
+
+.assessment-chat__suggestion:focus-visible,
+.assessment-chat__send:focus-visible {
+  outline: 2px solid var(--scarlet);
+  outline-offset: 2px;
 }
 
 .assessment-chat__message {
@@ -1386,6 +1579,18 @@ main {
   flex-direction: column;
   gap: 3px;
   max-width: 80%;
+  animation: assessment-chat-msg-in 0.25s ease both;
+}
+
+@keyframes assessment-chat-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .assessment-chat__message--user {
@@ -1396,6 +1601,25 @@ main {
 .assessment-chat__message--assistant {
   align-self: flex-start;
   align-items: flex-start;
+  flex-direction: row;
+  gap: 10px;
+  max-width: 88%;
+}
+
+.assessment-chat__message-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.assessment-chat__message-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
 .assessment-chat__message-label {
@@ -1408,9 +1632,9 @@ main {
 
 .assessment-chat__message-text {
   margin: 0;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 0.9rem;
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 0.92rem;
   line-height: 1.65;
   white-space: pre-wrap;
 }
@@ -1419,6 +1643,7 @@ main {
   background: var(--scarlet);
   color: #fff;
   border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 12px rgba(92, 18, 12, 0.18);
 }
 
 .assessment-chat__message--assistant .assessment-chat__message-text {
@@ -1426,6 +1651,7 @@ main {
   color: var(--ink);
   border: 1px solid var(--line);
   border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 8px rgba(92, 18, 12, 0.05);
 }
 
 /* Typing indicator dots */
@@ -1497,6 +1723,7 @@ main {
 
 .assessment-chat__input:focus {
   border-color: var(--scarlet);
+  box-shadow: 0 0 0 3px rgba(197, 29, 24, 0.12);
 }
 
 .assessment-chat__input::placeholder {
@@ -1506,28 +1733,52 @@ main {
 
 .assessment-chat__send {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 10px;
   background: var(--scarlet);
   color: #fff;
-  font-size: 1.1rem;
-  font-weight: 700;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, opacity 0.15s;
+  transition: background 0.15s, opacity 0.15s, transform 0.15s;
 }
 
 .assessment-chat__send:hover:not(:disabled) {
   background: var(--red);
+  transform: translateY(-1px);
 }
 
 .assessment-chat__send:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: default;
+  transform: none;
+}
+
+.assessment-chat__send-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: assessment-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assessment-result__skeleton-bar,
+  .assessment-result__skeleton-card,
+  .assessment-result__spinner,
+  .assessment-chat__send-spinner,
+  .assessment-chat__typing span,
+  .assessment-chat__message,
+  .assessment-result__cta-card,
+  .assessment-chat__suggestion,
+  .assessment-result__score-bar-fill {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 @media (max-width: 760px) {
@@ -1557,12 +1808,13 @@ main {
     grid-template-columns: 1fr;
   }
 
-  .assessment-result__secondary-actions {
-    justify-content: stretch;
-    flex-direction: column;
+  .assessment-history {
+    padding: 24px 20px;
   }
 
-  .assessment-result__secondary-actions .button {
+  .assessment-history__item {
+    flex-direction: column;
+    align-items: stretch;
     text-align: center;
   }
 }
