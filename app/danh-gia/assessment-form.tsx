@@ -17,6 +17,7 @@ type Answers = Record<string, number>;
 type FieldAnswers = Record<string, string | string[]>;
 type OtherValues = Record<string, string>;
 type Step = "otp-email" | "otp-code" | "business" | "assessment" | "support" | "result";
+type AiRecommendation = { summary: string; items: { category: string; advice: string }[] };
 
 function groupByCategory(questions: AssessmentQuestion[]) {
   const groups: { category: string; categoryMax: number; questions: AssessmentQuestion[] }[] = [];
@@ -265,6 +266,7 @@ export function AssessmentForm() {
   const [answers, setAnswers] = useState<Answers>({});
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [reportToken, setReportToken] = useState<string | null>(null);
+  const [aiRecommendation, setAiRecommendation] = useState<AiRecommendation | null>(null);
 
   const [otpEmail, setOtpEmail] = useState("");
   const [otpPendingToken, setOtpPendingToken] = useState<string | null>(null);
@@ -426,9 +428,12 @@ export function AssessmentForm() {
         },
         body: JSON.stringify(payload),
       });
-      const data = (await response.json()) as { result?: { reportToken?: string } };
+      const data = (await response.json()) as {
+        result?: { reportToken?: string; aiRecommendation?: AiRecommendation | null };
+      };
       if (response.ok && data.result?.reportToken) {
         setReportToken(data.result.reportToken);
+        setAiRecommendation(data.result.aiRecommendation ?? null);
       }
     } catch (error) {
       console.error("Không thể lưu kết quả đánh giá:", error);
@@ -446,12 +451,13 @@ export function AssessmentForm() {
     setSupportOther({});
     setAnswers({});
     setReportToken(null);
+    setAiRecommendation(null);
   }
 
   if (step === "result") {
     return (
       <>
-        <div className="assessment-result">
+        <div className={`assessment-result${aiRecommendation ? " assessment-result--wide" : ""}`}>
           <p className="assessment-result__label">Kết quả đánh giá</p>
           <div className="assessment-result__score">
             <strong>{totalScore}</strong>
@@ -462,45 +468,64 @@ export function AssessmentForm() {
           </p>
           <p className="assessment-result__desc">{level.desc}</p>
 
-          <div className="score-list assessment-result__breakdown">
-            {groups.map((group, index) => {
-              const c = categoryScores[index];
-              const isOpen = expandedCategory === c.category;
-              return (
-                <div className="assessment-score-group" key={c.category}>
-                  <button
-                    type="button"
-                    className={`score-row score-row--clickable${isOpen ? " score-row--open" : ""}`}
-                    onClick={() => setExpandedCategory((prev) => (prev === c.category ? null : c.category))}
-                  >
-                    <span>{c.category}</span>
-                    <div className="score-row__bar">
-                      <i style={{ width: `${(c.score / c.max) * 100}%` }} />
-                    </div>
-                    <strong>
-                      {c.score}/{c.max} {isOpen ? "▾" : "▸"}
-                    </strong>
-                  </button>
-                  {isOpen && (
-                    <div className="assessment-answers__qa-group">
-                      {group.questions.map((question) => {
-                        const optionIndex = answers[question.id];
-                        const option = optionIndex !== undefined ? question.options[optionIndex] : undefined;
-                        return (
-                          <div className="assessment-answers__qa" key={question.id}>
-                            <p className="assessment-answers__question">{question.text}</p>
-                            <p className="assessment-answers__answer">
-                              {option?.label ?? "(chưa trả lời)"}{" "}
-                              <span>({option?.points ?? 0} điểm)</span>
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          <div className="assessment-result__breakdown-layout">
+            <div className="score-list assessment-result__breakdown">
+              {groups.map((group, index) => {
+                const c = categoryScores[index];
+                const isOpen = expandedCategory === c.category;
+                return (
+                  <div className="assessment-score-group" key={c.category}>
+                    <button
+                      type="button"
+                      className={`score-row score-row--clickable${isOpen ? " score-row--open" : ""}`}
+                      onClick={() => setExpandedCategory((prev) => (prev === c.category ? null : c.category))}
+                    >
+                      <span>{c.category}</span>
+                      <div className="score-row__bar">
+                        <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+                      </div>
+                      <strong>
+                        {c.score}/{c.max} {isOpen ? "▾" : "▸"}
+                      </strong>
+                    </button>
+                    {isOpen && (
+                      <div className="assessment-answers__qa-group">
+                        {group.questions.map((question) => {
+                          const optionIndex = answers[question.id];
+                          const option = optionIndex !== undefined ? question.options[optionIndex] : undefined;
+                          return (
+                            <div className="assessment-answers__qa" key={question.id}>
+                              <p className="assessment-answers__question">{question.text}</p>
+                              <p className="assessment-answers__answer">
+                                {option?.label ?? "(chưa trả lời)"}{" "}
+                                <span>({option?.points ?? 0} điểm)</span>
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {aiRecommendation && (
+              <div className="assessment-recommendation">
+                <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
+                {aiRecommendation.summary && (
+                  <p className="assessment-recommendation__summary">{aiRecommendation.summary}</p>
+                )}
+                <ul className="assessment-recommendation__list">
+                  {aiRecommendation.items.map((item, i) => (
+                    <li key={i}>
+                      <strong>{item.category}</strong>
+                      <span>{item.advice}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="assessment-result__actions">

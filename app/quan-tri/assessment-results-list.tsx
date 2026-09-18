@@ -5,6 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 type FieldEntry = { label: string; value: string };
 type ScoredEntry = { category: string; question: string; selected: string; points: number };
 type CategoryScore = { category: string; max: number; score: number };
+type AiRecommendation = { summary: string; items: { category: string; advice: string }[] };
 
 type AssessmentResult = {
   id: number;
@@ -21,6 +22,7 @@ type AssessmentResult = {
   scoredEntries: ScoredEntry[];
   categoryScores: CategoryScore[];
   supportEntries: FieldEntry[];
+  aiRecommendation: AiRecommendation | null;
   isRead: boolean;
   createdAt: string;
 };
@@ -235,49 +237,69 @@ export function AssessmentResultsList() {
                               B — Đánh giá ({row.branch === "branch1" ? "Nhánh 1" : "Nhánh 2"}) —{" "}
                               {row.totalScore}/100 điểm — {row.levelLabel}
                             </h4>
-                            <div className="admin-detail__scores">
-                              {row.categoryScores.map((c) => {
-                                const isCategoryOpen =
-                                  expandedId === row.id && expandedCategory === c.category;
-                                const questions = row.scoredEntries.filter(
-                                  (entry) => entry.category === c.category,
-                                );
-                                return (
-                                  <div className="admin-score-group" key={c.category}>
-                                    <button
-                                      type="button"
-                                      className={`score-row score-row--clickable${
-                                        isCategoryOpen ? " score-row--open" : ""
-                                      }`}
-                                      onClick={() =>
-                                        setExpandedCategory((prev) =>
-                                          prev === c.category ? null : c.category,
-                                        )
-                                      }
-                                    >
-                                      <span>{c.category}</span>
-                                      <div className="score-row__bar">
-                                        <i style={{ width: `${(c.score / c.max) * 100}%` }} />
-                                      </div>
-                                      <strong>
-                                        {c.score}/{c.max} {isCategoryOpen ? "▾" : "▸"}
-                                      </strong>
-                                    </button>
-                                    {isCategoryOpen && (
-                                      <div className="admin-detail__qa-group">
-                                        {questions.map((entry, i) => (
-                                          <div className="admin-detail__qa" key={i}>
-                                            <p className="admin-detail__question">{entry.question}</p>
-                                            <p className="admin-detail__answer">
-                                              {entry.selected} <span>({entry.points} điểm)</span>
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              })}
+                            <div className="admin-detail__scores-layout">
+                              <div className="admin-detail__scores">
+                                {row.categoryScores.map((c) => {
+                                  const isCategoryOpen =
+                                    expandedId === row.id && expandedCategory === c.category;
+                                  const questions = row.scoredEntries.filter(
+                                    (entry) => entry.category === c.category,
+                                  );
+                                  return (
+                                    <div className="admin-score-group" key={c.category}>
+                                      <button
+                                        type="button"
+                                        className={`score-row score-row--clickable${
+                                          isCategoryOpen ? " score-row--open" : ""
+                                        }`}
+                                        onClick={() =>
+                                          setExpandedCategory((prev) =>
+                                            prev === c.category ? null : c.category,
+                                          )
+                                        }
+                                      >
+                                        <span>{c.category}</span>
+                                        <div className="score-row__bar">
+                                          <i style={{ width: `${(c.score / c.max) * 100}%` }} />
+                                        </div>
+                                        <strong>
+                                          {c.score}/{c.max} {isCategoryOpen ? "▾" : "▸"}
+                                        </strong>
+                                      </button>
+                                      {isCategoryOpen && (
+                                        <div className="admin-detail__qa-group">
+                                          {questions.map((entry, i) => (
+                                            <div className="admin-detail__qa" key={i}>
+                                              <p className="admin-detail__question">{entry.question}</p>
+                                              <p className="admin-detail__answer">
+                                                {entry.selected} <span>({entry.points} điểm)</span>
+                                              </p>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+
+                              {row.aiRecommendation && (
+                                <div className="admin-recommendation">
+                                  <h5>Khuyến nghị AI</h5>
+                                  {row.aiRecommendation.summary && (
+                                    <p className="admin-recommendation__summary">
+                                      {row.aiRecommendation.summary}
+                                    </p>
+                                  )}
+                                  <ul className="admin-recommendation__list">
+                                    {row.aiRecommendation.items.map((item, i) => (
+                                      <li key={i}>
+                                        <strong>{item.category}:</strong> {item.advice}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
                             </div>
                           </div>
 

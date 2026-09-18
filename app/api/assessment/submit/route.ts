@@ -11,6 +11,7 @@ import {
   type BusinessField,
 } from "../../../danh-gia/questions";
 import { notifyAdminOfAssessment, notifyAssessmentTaker } from "./notify";
+import { generateAssessmentRecommendation } from "./recommendation";
 
 type VerifiedOtpPayload = { email: string; exp: number; purpose: "otp-verified" };
 
@@ -122,6 +123,18 @@ export async function POST(request: Request) {
 
     const reportToken = crypto.randomUUID();
 
+    const aiRecommendation = await generateAssessmentRecommendation({
+      companyName,
+      branch,
+      totalScore,
+      levelLabel: level.label,
+      levelDesc: level.desc,
+      categoryScores,
+      scoredEntries,
+      businessEntries,
+      supportEntries,
+    });
+
     const saved = await withDb(async ({ db, sql }) => {
       await sql.unsafe(assessmentResultsTableSql);
       await sql.unsafe(assessmentResultsAlterSql);
@@ -141,6 +154,7 @@ export async function POST(request: Request) {
           scoredEntries,
           categoryScores,
           supportEntries,
+          aiRecommendation,
         })
         .returning();
       return row;

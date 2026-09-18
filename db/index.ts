@@ -84,15 +84,17 @@ export const assessmentResultsTableSql = `
     scored_entries jsonb NOT NULL DEFAULT '[]'::jsonb,
     category_scores jsonb NOT NULL DEFAULT '[]'::jsonb,
     support_entries jsonb NOT NULL DEFAULT '[]'::jsonb,
+    ai_recommendation jsonb,
     is_read boolean NOT NULL DEFAULT false,
     created_at timestamptz NOT NULL DEFAULT now()
   )
 `;
 
-// Adds the report_token column for rows created before it existed.
+// Adds columns for rows created before they existed.
 export const assessmentResultsAlterSql = `
   ALTER TABLE assessment_results
-  ADD COLUMN IF NOT EXISTS report_token text NOT NULL DEFAULT ''
+  ADD COLUMN IF NOT EXISTS report_token text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS ai_recommendation jsonb
 `;
 
 export const partnerInquiriesTableSql = `

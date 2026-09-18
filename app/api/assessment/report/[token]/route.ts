@@ -8,6 +8,7 @@ import { beVietnamProBoldBase64, beVietnamProRegularBase64 } from "./fonts";
 type FieldEntry = { label: string; value: string };
 type ScoredEntry = { category: string; question: string; selected: string; points: number };
 type CategoryScore = { category: string; max: number; score: number };
+type Recommendation = { summary: string; items: { category: string; advice: string }[] };
 
 const PAGE_WIDTH = 595.28;
 const PAGE_HEIGHT = 841.89;
@@ -172,6 +173,21 @@ async function buildReportPdf(row: typeof assessmentResults.$inferSelect) {
   }
   y -= 6;
   drawDivider();
+
+  // ---- AI recommendation ----
+  const recommendation = row.aiRecommendation as Recommendation | null;
+  if (recommendation) {
+    drawSectionTitle("KHUYẾN NGHỊ ĐỂ HOÀN THIỆN");
+    if (recommendation.summary) {
+      drawWrapped(recommendation.summary, { size: 9.5, color: COLOR_MUTED, gap: 10 });
+    }
+    for (const item of recommendation.items) {
+      drawWrapped(item.category, { size: 9.3, font: boldFont, color: COLOR_INK, gap: 2 });
+      drawWrapped(item.advice, { size: 9.3, color: COLOR_MUTED, gap: 8 });
+    }
+    y -= 6;
+    drawDivider();
+  }
 
   // ---- Section A ----
   drawSectionTitle("A — THÔNG TIN DOANH NGHIỆP");
