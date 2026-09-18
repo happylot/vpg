@@ -170,7 +170,7 @@ export function AssessmentResultsList() {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            PDF
+                            Tải PDF
                           </a>
                         )}
                       </div>

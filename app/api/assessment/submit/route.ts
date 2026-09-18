@@ -1,5 +1,6 @@
 import { assessmentResultsAlterSql, assessmentResultsTableSql, withDb } from "../../../../db";
 import { assessmentResults } from "../../../../db/schema";
+import { readToken } from "../otp/token";
 import {
   assessmentQuestionsBranch1,
   assessmentQuestionsBranch2,
@@ -10,6 +11,8 @@ import {
   type BusinessField,
 } from "../../../danh-gia/questions";
 import { notifyAdminOfAssessment, notifyAssessmentTaker } from "./notify";
+
+type VerifiedOtpPayload = { email: string; exp: number; purpose: "otp-verified" };
 
 type FieldValues = Record<string, string | string[] | undefined>;
 
@@ -48,6 +51,16 @@ function toRouteErrorMessage(error: unknown) {
 
 export async function POST(request: Request) {
   try {
+    const otpSecret = process.env.OTP_SECRET;
+    const otpToken = request.headers.get("x-otp-token") ?? "";
+    const verified = otpSecret ? await readToken<VerifiedOtpPayload>(otpToken, otpSecret) : null;
+    if (!verified || verified.purpose !== "otp-verified" || Date.now() > verified.exp) {
+      return Response.json(
+        { error: "Vui lòng xác nhận email bằng mã OTP trước khi gửi đánh giá." },
+        { status: 401 },
+      );
+    }
+
     const payload = (await request.json()) as {
       business?: FieldValues;
       branch?: string;
