@@ -2991,6 +2991,16 @@ main {
   border-color: rgba(142, 16, 16, 0.28);
 }
 
+.admin-detail-toggle--danger {
+  border-color: rgba(197, 29, 24, 0.3);
+  color: var(--scarlet);
+}
+
+.admin-detail-toggle--danger:hover {
+  background: rgba(197, 29, 24, 0.1);
+  border-color: rgba(197, 29, 24, 0.5);
+}
+
 .admin-detail-row td {
   white-space: normal;
   background: #fff9ec;

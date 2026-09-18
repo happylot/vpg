@@ -38,3 +38,23 @@ export async function PATCH(request: Request) {
 
   return Response.json({ ok: true });
 }
+
+export async function DELETE(request: Request) {
+  if (!(await isAuthenticated())) {
+    return Response.json({ error: "Chưa đăng nhập." }, { status: 401 });
+  }
+
+  const payload = (await request.json()) as { id?: number };
+  const id = payload.id;
+  if (!id || !Number.isInteger(id)) {
+    return Response.json({ error: "Thiếu id hợp lệ." }, { status: 400 });
+  }
+
+  await withDb(async ({ db, sql }) => {
+    await sql.unsafe(assessmentResultsTableSql);
+    await sql.unsafe(assessmentResultsAlterSql);
+    await db.delete(assessmentResults).where(eq(assessmentResults.id, id));
+  });
+
+  return Response.json({ ok: true });
+}
