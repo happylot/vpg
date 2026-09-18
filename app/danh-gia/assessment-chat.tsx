@@ -135,39 +135,18 @@ export function AssessmentChat({ reportToken, verifiedToken }: Props) {
         body: JSON.stringify({ reportToken, message: text }),
       });
 
-      if (!response.ok || !response.body) {
-        let errMsg = "Không nhận được phản hồi, vui lòng thử lại.";
-        try {
-          const data = (await response.json()) as { error?: string };
-          if (data.error) errMsg = data.error;
-        } catch {
-          // response wasn't JSON — keep default message
-        }
+      const data = (await response.json()) as { reply?: string; error?: string };
+      if (!response.ok || !data.reply) {
         setMessages((prev) => prev.slice(0, -1));
-        setError(errMsg);
+        setError(data.error || "Không nhận được phản hồi, vui lòng thử lại.");
         return;
       }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        accumulated += decoder.decode(value, { stream: true });
-        const chunk = accumulated;
-        setMessages((prev) => {
-          const next = [...prev];
-          next[next.length - 1] = { role: "assistant", content: chunk };
-          return next;
-        });
-      }
-
-      if (!accumulated) {
-        setMessages((prev) => prev.slice(0, -1));
-        setError("Không nhận được phản hồi, vui lòng thử lại.");
-      }
+      setMessages((prev) => {
+        const next = [...prev];
+        next[next.length - 1] = { role: "assistant", content: data.reply! };
+        return next;
+      });
     } catch {
       setMessages((prev) => prev.slice(0, -1));
       setError("Không kết nối được server, vui lòng thử lại.");
