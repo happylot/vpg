@@ -107,7 +107,7 @@ export async function generateAssessmentRecommendation(
       },
       body: JSON.stringify({
         model,
-        max_tokens: 1024,
+        max_tokens: 2048,
         system,
         messages: [{ role: "user", content: user }],
       }),
@@ -120,11 +120,26 @@ export async function generateAssessmentRecommendation(
       return null;
     }
 
-    const data = (await response.json()) as { content?: { type: string; text?: string }[] };
+    const data = (await response.json()) as {
+      content?: { type: string; text?: string }[];
+      stop_reason?: string;
+    };
     const text = data.content?.find((block) => block.type === "text")?.text ?? "";
     if (!text) return null;
 
-    const parsed: unknown = JSON.parse(extractJsonBlock(text));
+    if (data.stop_reason === "max_tokens") {
+      console.error("Phản hồi khuyến nghị AI bị cắt do vượt max_tokens:", text);
+      return null;
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(extractJsonBlock(text));
+    } catch (error) {
+      console.error("Không đọc được JSON khuyến nghị AI:", error, "\nNội dung nhận được:", text);
+      return null;
+    }
+
     if (!isValidRecommendation(parsed)) {
       console.error("Phản hồi khuyến nghị AI không đúng định dạng:", text);
       return null;
