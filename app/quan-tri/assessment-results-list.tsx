@@ -6,6 +6,7 @@ type FieldEntry = { label: string; value: string };
 type ScoredEntry = { category: string; question: string; selected: string; points: number };
 type CategoryScore = { category: string; max: number; score: number };
 type AiRecommendation = { summary: string; items: { category: string; advice: string }[] };
+type ChatMessage = { id: number; role: string; content: string; createdAt: string };
 
 type AssessmentResult = {
   id: number;
@@ -44,6 +45,9 @@ export function AssessmentResultsList() {
   const [error, setError] = useState("");
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [chatHistory, setChatHistory] = useState<Record<string, ChatMessage[]>>({});
+  const [chatLoading, setChatLoading] = useState<Record<string, boolean>>({});
+
 
   async function load() {
     try {
@@ -79,6 +83,23 @@ export function AssessmentResultsList() {
     }
   }
 
+  async function loadChatHistory(reportToken: string) {
+    if (chatHistory[reportToken] !== undefined || chatLoading[reportToken]) return;
+    setChatLoading((prev) => ({ ...prev, [reportToken]: true }));
+    try {
+      const response = await fetch(
+        `/api/admin/assessment-results/chat-history?reportToken=${encodeURIComponent(reportToken)}`,
+        { cache: "no-store" },
+      );
+      const data = (await response.json()) as { messages?: ChatMessage[] };
+      setChatHistory((prev) => ({ ...prev, [reportToken]: data.messages ?? [] }));
+    } catch {
+      setChatHistory((prev) => ({ ...prev, [reportToken]: [] }));
+    } finally {
+      setChatLoading((prev) => ({ ...prev, [reportToken]: false }));
+    }
+  }
+
   async function deleteResult(id: number, companyName: string) {
     const label = companyName || `#${id}`;
     if (!window.confirm(`Xóa kết quả đánh giá của "${label}"? Hành động này không thể hoàn tác.`)) {
@@ -96,11 +117,15 @@ export function AssessmentResultsList() {
     }
   }
 
-  function toggleExpand(id: number) {
+  function toggleExpand(id: number, reportToken: string) {
     setExpandedId((prev) => (prev === id ? null : id));
     setExpandedCategory(null);
     if (results?.find((row) => row.id === id && !row.isRead)) {
       toggleRead(id, true);
+    }
+    // Load chat history lazily when the row is expanded
+    if (reportToken) {
+      loadChatHistory(reportToken);
     }
   }
 
@@ -178,7 +203,7 @@ export function AssessmentResultsList() {
                         <button
                           type="button"
                           className="admin-detail-toggle"
-                          onClick={() => toggleExpand(row.id)}
+                          onClick={() => toggleExpand(row.id, row.reportToken)}
                         >
                           {expandedId === row.id ? "Ẩn" : "Chi tiết"}
                         </button>
@@ -313,6 +338,34 @@ export function AssessmentResultsList() {
                                 </div>
                               ))}
                             </dl>
+                          </div>
+
+                          <div className="admin-detail__section">
+                            <h4>D — Chat tư vấn AI</h4>
+                            {chatLoading[row.reportToken] ? (
+                              <p className="admin-page__empty">Đang tải lịch sử chat...</p>
+                            ) : !chatHistory[row.reportToken] || chatHistory[row.reportToken].length === 0 ? (
+                              <p className="admin-page__empty" style={{ fontSize: "0.85rem" }}>
+                                Người dùng chưa sử dụng chat tư vấn.
+                              </p>
+                            ) : (
+                              <div className="admin-chat-history">
+                                {chatHistory[row.reportToken].map((msg) => (
+                                  <div
+                                    key={msg.id}
+                                    className={`admin-chat-message admin-chat-message--${msg.role}`}
+                                  >
+                                    <span className="admin-chat-message__role">
+                                      {msg.role === "user" ? "👤 Người dùng" : "🤖 AI"}
+                                    </span>
+                                    <p className="admin-chat-message__text">{msg.content}</p>
+                                    <span className="admin-chat-message__time">
+                                      {new Date(msg.createdAt).toLocaleString("vi-VN")}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </td>

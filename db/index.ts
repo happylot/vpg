@@ -110,3 +110,22 @@ export const partnerInquiriesTableSql = `
     created_at timestamptz NOT NULL DEFAULT now()
   )
 `;
+
+export const assessmentChatSessionsTableSql = `
+  CREATE TABLE IF NOT EXISTS assessment_chat_sessions (
+    id serial PRIMARY KEY,
+    report_token text NOT NULL UNIQUE,
+    email text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )
+`;
+
+export const assessmentChatMessagesTableSql = `
+  CREATE TABLE IF NOT EXISTS assessment_chat_messages (
+    id serial PRIMARY KEY,
+    session_id integer NOT NULL,
+    role text NOT NULL,
+    content text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )
+`;

@@ -27,9 +27,15 @@ export type AssessmentScoredEntry = {
 };
 export type AssessmentCategoryScore = { category: string; max: number; score: number };
 // AI-generated recommendation — one advice item per weak category, plus a
-// short overall summary. Generated once at submit time and cached on the row.
+// short overall summary, and an AI-generated level label + one-sentence desc.
+// Generated once at submit time and cached on the row.
 export type AssessmentRecommendationItem = { category: string; advice: string };
-export type AssessmentRecommendation = { summary: string; items: AssessmentRecommendationItem[] };
+export type AssessmentRecommendation = {
+  levelLabel: string;
+  levelDesc: string;
+  summary: string;
+  items: AssessmentRecommendationItem[];
+};
 
 export const assessmentResults = pgTable("assessment_results", {
   id: serial("id").primaryKey(),
@@ -66,3 +72,26 @@ export const partnerInquiries = pgTable("partner_inquiries", {
     .notNull()
     .defaultNow(),
 });
+
+// One chat session per assessment report. Created the first time the user
+// sends a message after completing the assessment.
+export const assessmentChatSessions = pgTable("assessment_chat_sessions", {
+  id: serial("id").primaryKey(),
+  reportToken: text("report_token").notNull().unique(),
+  email: text("email").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+// Each turn in a chat session — either from the user or the AI assistant.
+export const assessmentChatMessages = pgTable("assessment_chat_messages", {
+  id: serial("id").primaryKey(),
+  sessionId: integer("session_id").notNull(),
+  role: text("role").notNull(), // 'user' | 'assistant'
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+

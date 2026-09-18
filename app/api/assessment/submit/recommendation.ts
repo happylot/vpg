@@ -9,8 +9,6 @@ type RecommendationInput = {
   companyName: string;
   branch: string;
   totalScore: number;
-  levelLabel: string;
-  levelDesc: string;
   categoryScores: AssessmentCategoryScore[];
   scoredEntries: AssessmentScoredEntry[];
   businessEntries: AssessmentFieldEntry[];
@@ -33,8 +31,6 @@ function buildPrompt(input: RecommendationInput) {
     doanh_nghiep: input.companyName || "(chưa rõ tên)",
     nhanh_danh_gia: input.branch === "branch1" ? "Chưa từng xuất khẩu" : "Đã/đang xuất khẩu",
     tong_diem: `${input.totalScore}/100`,
-    muc_do_san_sang: input.levelLabel,
-    mo_ta_muc_do: input.levelDesc,
     diem_theo_tieu_chi: input.categoryScores.map((c) => `${c.category}: ${c.score}/${c.max}`),
     cau_hoi_dang_bi_diem_thap: weakEntries.map((e) => ({
       tieu_chi: e.category,
@@ -49,8 +45,10 @@ function buildPrompt(input: RecommendationInput) {
     "Bạn là chuyên gia thực chiến về xuất khẩu cho doanh nghiệp SME tại Việt Nam.",
     "Nhiệm vụ của bạn là đưa ra nhận xét cực kỳ ngắn gọn, trực diện và mang lại giá trị hành động cao nhất dựa trên kết quả đánh giá (chú trọng các câu hỏi điểm thấp).",
     "Chỉ trả lời bằng một khối JSON hợp lệ duy nhất, đúng schema sau, tuyệt đối không dùng markdown code fence hay thêm text phụ:",
-    '{"summary": string, "items": [{"category": string, "advice": string}]}',
-    '"summary": 1-2 câu nhận xét thẳng thắn, súc tích về vị thế năng lực hiện tại và điểm then chốt cần đột phá.',
+    '{"levelLabel": string, "levelDesc": string, "summary": string, "items": [{"category": string, "advice": string}]}',
+    '"levelLabel": 2-4 từ xác định rõ vị thế/mức độ sẵn sàng xuất khẩu hiện tại của doanh nghiệp (ví dụ: "Chưa sẵn sàng", "Đang hình thành", "Sắp sẵn sàng", "Sẵn sàng xuất khẩu", "Xuất khẩu bền vững"). Phải phản ánh đúng thực tế điểm số và điểm yếu.',
+    '"levelDesc": đúng 1 câu nhận xét thẳng thắn, súc tích về thực trạng nổi bật nhất của doanh nghiệp — điểm mạnh chủ đạo và/hoặc rào cản cốt lõi cần vượt qua.',
+    '"summary": 1-2 câu tổng quan về những gì cần thay đổi nhiều nhất và hướng đột phá.',
     `"items": liệt kê tối đa ${MAX_ITEMS} tiêu chí cấp bách nhất cần cải thiện, "category" phải khớp chính xác tên tiêu chí trong dữ liệu.`,
     '"advice": 1-2 câu hành động cụ thể. KHÔNG khuyên lý thuyết chung chung. ĐẶC BIỆT: Với các vấn đề chuyên sâu, phức tạp và khó tự triển khai, hãy khéo léo gợi ý việc tìm kiếm chuyên gia đồng hành/tư vấn bên ngoài như một hướng giải quyết thiết thực. Lời khuyên cần tự nhiên, khách quan, chân thành như một lời chia sẻ, tuyệt đối không dùng văn phong chèo kéo, quảng cáo hay sales.',
     "Nếu doanh nghiệp đã đạt điểm cao ở hầu hết các mặt, hãy gợi ý chiến lược ngách hoặc tối ưu nâng cao thay vì để trống.",
@@ -72,6 +70,8 @@ function extractJsonBlock(text: string) {
 function isValidRecommendation(value: unknown): value is AssessmentRecommendation {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Record<string, unknown>;
+  if (typeof candidate.levelLabel !== "string" || !candidate.levelLabel.trim()) return false;
+  if (typeof candidate.levelDesc !== "string" || !candidate.levelDesc.trim()) return false;
   if (typeof candidate.summary !== "string") return false;
   if (!Array.isArray(candidate.items)) return false;
   return candidate.items.every(
@@ -146,7 +146,12 @@ export async function generateAssessmentRecommendation(
       return null;
     }
 
-    return { summary: parsed.summary, items: parsed.items.slice(0, MAX_ITEMS) };
+    return {
+      levelLabel: parsed.levelLabel.trim(),
+      levelDesc: parsed.levelDesc.trim(),
+      summary: parsed.summary,
+      items: parsed.items.slice(0, MAX_ITEMS),
+    };
   } catch (error) {
     console.error("Không thể tạo khuyến nghị AI:", error);
     return null;

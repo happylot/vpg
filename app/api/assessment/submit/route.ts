@@ -127,8 +127,6 @@ export async function POST(request: Request) {
       companyName,
       branch,
       totalScore,
-      levelLabel: level.label,
-      levelDesc: level.desc,
       categoryScores,
       scoredEntries,
       businessEntries,

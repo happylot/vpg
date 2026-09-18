@@ -12,12 +12,19 @@ import {
   type BusinessCheckboxField,
   type BusinessField,
 } from "./questions";
+import { AssessmentChat } from "./assessment-chat";
+
 
 type Answers = Record<string, number>;
 type FieldAnswers = Record<string, string | string[]>;
 type OtherValues = Record<string, string>;
 type Step = "otp-email" | "otp-code" | "business" | "assessment" | "support" | "result";
-type AiRecommendation = { summary: string; items: { category: string; advice: string }[] };
+type AiRecommendation = {
+  levelLabel: string;
+  levelDesc: string;
+  summary: string;
+  items: { category: string; advice: string }[];
+};
 
 function groupByCategory(questions: AssessmentQuestion[]) {
   const groups: { category: string; categoryMax: number; questions: AssessmentQuestion[] }[] = [];
@@ -457,90 +464,88 @@ export function AssessmentForm() {
   if (step === "result") {
     return (
       <>
-        <div className={`assessment-result${aiRecommendation ? " assessment-result--wide" : ""}`}>
+        <div className="assessment-result">
+          {/* ── Score header ── */}
           <p className="assessment-result__label">Kết quả đánh giá</p>
           <div className="assessment-result__score">
             <strong>{totalScore}</strong>
             <span>/ 100 điểm</span>
           </div>
-          <p className="assessment-result__level">
-            {companyName ? `${companyName} — ${level.label}` : level.label}
-          </p>
-          <p className="assessment-result__desc">{level.desc}</p>
 
-          <div className="assessment-result__breakdown-layout">
-            <div className="score-list assessment-result__breakdown">
-              {groups.map((group, index) => {
-                const c = categoryScores[index];
-                const isOpen = expandedCategory === c.category;
-                return (
-                  <div className="assessment-score-group" key={c.category}>
-                    <button
-                      type="button"
-                      className={`score-row score-row--clickable${isOpen ? " score-row--open" : ""}`}
-                      onClick={() => setExpandedCategory((prev) => (prev === c.category ? null : c.category))}
-                    >
-                      <span>{c.category}</span>
-                      <div className="score-row__bar">
-                        <i style={{ width: `${(c.score / c.max) * 100}%` }} />
-                      </div>
-                      <strong>
-                        {c.score}/{c.max} {isOpen ? "▾" : "▸"}
-                      </strong>
-                    </button>
-                    {isOpen && (
-                      <div className="assessment-answers__qa-group">
-                        {group.questions.map((question) => {
-                          const optionIndex = answers[question.id];
-                          const option = optionIndex !== undefined ? question.options[optionIndex] : undefined;
-                          return (
-                            <div className="assessment-answers__qa" key={question.id}>
-                              <p className="assessment-answers__question">{question.text}</p>
-                              <p className="assessment-answers__answer">
-                                {option?.label ?? "(chưa trả lời)"}{" "}
-                                <span>({option?.points ?? 0} điểm)</span>
-                              </p>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {aiRecommendation && (
-              <div className="assessment-recommendation">
-                <div className="assessment-recommendation__header">
-                  <span className="assessment-recommendation__icon">✦</span>
-                  <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
-                </div>
-                {aiRecommendation.summary && (
-                  <p className="assessment-recommendation__summary">{aiRecommendation.summary}</p>
-                )}
-                {aiRecommendation.items.length > 0 && (
-                  <div className="assessment-recommendation__section-title">
-                    Các điểm cần ưu tiên cải thiện
-                  </div>
-                )}
-                <ul className="assessment-recommendation__list">
-                  {aiRecommendation.items.map((item, i) => (
-                    <li key={i} className="assessment-recommendation__item">
-                      <div className="assessment-recommendation__item-header">
-                        <span className="assessment-recommendation__number">{i + 1}</span>
-                        <strong className="assessment-recommendation__category">{item.category}</strong>
-                      </div>
-                      <p className="assessment-recommendation__advice">{item.advice}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div className="assessment-result__identity">
+            {companyName && (
+              <span className="assessment-result__company">{companyName}</span>
             )}
-
+            <span className="assessment-result__level-badge">
+              {aiRecommendation?.levelLabel ?? level.label}
+            </span>
           </div>
 
-          <div className="assessment-result__actions">
+          <p className="assessment-result__desc">
+            {aiRecommendation?.levelDesc ?? level.desc}
+          </p>
+
+          {/* ── Recommendation ── */}
+          {aiRecommendation && (
+            <div className="assessment-recommendation assessment-recommendation--full">
+              <div className="assessment-recommendation__header">
+                <span className="assessment-recommendation__icon">✦</span>
+                <p className="assessment-recommendation__label">Khuyến nghị dành cho bạn</p>
+              </div>
+              {aiRecommendation.summary && (
+                <p className="assessment-recommendation__summary">{aiRecommendation.summary}</p>
+              )}
+              {aiRecommendation.items.length > 0 && (
+                <div className="assessment-recommendation__section-title">
+                  Các điểm cần ưu tiên cải thiện
+                </div>
+              )}
+              <ul className="assessment-recommendation__list">
+                {aiRecommendation.items.map((item, i) => (
+                  <li key={i} className="assessment-recommendation__item">
+                    <div className="assessment-recommendation__item-header">
+                      <span className="assessment-recommendation__number">{i + 1}</span>
+                      <strong className="assessment-recommendation__category">{item.category}</strong>
+                    </div>
+                    <p className="assessment-recommendation__advice">{item.advice}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* ── CTA row ── */}
+          <div className="assessment-result__cta-row">
+            {reportToken && (
+              <a
+                className="assessment-result__cta-card"
+                href={`/api/assessment/report/${reportToken}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="assessment-result__cta-icon">📄</span>
+                <span className="assessment-result__cta-title">Xem chi tiết đánh giá</span>
+                <span className="assessment-result__cta-sub">Tải báo cáo PDF đầy đủ</span>
+              </a>
+            )}
+            {reportToken && verifiedToken && (
+              <button
+                type="button"
+                className="assessment-result__cta-card assessment-result__cta-card--primary"
+                onClick={() =>
+                  document
+                    .querySelector(".assessment-chat")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                <span className="assessment-result__cta-icon">💬</span>
+                <span className="assessment-result__cta-title">Chat với chuyên gia tư vấn</span>
+                <span className="assessment-result__cta-sub">Hỗ trợ 24/7 — Miễn phí</span>
+              </button>
+            )}
+          </div>
+
+          <div className="assessment-result__secondary-actions">
             <button type="button" className="button button--ghost button--dark" onClick={resetAll}>
               Làm lại đánh giá
             </button>
@@ -550,25 +555,9 @@ export function AssessmentForm() {
           </div>
         </div>
 
-        {reportToken && (
-          <div className="assessment-report">
-            <p className="section-label">Báo cáo chi tiết</p>
-            <h2>Xem lại toàn bộ câu trả lời của bạn</h2>
-            <div className="assessment-report-grid">
-              <a
-                className="partner-resource-card"
-                href={`/api/assessment/report/${reportToken}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <h3>{companyName ? `Báo cáo đánh giá — ${companyName}` : "Báo cáo đánh giá"}</h3>
-                <p>
-                  Toàn bộ câu hỏi, đáp án đã chọn và điểm số chi tiết theo từng tiêu chí trong
-                  bài đánh giá của bạn.
-                </p>
-                <span>Xem báo cáo →</span>
-              </a>
-            </div>
+        {reportToken && verifiedToken && (
+          <div className="assessment-chat-wrapper">
+            <AssessmentChat reportToken={reportToken} verifiedToken={verifiedToken} />
           </div>
         )}
       </>
