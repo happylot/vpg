@@ -627,13 +627,14 @@ export function AssessmentForm() {
 
     return (
       <>
-        <div className="assessment-result">
-          {pastReports.length > 0 && (
-            <button type="button" className="assessment-result__back-link" onClick={goToHistory}>
-              ← Quay lại danh sách bài đánh giá
-            </button>
-          )}
+        {pastReports.length > 0 && (
+          <button type="button" className="assessment-result__back-link" onClick={goToHistory}>
+            ← Quay lại danh sách bài đánh giá
+          </button>
+        )}
 
+        <div className="assessment-result-panel">
+          <div className="assessment-result-panel__section assessment-result">
           {/* ── Score header ── */}
           <p className="assessment-result__label">Kết quả đánh giá</p>
 
@@ -718,48 +719,49 @@ export function AssessmentForm() {
               )}
             </>
           )}
-        </div>
-
-        {!isLoading && !historyDetailError && reportToken && verifiedToken && (
-          <div className="assessment-chat-wrapper">
-            <AssessmentChat key={reportToken} reportToken={reportToken} verifiedToken={verifiedToken} />
           </div>
-        )}
 
-        {!isLoading && !historyDetailError && (
-          <>
-            <div className="assessment-result__cta-row">
-              {reportToken && verifiedToken && (
-                <button
-                  type="button"
-                  className="assessment-result__cta-card"
-                  onClick={openReportPdf}
-                  disabled={reportOpening}
-                >
-                  <span className="assessment-result__cta-icon">
-                    <IconFileText />
-                  </span>
-                  <span className="assessment-result__cta-title">
-                    {reportOpening ? "Đang mở báo cáo..." : "Xem chi tiết báo cáo"}
-                  </span>
-                  <span className="assessment-result__cta-sub">Tải báo cáo PDF đầy đủ</span>
-                </button>
-              )}
-              <a className="assessment-result__cta-card" href="/events">
-                <span className="assessment-result__cta-icon">
-                  <IconCompass />
-                </span>
-                <span className="assessment-result__cta-title">Xem chương trình phù hợp</span>
-                <span className="assessment-result__cta-sub">Chương trình hỗ trợ xuất khẩu dành cho bạn</span>
-              </a>
+          {!isLoading && !historyDetailError && reportToken && verifiedToken && (
+            <div className="assessment-result-panel__section assessment-chat-wrapper">
+              <AssessmentChat key={reportToken} reportToken={reportToken} verifiedToken={verifiedToken} />
             </div>
-            {reportError && (
-              <p className="register-form__error" role="alert">
-                {reportError}
-              </p>
-            )}
-          </>
-        )}
+          )}
+
+          {!isLoading && !historyDetailError && (
+            <div className="assessment-result-panel__section assessment-result__cta-section">
+              <div className="assessment-result__cta-row">
+                {reportToken && verifiedToken && (
+                  <button
+                    type="button"
+                    className="assessment-result__cta-card"
+                    onClick={openReportPdf}
+                    disabled={reportOpening}
+                  >
+                    <span className="assessment-result__cta-icon">
+                      <IconFileText />
+                    </span>
+                    <span className="assessment-result__cta-title">
+                      {reportOpening ? "Đang mở báo cáo..." : "Xem chi tiết báo cáo"}
+                    </span>
+                    <span className="assessment-result__cta-sub">Tải báo cáo PDF đầy đủ</span>
+                  </button>
+                )}
+                <a className="assessment-result__cta-card" href="/events">
+                  <span className="assessment-result__cta-icon">
+                    <IconCompass />
+                  </span>
+                  <span className="assessment-result__cta-title">Xem chương trình phù hợp</span>
+                  <span className="assessment-result__cta-sub">Chương trình hỗ trợ xuất khẩu dành cho bạn</span>
+                </a>
+              </div>
+              {reportError && (
+                <p className="register-form__error" role="alert">
+                  {reportError}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </>
     );
   }
